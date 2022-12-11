@@ -14,11 +14,11 @@ Then move the resulting `/mnt/etc/nixos/hardware-configuration.nix` to
 `./hosts/<host>/hardware-configuration.nix`. Copy the configuration from
 `/etc/nixos` to `/mnt/etc/nixos`.
 
-To install run the following command where `<host>` matches one of the hosts in
-`./hosts/default.nix`, i.e. bridget for `bridget = lib.nixosSystem {}`:
+To install run the following command where `<host>` matches one of the hosts
+defined in `./hosts/default.nix`, i.e. `bridget`:
 
 ```sh
-nixos-install --flake '/mnt/etc/nixos#<host>'
+nixos-install --flake .#<host>
 ```
 
 After the installation has finished, set a password for the user:
@@ -40,7 +40,7 @@ nix flake update
 Rebuild the system:
 
 ```sh
-sudo nixos-rebuild switch --flake .#<config>
+nixos-rebuild switch --flake .#<host>
 ```
 
 ## References
