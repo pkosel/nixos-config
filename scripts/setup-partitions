@@ -23,13 +23,13 @@ mount /dev/disk/by-label/boot /mnt/boot
 
 # mount data partitions
 mkdir -p /mnt/data1
-mount /dev/disk/by-label/data1 /mnt/data1
+mount /dev/sda1 /mnt/data1
 mkdir -p /mnt/data2
-mount /dev/disk/by-label/data2 /mnt/data2
+mount /dev/sda2 /mnt/data2
 mkdir -p /mnt/data3
-mount /dev/disk/by-label/data3 /mnt/data3
+mount /dev/sda3 /mnt/data3
 mkdir -p /mnt/data4
-mount /dev/disk/by-label/data4 /mnt/data4
+mount /dev/sda4 /mnt/data4
 
 # activate swap
 swapon /dev/nvme0n1p3

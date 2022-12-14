@@ -2,8 +2,11 @@
 
 {
   home.packages = with pkgs; [
-    keepassxc
     firefox
+    keepassxc
+    zotero
+    obsidian
+    tree
   ];
 
   programs.neovim = {
@@ -20,9 +23,6 @@
 
   gtk.enable = true;
   gtk.theme.name = "Adwaita-dark";
-  gtk.gtk3.extraConfig = {
-    gtk-application-prefer-dark-theme = true;
-  };
 
   home.stateVersion = "22.11";
 }
