@@ -1,18 +1,95 @@
-{ config, pkgs, ... }:
-
 {
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
+  vimLua = lua: ''
+    lua << EOF
+    ${lua}
+    EOF
+  '';
+in {
+  imports = [
+    ./features/firefox.nix
+  ];
+
+  #nixpkgs = {
+  #  overlays = [inputs.nur.overlay outputs.overlays.additions];
+  #  config = {
+  #    allowUnfree = true;
+  #  };
+  #};
+
+  home = {
+    username = "philipp";
+    homeDirectory = "/home/philipp";
+  };
+
+  programs.home-manager.enable = true;
+
+  # programs & packages
   home.packages = with pkgs; [
-    firefox
     keepassxc
     zotero
-    obsidian
+
+    ripgrep
+    bat
+    fzf
+    jq
     tree
+
+    ledger
+    pandoc
+
+    eduvpn-client
+
+    texlive.combined.scheme-full
   ];
+
+  programs.kitty = {
+    enable = true;
+    settings = {
+      # https://github.com/kovidgoyal/kitty/issues/3284
+      linux_display_server = "x11";
+      remember_window_size = "no";
+      initial_window_width = "960";
+      initial_window_height = "540";
+      tab_bar_style = "powerline";
+    };
+    font.package = pkgs.jetbrains-mono;
+    font.name = "JetBrains Mono";
+    theme = "Tokyo Night";
+  };
+
+  programs.fish = {
+    enable = true;
+    #shellAliases = {
+    #  ssh = "kitty +kitten ssh";
+    #};
+  };
+
+  programs.zellij = {
+    enable = true;
+    settings = {
+      theme = "tokyo-night";
+    };
+  };
 
   programs.neovim = {
     enable = true;
     viAlias = true;
     vimAlias = true;
+    plugins = with pkgs.vimPlugins; [
+      (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
+      vimtex
+    ];
+    extraConfig = with builtins;
+      vimLua (pkgs.lib.foldl (r: f: r + "\n" + readFile f) "" [
+        ./features/nvim/treesitter.lua
+      ]);
   };
 
   programs.git = {
@@ -21,8 +98,12 @@
     userEmail = "pkosel@fastmail.com";
   };
 
-  gtk.enable = true;
-  gtk.theme.name = "Adwaita-dark";
+  gtk = {
+    enable = true;
+    theme.name = "Adwaita-dark";
+    gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
+    gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
+  };
 
   home.stateVersion = "22.11";
 }

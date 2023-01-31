@@ -1,13 +1,18 @@
-{ config, pkgs, ... }:
-
 {
-  # Enable X11 windowing system
+  config,
+  pkgs,
+  ...
+}: {
   services.xserver.enable = true;
 
-  # Keymap in X11
   services.xserver.layout = "eu";
 
-  # Enable Gnome3
+  # environment.systemPackages = with pkgs;
+  #   with gnomeExtensions; [
+  #     gnome.dconf-editor
+  #     gnome.gnome-tweaks
+  #   ];
+
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 }

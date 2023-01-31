@@ -1,50 +1,18 @@
-# nixos-config
+# My NixOS configurations
 
-## Install
+## Bootstrapping
 
-Clone the configuration into `/etc/nixos`.
+For bootstrapping a flake-enabled nix environment on a fresh install run:
 
-On a new machine run:
-
-```sh
-scripts/setup-partitions
+```
+nix-shell
 ```
 
-Then move the resulting `/mnt/etc/nixos/hardware-configuration.nix` to
-`./hosts/<host>/hardware-configuration.nix`. Copy the configuration from
-`/etc/nixos` to `/mnt/etc/nixos`.
-
-To install run the following command where `<host>` matches one of the hosts
-defined in `./hosts/default.nix`, i.e. `bridget`:
-
-```sh
-nixos-install --flake .#<host>
-```
-
-After the installation has finished, set a password for the user:
-
-```sh
-passwd <user>
-```
-
-## Update
-
-Update all flake inputs:
-
-```sh
-nix flake update
-```
-
-## Rebuild
-
-Rebuild the system:
-
-```sh
-nixos-rebuild switch --flake .#<host>
-```
+Use `nixos-rebuild --flake .` to build system configurations.  
+Use `home-manager --flake .` to build user configurations.
 
 ## References
 
-- [https://github.com/MatthiasBenaets/nixos-config](https://github.com/MatthiasBenaets/nixos-config)
+- [https://m7.rs/git/nix-config/](https://m7.rs/git/nix-config/)
 - [https://gitlab.com/felschr/nixos-config](https://gitlab.com/felschr/nixos-config)
 

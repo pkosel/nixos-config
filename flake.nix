@@ -8,22 +8,58 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nur.url = "github:nix-community/NUR";
+
+    alejandra = {
+      url = "github:kamadorueda/alejandra/3.0.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, ... }: {
-    nixosConfigurations = {
-      bridget = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/configuration.nix
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    ...
+  } @ inputs: let
+    inherit (self) outputs;
+    supportedSystem = ["x86_64-linux"];
+    forAllSystems = nixpkgs.lib.genAttrs supportedSystem;
+  in rec {
+    packages = forAllSystems (
+      system:
+        import ./pkgs {pkgs = nixpkgs.legacyPackages.${system};}
+    );
 
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.philipp = import ./home/home.nix;
-          }
-        ];
+    overlays = import ./overlays;
+
+    nixosConfigurations = {
+      # Desktop
+      bridget = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [./hosts/configuration.nix];
       };
     };
+
+    homeConfigurations = {
+      # Desktop
+      philipp = home-manager.lib.homeManagerConfiguration {
+        # https://github.com/nix-community/home-manager/issues/2942
+        #pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+          overlays = [inputs.nur.overlay outputs.overlays.additions];
+        };
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [./home/home.nix];
+      };
+    };
+
+    formatter = forAllSystems (
+      system:
+        inputs.alejandra.defaultPackage.${system}
+    );
   };
 }
