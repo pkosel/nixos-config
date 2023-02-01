@@ -8,7 +8,7 @@
 }: {
   imports = [
     ./hardware-configuration.nix
-    ./features/desktop/gnome.nix
+    ./features/desktop
     ./features/services/syncthing.nix
     ./features/virtualization/libvirt.nix
   ];

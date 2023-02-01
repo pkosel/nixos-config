@@ -13,6 +13,7 @@
   '';
 in {
   imports = [
+    ./features/desktop
     ./features/firefox.nix
   ];
 
@@ -35,10 +36,11 @@ in {
     keepassxc
     zotero
 
-    ripgrep
     bat
+    fd
     fzf
     jq
+    ripgrep
     tree
 
     ledger
@@ -96,13 +98,6 @@ in {
     enable = true;
     userName = "Philipp Kosel";
     userEmail = "pkosel@fastmail.com";
-  };
-
-  gtk = {
-    enable = true;
-    theme.name = "Adwaita-dark";
-    gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
-    gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
   };
 
   home.stateVersion = "22.11";

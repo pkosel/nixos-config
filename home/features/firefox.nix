@@ -66,6 +66,7 @@ in {
         "extensions.formautofill.creditCards.enabled" = false;
         "extensions.pocket.enabled" = false;
         "identity.fxaccounts.enabled" = false;
+        "layout.css.prefers-color-scheme.content-override" = 1;
         "services.passwordSavingEnabled" = false;
         "signon.autofillForms" = false;
         "signon.rememberSignons" = false;
