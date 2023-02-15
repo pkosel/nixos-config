@@ -6,6 +6,15 @@
   pkgs,
   ...
 }: let
+  default-python = pkgs.python3.withPackages (python-packages:
+    with python-packages; [
+      pip
+      wheel
+      setuptools
+      black
+      #prospector
+    ]);
+
   vimLua = lua: ''
     lua << EOF
     ${lua}
@@ -33,10 +42,11 @@ in {
 
   # programs & packages
   home.packages = with pkgs; [
+    # misc
+    eduvpn-client
     keepassxc
-    zotero
-    obsidian
 
+    # terminal
     bat
     fd
     fzf
@@ -44,12 +54,19 @@ in {
     ripgrep
     tree
 
-    ledger
+    # dev
+    default-python
+    conda
+
+    # research
+    zotero
+    obsidian
+
+    # office
+    texlive.combined.scheme-full
     pandoc
 
-    eduvpn-client
-
-    texlive.combined.scheme-full
+    ledger
   ];
 
   programs.kitty = {

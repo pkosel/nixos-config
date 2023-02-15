@@ -8,6 +8,7 @@
 }: {
   imports = [
     ./hardware-configuration.nix
+    ./hardware/gpu.nix
     ./features/desktop
     ./features/services/syncthing.nix
     ./features/virtualization/libvirt.nix
