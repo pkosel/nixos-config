@@ -10,21 +10,21 @@
 in {
   programs.firefox = {
     enable = true;
-    extensions = with addons; [
-      ublock-origin
-      keepassxc-browser
-      (buildFirefoxXpiAddon {
-        pname = "zotero-connector";
-        version = "5.0.103";
-        addonId = "zotero@chnm.gmu.edu";
-        url = "https://download.zotero.org/connector/firefox/release/Zotero_Connector-5.0.103.xpi";
-        sha256 = "sha256-dHdcbGb/NO4jiyhEcDdfzJRbdz+d4ZCtojEtkbOVdD0=";
-        meta = {};
-      })
-      languagetool
-      libredirect
-    ];
     profiles.philipp = {
+      extensions = with addons; [
+        ublock-origin
+        keepassxc-browser
+        (buildFirefoxXpiAddon {
+          pname = "zotero-connector";
+          version = "5.0.103";
+          addonId = "zotero@chnm.gmu.edu";
+          url = "https://download.zotero.org/connector/firefox/release/Zotero_Connector-5.0.103.xpi";
+          sha256 = "sha256-dHdcbGb/NO4jiyhEcDdfzJRbdz+d4ZCtojEtkbOVdD0=";
+          meta = {};
+        })
+        languagetool
+        libredirect
+      ];
       search = {
         default = "DuckDuckGo";
         engines = {
