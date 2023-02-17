@@ -15,6 +15,7 @@ in {
   imports = [
     ./features/desktop
     ./features/firefox.nix
+    ./features/cli/starship.nix
   ];
 
   #nixpkgs = {
