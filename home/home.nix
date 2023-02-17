@@ -16,6 +16,7 @@ in {
     ./features/desktop
     ./features/firefox.nix
     ./features/cli/starship.nix
+    ./features/nvim
   ];
 
   #nixpkgs = {
