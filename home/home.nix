@@ -6,15 +6,6 @@
   pkgs,
   ...
 }: let
-  default-python = pkgs.python3.withPackages (python-packages:
-    with python-packages; [
-      pip
-      wheel
-      setuptools
-      black
-      #prospector
-    ]);
-
   vimLua = lua: ''
     lua << EOF
     ${lua}
@@ -55,8 +46,6 @@ in {
     tree
 
     # dev
-    default-python
-    conda
 
     # research
     zotero
