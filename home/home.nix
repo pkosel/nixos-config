@@ -5,7 +5,8 @@ let
     ${lua}
     EOF
   '';
-in {
+in
+{
   imports = [
     ./features/desktop
     ./features/firefox.nix
@@ -13,12 +14,13 @@ in {
     ./features/nvim
   ];
 
-  #nixpkgs = {
-  #  overlays = [inputs.nur.overlay outputs.overlays.additions];
-  #  config = {
-  #    allowUnfree = true;
-  #  };
-  #};
+  nixpkgs = {
+    overlays = [ inputs.nur.overlay outputs.overlays.additions ];
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = (_: true);
+    };
+  };
 
   home = {
     username = "philipp";

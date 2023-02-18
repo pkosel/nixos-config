@@ -1,7 +1,22 @@
-{ lib, buildPythonPackage, dbus-python, fetchFromGitHub, gdk-pixbuf
-, gobject-introspection, gtk3, libnotify, networkmanager, pygobject3
-, pytest-runner, pynacl, pytest, pycodestyle, requests_oauthlib, setuptools
-, wrapGAppsHook, }:
+{ lib
+, buildPythonPackage
+, dbus-python
+, fetchFromGitHub
+, gdk-pixbuf
+, gobject-introspection
+, gtk3
+, libnotify
+, networkmanager
+, pygobject3
+, pytest-runner
+, pynacl
+, pytest
+, pycodestyle
+, requests_oauthlib
+, setuptools
+, wrapGAppsHook
+,
+}:
 buildPythonPackage rec {
   pname = "eduvpn-client";
   version = "3.1.0";

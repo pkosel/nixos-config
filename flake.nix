@@ -10,23 +10,17 @@
     };
 
     nur.url = "github:nix-community/NUR";
-
-    nixfmt = {
-      url = "github:serokell/nixfmt";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
       inherit (self) outputs;
-      supportedSystem = [ "x86_64-linux" ];
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystem;
-    in rec {
-      packages = forAllSystems
-        (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; });
-
+      forEachSystem = nixpkgs.lib.genAttrs [ "x86_64-linux" ];
+      forEachPkgs = f: forEachSystem (sys: f nixpkgs.legacyPackages.${sys});
+    in
+    {
       overlays = import ./overlays;
+      packages = forEachPkgs (pkgs: import ./pkgs { inherit pkgs; });
 
       nixosConfigurations = {
         # Desktop
@@ -39,20 +33,12 @@
       homeConfigurations = {
         # Desktop
         philipp = home-manager.lib.homeManagerConfiguration {
-          # https://github.com/nix-community/home-manager/issues/2942
-          #pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          pkgs = import nixpkgs {
-            system = "x86_64-linux";
-            config.allowUnfree = true;
-            overlays = [ inputs.nur.overlay outputs.overlays.additions ];
-          };
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home/home.nix ];
         };
       };
 
-      formatter = forAllSystems (system:
-        #nixpkgs.legacyPackages.${system}.nixfmt
-        inputs.nixfmt.packages.${system}.nixfmt);
+      formatter = forEachPkgs (pkgs: pkgs.nixpkgs-fmt);
     };
 }
