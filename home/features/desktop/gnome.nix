@@ -1,11 +1,4 @@
-{
-  inputs,
-  outputs,
-  lib,
-  config,
-  pkgs,
-  ...
-}: {
+{ inputs, outputs, lib, config, pkgs, ... }: {
   home.packages = with pkgs; [
     gnomeExtensions.blur-my-shell
     gnomeExtensions.dash-to-panel

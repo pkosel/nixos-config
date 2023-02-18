@@ -1,11 +1,5 @@
-{
-  inputs,
-  outputs,
-  lib,
-  config,
-  pkgs,
-  ...
-}: let
+{ inputs, outputs, lib, config, pkgs, ... }:
+let
   vimLua = lua: ''
     lua << EOF
     ${lua}
@@ -84,9 +78,7 @@ in {
 
   programs.zellij = {
     enable = true;
-    settings = {
-      theme = "tokyo-night";
-    };
+    settings = { theme = "tokyo-night"; };
   };
 
   programs.neovim = {
@@ -98,9 +90,8 @@ in {
       vimtex
     ];
     extraConfig = with builtins;
-      vimLua (pkgs.lib.foldl (r: f: r + "\n" + readFile f) "" [
-        ./features/nvim/treesitter.lua
-      ]);
+      vimLua (pkgs.lib.foldl (r: f: r + "\n" + readFile f) ""
+        [ ./features/nvim/treesitter.lua ]);
   };
 
   programs.git = {

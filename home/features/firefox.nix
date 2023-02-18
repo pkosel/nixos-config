@@ -1,12 +1,5 @@
-{
-  inputs,
-  outputs,
-  lib,
-  config,
-  pkgs,
-  ...
-}: let
-  addons = pkgs.nur.repos.rycee.firefox-addons;
+{ inputs, outputs, lib, config, pkgs, ... }:
+let addons = pkgs.nur.repos.rycee.firefox-addons;
 in {
   programs.firefox = {
     enable = true;
@@ -18,9 +11,10 @@ in {
           pname = "zotero-connector";
           version = "5.0.103";
           addonId = "zotero@chnm.gmu.edu";
-          url = "https://download.zotero.org/connector/firefox/release/Zotero_Connector-5.0.103.xpi";
+          url =
+            "https://download.zotero.org/connector/firefox/release/Zotero_Connector-5.0.103.xpi";
           sha256 = "sha256-dHdcbGb/NO4jiyhEcDdfzJRbdz+d4ZCtojEtkbOVdD0=";
-          meta = {};
+          meta = { };
         })
         languagetool
         libredirect

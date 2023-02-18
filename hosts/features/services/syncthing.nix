@@ -9,13 +9,17 @@
     overrideDevices = true;
     overrideFolders = true;
     devices = {
-      "laptop" = {id = "YNW3NRD-JGIMC7X-26MXMPI-OWPOK3P-ZPMPXFZ-4ZFK2YS-MXLAURW-SOVGQAI";};
-      "phone" = {id = "OZGHQSB-YTYBBA5-3MHGSTP-6NDTKLQ-ZDTOFPO-WKS2NZY-26FENGZ-5EZQRQV";};
+      "laptop" = {
+        id = "YNW3NRD-JGIMC7X-26MXMPI-OWPOK3P-ZPMPXFZ-4ZFK2YS-MXLAURW-SOVGQAI";
+      };
+      "phone" = {
+        id = "OZGHQSB-YTYBBA5-3MHGSTP-6NDTKLQ-ZDTOFPO-WKS2NZY-26FENGZ-5EZQRQV";
+      };
     };
     folders = {
       "KeePassXC" = {
         path = "/home/philipp/Documents/KeePassXC";
-        devices = ["laptop" "phone"];
+        devices = [ "laptop" "phone" ];
       };
     };
   };

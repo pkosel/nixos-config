@@ -1,13 +1,9 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{ config, pkgs, ... }: {
   environment.systemPackages = with pkgs;
-  with gnomeExtensions; [
-    gnome.dconf-editor
-    gnome.gnome-tweaks
-  ];
+    with gnomeExtensions; [
+      gnome.dconf-editor
+      gnome.gnome-tweaks
+    ];
 
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;

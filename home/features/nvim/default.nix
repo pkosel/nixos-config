@@ -1,5 +1,1 @@
-{ config, pkgs, ... }:
-
-{
-  home.sessionVariables.EDITOR = "nvim";
-}
+{ config, pkgs, ... }: { home.sessionVariables.EDITOR = "nvim"; }

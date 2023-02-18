@@ -11,55 +11,48 @@
 
     nur.url = "github:nix-community/NUR";
 
-    alejandra = {
-      url = "github:kamadorueda/alejandra/3.0.0";
+    nixfmt = {
+      url = "github:serokell/nixfmt";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    supportedSystem = ["x86_64-linux"];
-    forAllSystems = nixpkgs.lib.genAttrs supportedSystem;
-  in rec {
-    packages = forAllSystems (
-      system:
-        import ./pkgs {pkgs = nixpkgs.legacyPackages.${system};}
-    );
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+    let
+      inherit (self) outputs;
+      supportedSystem = [ "x86_64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystem;
+    in rec {
+      packages = forAllSystems
+        (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; });
 
-    overlays = import ./overlays;
+      overlays = import ./overlays;
 
-    nixosConfigurations = {
-      # Desktop
-      bridget = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/configuration.nix];
-      };
-    };
-
-    homeConfigurations = {
-      # Desktop
-      philipp = home-manager.lib.homeManagerConfiguration {
-        # https://github.com/nix-community/home-manager/issues/2942
-        #pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        pkgs = import nixpkgs {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-          overlays = [inputs.nur.overlay outputs.overlays.additions];
+      nixosConfigurations = {
+        # Desktop
+        bridget = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/configuration.nix ];
         };
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [./home/home.nix];
       };
-    };
 
-    formatter = forAllSystems (
-      system:
-        inputs.alejandra.defaultPackage.${system}
-    );
-  };
+      homeConfigurations = {
+        # Desktop
+        philipp = home-manager.lib.homeManagerConfiguration {
+          # https://github.com/nix-community/home-manager/issues/2942
+          #pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+            overlays = [ inputs.nur.overlay outputs.overlays.additions ];
+          };
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [ ./home/home.nix ];
+        };
+      };
+
+      formatter = forAllSystems (system:
+        #nixpkgs.legacyPackages.${system}.nixfmt
+        inputs.nixfmt.packages.${system}.nixfmt);
+    };
 }

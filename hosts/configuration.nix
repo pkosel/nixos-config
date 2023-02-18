@@ -1,11 +1,4 @@
-{
-  inputs,
-  outputs,
-  lib,
-  config,
-  pkgs,
-  ...
-}: {
+{ inputs, outputs, lib, config, pkgs, ... }: {
   imports = [
     ./hardware-configuration.nix
     ./hardware/gpu.nix
@@ -15,10 +8,8 @@
   ];
 
   nixpkgs = {
-    overlays = [outputs.overlays.additions inputs.nur.overlay];
-    config = {
-      allowUnfree = true;
-    };
+    overlays = [ outputs.overlays.additions inputs.nur.overlay ];
+    config = { allowUnfree = true; };
   };
 
   nix = {
@@ -28,7 +19,7 @@
     };
     settings = {
       auto-optimise-store = true;
-      experimental-features = ["nix-command" "flakes"];
+      experimental-features = [ "nix-command" "flakes" ];
     };
     extraOptions = ''
       keep-outputs = true
@@ -58,16 +49,13 @@
 
   users.users.philipp = {
     isNormalUser = true;
-    extraGroups = ["wheel" "audio"];
+    extraGroups = [ "wheel" "audio" ];
     shell = pkgs.fish;
   };
 
   programs.fish.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    vim
-    wget
-  ];
+  environment.systemPackages = with pkgs; [ vim wget ];
 
   system.stateVersion = "22.11";
 }

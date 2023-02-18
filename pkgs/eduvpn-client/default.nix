@@ -1,22 +1,7 @@
-{
-  lib,
-  buildPythonPackage,
-  dbus-python,
-  fetchFromGitHub,
-  gdk-pixbuf,
-  gobject-introspection,
-  gtk3,
-  libnotify,
-  networkmanager,
-  pygobject3,
-  pytest-runner,
-  pynacl,
-  pytest,
-  pycodestyle,
-  requests_oauthlib,
-  setuptools,
-  wrapGAppsHook,
-}:
+{ lib, buildPythonPackage, dbus-python, fetchFromGitHub, gdk-pixbuf
+, gobject-introspection, gtk3, libnotify, networkmanager, pygobject3
+, pytest-runner, pynacl, pytest, pycodestyle, requests_oauthlib, setuptools
+, wrapGAppsHook, }:
 buildPythonPackage rec {
   pname = "eduvpn-client";
   version = "3.1.0";
@@ -30,26 +15,13 @@ buildPythonPackage rec {
 
   dontWrapGApps = true;
 
-  nativeBuildInputs = [
-    gdk-pixbuf
-    gobject-introspection
-    pytest-runner
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ gdk-pixbuf gobject-introspection pytest-runner wrapGAppsHook ];
 
-  buildInputs = [
-    gtk3
-    libnotify
-    networkmanager
-  ];
+  buildInputs = [ gtk3 libnotify networkmanager ];
 
-  propagatedBuildInputs = [
-    dbus-python
-    pygobject3
-    pynacl
-    requests_oauthlib
-    setuptools
-  ];
+  propagatedBuildInputs =
+    [ dbus-python pygobject3 pynacl requests_oauthlib setuptools ];
 
   postPatch = ''
     substituteInPlace eduvpn/utils.py \
@@ -60,7 +32,7 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}");
   '';
 
-  checkInputs = [pytest pycodestyle];
+  checkInputs = [ pytest pycodestyle ];
 
   meta = with lib; {
     homepage = "https://eduvpn.org";
@@ -68,10 +40,11 @@ buildPythonPackage rec {
     longDescription = ''
       This is the GNU/Linux desktop client for eduVPN. It also is a Python client API.
     '';
-    changelog = "https://raw.githubusercontent.com/eduvpn/python-eduvpn-client/${version}/CHANGES.md";
+    changelog =
+      "https://raw.githubusercontent.com/eduvpn/python-eduvpn-client/${version}/CHANGES.md";
     mainProgram = "eduvpn-gui";
     license = licenses.gpl3;
-    maintainers = with maintainers; [kilianar];
+    maintainers = with maintainers; [ kilianar ];
     platforms = platforms.linux;
   };
 }
