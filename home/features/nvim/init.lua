@@ -1,3 +1,8 @@
+-- My nvim config
+
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -11,22 +16,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate"
-  },
-  { "numToStr/Comment.nvim" },
-  { "nvim-lualine/lualine.nvim" }
-})
+require("lazy").setup("plugins")
 
--- options
-vim.o.number = true
+require 'config.options'
+-- require 'config.keymaps'
 
-require("nvim-treesitter.configs").setup {
-  ensure_installed = { "c", "cpp", "rust", "python", "nix", "lua" },
-  highlight = { enable = true }
-}
-
-require("Comment").setup()
-require("lualine").setup()
+vim.cmd [[colorscheme tokyonight]]
