@@ -1,4 +1,8 @@
 { inputs, outputs, lib, config, pkgs, ... }:
+
+let
+  pkgs-stable = import inputs.nixpkgs-stable { system = pkgs.system; };
+in
 {
   imports = [
     ./features/desktop
@@ -74,6 +78,7 @@
 
   programs.zellij = {
     enable = true;
+    package = pkgs-stable.zellij;
     settings = { theme = "tokyo-night"; };
   };
 
