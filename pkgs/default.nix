@@ -3,4 +3,5 @@
   eduvpn-client = pkgs.python3Packages.toPythonApplication
     (pkgs.python3Packages.callPackage ./eduvpn-client { });
   morewaita-icon-theme = pkgs.callPackage ./morewaita-icon-theme { };
+  gdrive-client = pkgs.callPackage ./gdrive-client { };
 }

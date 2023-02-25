@@ -52,6 +52,8 @@ in
     pandoc
 
     ledger
+
+    gdrive-client
   ];
 
   programs.kitty = {
