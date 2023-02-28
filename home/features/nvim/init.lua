@@ -19,6 +19,6 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins")
 
 require 'config.options'
--- require 'config.keymaps'
+require 'config.keymaps'
 
 vim.cmd [[colorscheme gruvbox-material]]
