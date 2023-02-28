@@ -68,7 +68,7 @@ in
     };
     font.package = pkgs.jetbrains-mono;
     font.name = "JetBrains Mono";
-    theme = "Tokyo Night";
+    theme = "Gruvbox Material Dark Medium";
   };
 
   programs.fish = {
