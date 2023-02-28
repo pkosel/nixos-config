@@ -21,4 +21,4 @@ require("lazy").setup("plugins")
 require 'config.options'
 -- require 'config.keymaps'
 
-vim.cmd [[colorscheme tokyonight]]
+vim.cmd [[colorscheme gruvbox-material]]
