@@ -33,7 +33,7 @@ in
     keepassxc
 
     # terminal
-    bat
+    # bat
     fd
     fzf
     jq
@@ -73,15 +73,27 @@ in
 
   programs.fish = {
     enable = true;
-    #shellAliases = {
-    #  ssh = "kitty +kitten ssh";
-    #};
   };
 
   programs.zellij = {
     enable = true;
     package = pkgs-stable.zellij;
-    settings = { theme = "tokyo-night"; };
+    settings = {
+      theme = "gruvbox-dark";
+      themes.gruvbox-dark = {
+        fg = [ 213 196 161 ];
+        bg = [ 40 40 40 ];
+        black = [ 60 56 54 ];
+        red = [ 204 36 29 ];
+        green = [ 152 151 26 ];
+        yellow = [ 215 153 33 ];
+        blue = [ 69 133 136 ];
+        magenta = [ 177 98 134 ];
+        cyan = [ 104 157 106 ];
+        white = [ 251 241 199 ];
+        orange = [ 214 93 14 ];
+      };
+    };
   };
 
   programs.git = {
@@ -93,6 +105,13 @@ in
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+  };
+
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "gruvbox-dark";
+    };
   };
 
   home.stateVersion = "22.11";
