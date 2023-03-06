@@ -28,9 +28,10 @@ in
 
   # programs & packages
   home.packages = with pkgs; [
-    # misc
-    eduvpn-client
+    # privacy & security
     keepassxc
+    mullvad-vpn
+    eduvpn-client
 
     # terminal
     # bat
