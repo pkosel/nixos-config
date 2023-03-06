@@ -54,7 +54,10 @@ in
 
     ledger
 
-    gdrive-client
+    # entertainment
+    celluloid
+    spot
+    spotify
   ];
 
   programs.kitty = {
