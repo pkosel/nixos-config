@@ -5,6 +5,7 @@
     ./features/desktop
     ./features/services/syncthing.nix
     ./features/virtualization/libvirt.nix
+    ./features/vpn.nix
   ];
 
   nixpkgs = {
