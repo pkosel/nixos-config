@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema id="org.gnome.shell.extensions.window-resizer"
+          path="/org/gnome/shell/extensions/window-resizer/">
+    <key type="as" name="cycle-window-sizes">
+      <default><![CDATA[['<Alt><Control>s']]]></default>
+      <summary>Cycle Window Sizes</summary>
+    </key>
+    <key type="as" name="cycle-window-sizes-backward">
+      <default><![CDATA[['<Shift><Alt><Control>s']]]></default>
+      <summary>Cycle Window Sizes Backward</summary>
+    </key>
+    <key type="as" name="center-window">
+      <default><![CDATA[['<Control><Super>T']]]></default>
+      <summary>Center Window</summary>
+    </key>
+  </schema>
+</schemalist>

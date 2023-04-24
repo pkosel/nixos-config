@@ -1,0 +1,9 @@
+{
+  "name": "Window Resizer",
+  "description": "Programmatic window resizing for GNOME Shell",
+  "uuid": "window-resizer@pkosel.github.com",
+  "shell-version": [
+    "43"
+  ],
+  "settings-schema": "org.gnome.shell.extensions.window-resizer"
+}

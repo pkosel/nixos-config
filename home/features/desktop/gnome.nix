@@ -3,6 +3,7 @@
     gnomeExtensions.blur-my-shell
     gnomeExtensions.dash-to-panel
     gnomeExtensions.pop-shell
+    window-resizer
   ];
 
   dconf.settings = {
@@ -14,6 +15,7 @@
         "blur-my-shell@aunetx"
         "dash-to-panel@jderose9.github.com"
         "pop-shell@system76.com"
+        "window-resizer@pkosel.github.com"
       ];
       favorite-apps = [
         "firefox.desktop"
