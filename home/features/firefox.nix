@@ -64,6 +64,45 @@ in {
         "services.passwordSavingEnabled" = false;
         "signon.autofillForms" = false;
         "signon.rememberSignons" = false;
+
+        "browser.uiCustomization.state" = builtins.toJSON {
+            "placements" = {
+              "widget-overflow-fixed-list" = [];
+              "unified-extensions-area" = [];
+              "nav-bar" = [
+                "back-button"
+                "forward-button"
+                "stop-reload-button"
+                "home-button"
+                "customizableui-special-spring1"
+                "urlbar-container"
+                "customizableui-special-spring2"
+                "downloads-button"
+                "fxa-toolbar-menu-button"
+              ];
+              "toolbar-menubar" = [
+                "menubar-items"
+              ];
+              "TabsToolbar" = [
+                "tabbrowser-tabs"
+                "new-tab-button"
+                "alltabs-button"
+              ];
+              "PersonalToolbar" = [
+                "personal-bookmarks"
+              ];
+            };
+            "seen" = [
+              "developer-button"
+            ];
+            "dirtyAreaCache" = [
+              "nav-bar"
+              "PersonalToolbar"
+              "TabsToolbar"
+            ];
+            "currentVersion" = 18;
+            "newElementCount" = 3;
+        };
       };
     };
   };
