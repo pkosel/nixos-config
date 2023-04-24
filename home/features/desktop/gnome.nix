@@ -18,7 +18,7 @@
       favorite-apps = [
         "firefox.desktop"
         "kitty.desktop"
-        "zotero-6.0.20.desktop"
+        "zotero-6.0.26.desktop"
         "obsidian.desktop"
         "org.keepassxc.KeePassXC.desktop"
       ];
