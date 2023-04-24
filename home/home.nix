@@ -31,7 +31,6 @@ in
     # privacy & security
     keepassxc
     mullvad-vpn
-    eduvpn-client
 
     # terminal
     # bat
@@ -39,6 +38,7 @@ in
     fzf
     jq
     ripgrep
+    sd
     tree
 
     # dev
@@ -66,8 +66,8 @@ in
       # https://github.com/kovidgoyal/kitty/issues/3284
       linux_display_server = "x11";
       remember_window_size = "no";
-      initial_window_width = "960";
-      initial_window_height = "540";
+      # initial_window_width = "960";
+      # initial_window_height = "540";
       tab_bar_style = "powerline";
     };
     font.package = pkgs.jetbrains-mono;
