@@ -56,8 +56,8 @@ in
 
     # entertainment
     celluloid
-    spot
-    spotify
+    # spot
+    # spotify
   ];
 
   programs.kitty = {
