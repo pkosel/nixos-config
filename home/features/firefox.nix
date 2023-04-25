@@ -6,14 +6,14 @@ in {
     profiles.philipp = {
       extensions = with addons; [
         ublock-origin
-        keepassxc-browser
+        bitwarden
         (buildFirefoxXpiAddon {
           pname = "zotero-connector";
-          version = "5.0.103";
+          version = "5.0.107";
           addonId = "zotero@chnm.gmu.edu";
           url =
-            "https://download.zotero.org/connector/firefox/release/Zotero_Connector-5.0.103.xpi";
-          sha256 = "sha256-dHdcbGb/NO4jiyhEcDdfzJRbdz+d4ZCtojEtkbOVdD0=";
+            "https://download.zotero.org/connector/firefox/release/Zotero_Connector-5.0.107.xpi";
+          sha256 = "sha256-RuAhWGvUhkog8SxzKhRwQQwzTQLzBKlHjSsFj9e25e4=";
           meta = { };
         })
         languagetool
@@ -79,6 +79,10 @@ in {
                 "customizableui-special-spring2"
                 "downloads-button"
                 "fxa-toolbar-menu-button"
+                "ublock0_raymondhill_net-browser-action"
+                "_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action"
+                "zotero_chnm_gmu_edu-browser-action"
+                "languagetool-webextension_languagetool_org-browser-action"
               ];
               "toolbar-menubar" = [
                 "menubar-items"

@@ -22,7 +22,6 @@
         "kitty.desktop"
         "zotero-6.0.26.desktop"
         "obsidian.desktop"
-        "org.keepassxc.KeePassXC.desktop"
       ];
     };
     "org/gnome/shell/extensions/dash-to-panel" = {
