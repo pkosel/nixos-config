@@ -103,7 +103,7 @@ in
   programs.git = {
     enable = true;
     userName = "Philipp Kosel";
-    userEmail = "pkosel@fastmail.com";
+    userEmail = "pkosel+git@fastmail.com";
   };
 
   programs.direnv = {
