@@ -18,12 +18,30 @@
         "window-resizer@pkosel.github.com"
       ];
       favorite-apps = [
+        "org.gnome.Nautilus.desktop"
         "firefox.desktop"
         "kitty.desktop"
         "zotero-6.0.26.desktop"
         "obsidian.desktop"
+        "mullvad-vpn.desktop"
+        "org.gnome.Boxes.desktop"
       ];
     };
+
+    "org/gnome/desktop/app-folders" = {
+      folder-children = [ "Office" "Utilities" ];
+    };
+    "org/gnome/desktop/app-folders/folders/Office" = {
+      name = "Office";
+      translate = true;
+      categories = [ "Office" ];
+    };
+    "org/gnome/desktop/app-folders/folders/Utilities" = {
+      name = "Utilities";
+      translate = true;
+      categories = [ "Utility" "X-GNOME-Utilities" "System" ];
+    };
+
     "org/gnome/shell/extensions/dash-to-panel" = {
       dot-style-focused = "SQUARES";
       dot-style-unfocused = "SQUARES";

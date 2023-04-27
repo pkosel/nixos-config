@@ -29,7 +29,6 @@ in
   # programs & packages
   home.packages = with pkgs; [
     # privacy & security
-    keepassxc
     mullvad-vpn
 
     # terminal
@@ -49,15 +48,14 @@ in
     obsidian
 
     # office
-    texlive.combined.scheme-full
+    texlive.combined.scheme-small
+    libreoffice
     pandoc
 
     ledger
 
     # entertainment
     celluloid
-    # spot
-    # spotify
   ];
 
   programs.kitty = {
