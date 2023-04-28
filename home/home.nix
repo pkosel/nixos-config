@@ -102,6 +102,11 @@ in
     enable = true;
     userName = "Philipp Kosel";
     userEmail = "170943+pkosel@users.noreply.github.com";
+    extraConfig = {
+      init = {
+        defaultBranch = "main";
+      };
+    };
   };
 
   programs.direnv = {
