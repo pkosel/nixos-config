@@ -17,8 +17,8 @@
       };
     };
     folders = {
-      "Code" = {
-        path = "/home/philipp/Code";
+      "Syncthing" = {
+        path = "/home/philipp/Documents/Syncthing";
         devices = [ "laptop" ];
       };
     };
