@@ -17,9 +17,9 @@
       };
     };
     folders = {
-      "KeePassXC" = {
-        path = "/home/philipp/Documents/KeePassXC";
-        devices = [ "laptop" "phone" ];
+      "Code" = {
+        path = "/home/philipp/Code";
+        devices = [ "laptop" ];
       };
     };
   };
