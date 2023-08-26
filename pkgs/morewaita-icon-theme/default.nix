@@ -1,13 +1,13 @@
 { lib, stdenvNoCC, fetchFromGitHub, gtk3, xdg-utils, }:
 stdenvNoCC.mkDerivation rec {
   pname = "morewaita-icon-theme";
-  version = "43.3";
+  version = "44.1";
 
   src = fetchFromGitHub {
     owner = "somepaulo";
     repo = "MoreWaita";
-    rev = "59bfc8ce20afa7c9030406d0c5e3f532c66bd766";
-    sha256 = "sha256-9UAuJAK7UXDJkWZ1BGX2zC08Iy5Sk+YbvtR8vIuyhlc=";
+    rev = "6acecb2761e3e97b9c9592e05f96ef824c8d0789";
+    sha256 = "3HYMnu+halkbrFagaKFmDFctcF0yjsPalD8IBkYeVLA=";
   };
 
   nativeBuildInputs = [ gtk3 xdg-utils ];
