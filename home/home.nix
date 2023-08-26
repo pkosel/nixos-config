@@ -46,7 +46,6 @@ in
 
     # research
     zotero
-    obsidian
 
     # office
     texlive.combined.scheme-small
