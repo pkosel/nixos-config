@@ -30,6 +30,7 @@ in
   # programs & packages
   home.packages = with pkgs; [
     # privacy & security
+    bitwarden
     mullvad-vpn
 
     # terminal
