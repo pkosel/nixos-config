@@ -10,6 +10,7 @@ in
     ./features/firefox.nix
     ./features/hledger.nix
     ./features/nvim
+    ./features/vscode.nix
   ];
 
   nixpkgs = {
