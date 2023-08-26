@@ -11,6 +11,8 @@
     };
 
     nur.url = "github:nix-community/NUR";
+
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
@@ -34,9 +36,9 @@
       homeConfigurations = {
         # Desktop
         philipp = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home/home.nix ];
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
         };
       };
 
