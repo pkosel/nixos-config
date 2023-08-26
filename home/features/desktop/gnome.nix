@@ -20,11 +20,11 @@
       favorite-apps = [
         "org.gnome.Nautilus.desktop"
         "firefox.desktop"
+        "code.desktop"
         "kitty.desktop"
-        "zotero-6.0.26.desktop"
-        "obsidian.desktop"
-        "mullvad-vpn.desktop"
-        "org.gnome.Boxes.desktop"
+        "zotero.desktop"
+        "calibre-gui.desktop"
+        "signal-desktop.desktop"
       ];
     };
 
