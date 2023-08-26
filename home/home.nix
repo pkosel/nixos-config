@@ -5,9 +5,10 @@ let
 in
 {
   imports = [
+    ./features/cli/starship.nix
     ./features/desktop
     ./features/firefox.nix
-    ./features/cli/starship.nix
+    ./features/hledger.nix
     ./features/nvim
   ];
 
@@ -52,7 +53,8 @@ in
     libreoffice
     pandoc
 
-    ledger
+    # social
+    signal-desktop
 
     # entertainment
     celluloid
