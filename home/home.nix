@@ -57,6 +57,8 @@ in
     signal-desktop
 
     # entertainment
+    calibre
+    foliate
     celluloid
   ];
 
