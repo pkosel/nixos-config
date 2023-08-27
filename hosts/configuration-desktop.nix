@@ -1,6 +1,6 @@
 { inputs, outputs, lib, config, pkgs, ... }: {
   imports = [
-    ./hardware-configuration.nix
+    ./hardware-configuration-desktop.nix
     ./hardware/gpu.nix
     ./features/desktop
     ./features/services/syncthing.nix

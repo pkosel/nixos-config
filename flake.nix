@@ -29,7 +29,13 @@
         # Desktop
         bridget = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/configuration.nix ];
+          modules = [ ./hosts/configuration-desktop.nix ];
+        };
+
+        # Laptop
+        frida = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/configuration-laptop.nix ];
         };
       };
 
