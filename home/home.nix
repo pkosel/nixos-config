@@ -42,9 +42,6 @@ in
     sd
     tree
 
-    # dev
-    gcc
-
     # research
     zotero
 
