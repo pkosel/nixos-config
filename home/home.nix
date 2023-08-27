@@ -8,7 +8,6 @@ in
     ./features/cli/starship.nix
     ./features/desktop
     ./features/firefox.nix
-    ./features/hledger.nix
     ./features/nvim
     ./features/vscode.nix
   ];
