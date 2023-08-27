@@ -49,7 +49,6 @@ in
     zotero
 
     # office
-    texlive.combined.scheme-small
     libreoffice
     pandoc
 
