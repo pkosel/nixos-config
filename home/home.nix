@@ -47,7 +47,6 @@ in
 
     # office
     libreoffice
-    pandoc
 
     # social
     signal-desktop
