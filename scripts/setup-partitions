@@ -1,0 +1,68 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p bash parted
+
+set -euo pipefail
+
+read -p "Enter the name of the storage device to partition (e.g. /dev/nvme0n1): " -r
+drive=$REPLY
+
+if [[ $drive =~ "nvme" ]]; then
+  boot="${drive}p1"
+  system="${drive}p2"
+  swap="${drive}p3"
+else
+  boot="${drive}1"
+  system="${drive}2"
+  swap="${drive}3"
+fi
+
+echo
+echo "The following layout will be created:"
+echo "
+$drive
+   |
+   ├── $boot (boot partition, fat32)
+   |
+   ├── $system (system partition, ext4)
+   |
+   └── $swap (swap partition, linux-swap)
+"
+
+echo
+echo "WARNING! Continuing will cause $drive to be formatted."
+read -p "Do you really want to continue? [Y/n]" -n 1 -r
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+  exit 1;
+fi
+
+# create partition table
+parted /dev/nvme0n1 -- mklabel gpt
+
+# create boot partition
+parted /dev/nvme0n1 -- mkpart boot fat32 1MiB 512MiB
+parted /dev/nvme0n1 -- set 1 esp on
+mkfs.fat -F 32 -n boot /dev/nvme0n1p1
+
+# create system partition
+parted /dev/nvme0n1 -- mkpart nixos ext4 512MiB -4GiB
+mkfs.ext4 -L nixos /dev/nvme0n1p2
+
+# create swap partition
+parted /dev/nvme0n1 -- mkpart swap linux-swap -4GiB 100%
+mkswap -L swap /dev/nvme0n1p3
+
+# mount partitions
+mount /dev/disk/by-label/nixos /mnt
+
+mkdir -p /mnt/boot
+mount /dev/disk/by-label/boot /mnt/boot
+
+# activate swap
+swapon /dev/nvme0n1p3
+
+# generate default configuration
+nixos-generate-config --root /mnt
+
+echo
+echo "Partitions have been created and hardware-configuration.nix has been generated."
+
