@@ -1,8 +1,5 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
-let
-  pkgs-stable = import inputs.nixpkgs-stable { system = pkgs.system; };
-in
 {
   imports = [
     ./features/cli/starship.nix
