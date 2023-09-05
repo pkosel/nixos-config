@@ -1,4 +1,4 @@
-{ inputs, outputs, lib, config, pkgs, ... }:
+{ config, pkgs, ... }:
 let addons = pkgs.nur.repos.rycee.firefox-addons;
 in {
   programs.firefox = {
@@ -66,46 +66,46 @@ in {
         "signon.rememberSignons" = false;
 
         "browser.uiCustomization.state" = builtins.toJSON {
-            "placements" = {
-              "widget-overflow-fixed-list" = [];
-              "unified-extensions-area" = [];
-              "nav-bar" = [
-                "back-button"
-                "forward-button"
-                "stop-reload-button"
-                "home-button"
-                "customizableui-special-spring1"
-                "urlbar-container"
-                "customizableui-special-spring2"
-                "downloads-button"
-                "fxa-toolbar-menu-button"
-                "ublock0_raymondhill_net-browser-action"
-                "_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action"
-                "zotero_chnm_gmu_edu-browser-action"
-                "languagetool-webextension_languagetool_org-browser-action"
-              ];
-              "toolbar-menubar" = [
-                "menubar-items"
-              ];
-              "TabsToolbar" = [
-                "tabbrowser-tabs"
-                "new-tab-button"
-                "alltabs-button"
-              ];
-              "PersonalToolbar" = [
-                "personal-bookmarks"
-              ];
-            };
-            "seen" = [
-              "developer-button"
+          "placements" = {
+            "widget-overflow-fixed-list" = [ ];
+            "unified-extensions-area" = [ ];
+            "nav-bar" = [
+              "back-button"
+              "forward-button"
+              "stop-reload-button"
+              "home-button"
+              "customizableui-special-spring1"
+              "urlbar-container"
+              "customizableui-special-spring2"
+              "downloads-button"
+              "fxa-toolbar-menu-button"
+              "ublock0_raymondhill_net-browser-action"
+              "_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action"
+              "zotero_chnm_gmu_edu-browser-action"
+              "languagetool-webextension_languagetool_org-browser-action"
             ];
-            "dirtyAreaCache" = [
-              "nav-bar"
-              "PersonalToolbar"
-              "TabsToolbar"
+            "toolbar-menubar" = [
+              "menubar-items"
             ];
-            "currentVersion" = 18;
-            "newElementCount" = 3;
+            "TabsToolbar" = [
+              "tabbrowser-tabs"
+              "new-tab-button"
+              "alltabs-button"
+            ];
+            "PersonalToolbar" = [
+              "personal-bookmarks"
+            ];
+          };
+          "seen" = [
+            "developer-button"
+          ];
+          "dirtyAreaCache" = [
+            "nav-bar"
+            "PersonalToolbar"
+            "TabsToolbar"
+          ];
+          "currentVersion" = 18;
+          "newElementCount" = 3;
         };
       };
     };

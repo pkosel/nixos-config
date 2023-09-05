@@ -1,15 +1,13 @@
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{ config, pkgs, inputs, self, ... }: {
   imports = [
     ./hardware-configuration-laptop.nix
-    # ./hardware/gpu.nix
     ./features/desktop
-    # ./features/services/syncthing.nix
     ./features/virtualization/libvirt.nix
     ./features/vpn.nix
   ];
 
   nixpkgs = {
-    overlays = [ outputs.overlays.additions inputs.nur.overlay ];
+    overlays = [ inputs.nur.overlay self.overlays.additions ];
     config = { allowUnfree = true; };
   };
 

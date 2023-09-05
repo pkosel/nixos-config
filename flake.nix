@@ -17,36 +17,59 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
       inherit (self) outputs;
-      forEachSystem = nixpkgs.lib.genAttrs [ "x86_64-linux" ];
-      forEachPkgs = f: forEachSystem (sys: f nixpkgs.legacyPackages.${sys});
+      system = "x86_64-linux";
+      # pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs {
+        inherit system;
+      };
     in
     {
-      overlays = import ./overlays;
-      packages = forEachPkgs (pkgs: import ./pkgs { inherit pkgs; });
+      packages.${system} = import ./pkgs { inherit pkgs; };
+
+      overlays = {
+        additions = (final: _prev: import ./pkgs { pkgs = final; });
+      };
 
       nixosConfigurations = {
         # Desktop
         bridget = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/configuration-desktop.nix ];
+          inherit system;
+
+          specialArgs = { inherit inputs self; };
+
+          modules = [
+            ./hosts/configuration-desktop.nix
+
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.philipp = import ./home/home.nix;
+              home-manager.extraSpecialArgs = inputs;
+            }
+          ];
         };
 
         # Laptop
-        frida = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/configuration-laptop.nix ];
+        frieda = nixpkgs.lib.nixosSystem {
+          inherit system;
+
+          specialArgs = { inherit inputs self; };
+
+          modules = [
+            ./hosts/configuration-laptop.nix
+
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.philipp = import ./home/home.nix;
+              home-manager.extraSpecialArgs = inputs;
+            }
+          ];
         };
       };
 
-      homeConfigurations = {
-        # Desktop
-        philipp = home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./home/home.nix ];
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        };
-      };
-
-      formatter = forEachPkgs (pkgs: pkgs.nixpkgs-fmt);
+      formatter.${system} = pkgs.nixpkgs-fmt;
     };
 }

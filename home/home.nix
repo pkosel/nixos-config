@@ -1,4 +1,4 @@
-{ inputs, outputs, lib, config, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -9,20 +9,10 @@
     ./features/vscode.nix
   ];
 
-  nixpkgs = {
-    overlays = [ inputs.nur.overlay outputs.overlays.additions ];
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = (_: true);
-    };
-  };
-
   home = {
     username = "philipp";
     homeDirectory = "/home/philipp";
   };
-
-  programs.home-manager.enable = true;
 
   # programs & packages
   home.packages = with pkgs; [
@@ -95,6 +85,8 @@
       theme = "gruvbox-dark";
     };
   };
+
+  programs.home-manager.enable = true;
 
   home.stateVersion = "23.05";
 }

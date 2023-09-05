@@ -1,8 +1,8 @@
-{ inputs, config, pkgs, ... }:
+{ config, pkgs, nix-vscode-extensions, ... }:
 {
   programs.vscode = {
     enable = true;
-    extensions = with inputs.nix-vscode-extensions.extensions."x86_64-linux"; [
+    extensions = with nix-vscode-extensions.extensions."x86_64-linux"; [
       vscode-marketplace.vscodevim.vim
 
       vscode-marketplace.mkhl.direnv

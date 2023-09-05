@@ -1,4 +1,4 @@
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{ config, pkgs, ... }: {
   gtk = {
     enable = true;
     iconTheme = {

@@ -1,3 +1,3 @@
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{ config, pkgs, ... }: {
   imports = [ ./gnome.nix ./gtk.nix ];
 }
