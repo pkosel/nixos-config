@@ -4,6 +4,7 @@
     ./features/desktop
     ./features/virtualization/libvirt.nix
     ./features/vpn.nix
+    ./features/printing.nix
   ];
 
   nixpkgs = {
@@ -31,7 +32,7 @@
     efi.canTouchEfiVariables = true;
   };
 
-  networking.hostName = "frida";
+  networking.hostName = "frieda";
 
   time.timeZone = "Europe/Berlin";
 
@@ -45,13 +46,6 @@
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
-  services = {
-    printing.enable = true;
-    avahi.enable = true;
-    avahi.nssmdns = true;
-    avahi.openFirewall = true;
-  };
 
   users.users.philipp = {
     isNormalUser = true;
