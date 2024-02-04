@@ -3,8 +3,10 @@
     ./hardware-configuration-laptop.nix
     ./features/desktop
     ./features/virtualization/libvirt.nix
+    ./features/virtualization/podman.nix
     ./features/vpn.nix
     ./features/printing.nix
+    ./features/fonts.nix
   ];
 
   nixpkgs = {

@@ -5,8 +5,7 @@
     ./features/cli/starship.nix
     ./features/desktop
     ./features/firefox.nix
-    ./features/nvim
-    ./features/vscode.nix
+    ./features/editors
   ];
 
   home = {
@@ -16,6 +15,9 @@
 
   # programs & packages
   home.packages = with pkgs; [
+    # dev
+    gcc
+
     # privacy & security
     bitwarden
     mullvad-vpn
@@ -23,9 +25,9 @@
     # terminal
     # bat
     fd
-    fzf
+    # fzf
     jq
-    ripgrep
+    # ripgrep
     sd
     tree
 
@@ -54,8 +56,8 @@
       # initial_window_height = "540";
       tab_bar_style = "powerline";
     };
-    font.package = pkgs.jetbrains-mono;
-    font.name = "JetBrains Mono";
+    font.package = pkgs.fira-code;
+    font.name = "Fira Code";
     theme = "Gruvbox Material Dark Medium";
   };
 

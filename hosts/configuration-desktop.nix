@@ -5,8 +5,10 @@
     ./features/desktop
     ./features/services/syncthing.nix
     ./features/virtualization/libvirt.nix
+    ./features/virtualization/podman.nix
     ./features/vpn.nix
     ./features/printing.nix
+    ./features/fonts.nix
   ];
 
   nixpkgs = {

@@ -11,6 +11,7 @@
       button-layout = "appmenu:minimize,maximize,close";
     };
     "org/gnome/shell" = {
+      disable-user-extensions = false;
       enabled-extensions = [
         "blur-my-shell@aunetx"
         "dash-to-panel@jderose9.github.com"
