@@ -8,6 +8,8 @@
     ./features/editors
   ];
 
+  users.users.philipp.initialPassword = "password";
+
   home = {
     username = "philipp";
     homeDirectory = "/home/philipp";
