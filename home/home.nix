@@ -15,6 +15,8 @@
 
   # programs & packages
   home.packages = with pkgs; [
+    cachix
+
     # dev
     gcc
 
