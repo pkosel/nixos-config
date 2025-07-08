@@ -1,79 +1,72 @@
 {
-  description = "My NixOS configuration";
-
-  nixConfig = {
-    extra-substituters = [ "https://nix-community.cachix.org" ];
-    extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
-  };
+  description = "Philipp's NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2311.tar.gz";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 
     home-manager = {
-      url = "https://flakehub.com/f/nix-community/home-manager/0.2311.tar.gz";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nur.url = "github:nix-community/NUR";
-
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }:
     let
-      inherit (self) outputs;
       system = "x86_64-linux";
-      # pkgs = nixpkgs.legacyPackages.${system};
-      pkgs = import nixpkgs { inherit system; };
-    in {
-      packages.${system} = import ./pkgs { inherit pkgs; };
 
-      overlays = {
-        additions = (final: _prev: import ./pkgs { pkgs = final; });
+      # Overlay that adds all custom packages
+      customPackagesOverlay = final: prev: {
+        # Individual package overlays
+        claude-code = final.callPackage ./pkgs/claude-code/package.nix { };
+        morewaita-icon-theme = final.callPackage ./pkgs/morewaita-icon-theme.nix { };
+        window-resizer = final.callPackage ./pkgs/window-resizer.nix { };
       };
 
-      nixosConfigurations = {
-        # Desktop
-        bridget = nixpkgs.lib.nixosSystem {
-          inherit system;
-
-          specialArgs = { inherit inputs self; };
-
-          modules = [
-            ./hosts/configuration-desktop.nix
-
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.philipp = import ./home/home.nix;
-              home-manager.extraSpecialArgs = inputs;
-            }
-          ];
-        };
-
-        # Laptop
-        frieda = nixpkgs.lib.nixosSystem {
-          inherit system;
-
-          specialArgs = { inherit inputs self; };
-
-          modules = [
-            ./hosts/configuration-laptop.nix
-
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.philipp = import ./home/home.nix;
-              home-manager.extraSpecialArgs = inputs;
-            }
-          ];
-        };
+      # Create nixpkgs instance with custom overlays and configuration
+      pkgsWithOverlays = import nixpkgs {
+        inherit system;
+        overlays = [ customPackagesOverlay ];
+        config.allowUnfree = true;
+      };
+    in
+    {
+      # Expose packages for direct building/running
+      packages.${system} = {
+        inherit (pkgsWithOverlays) claude-code morewaita-icon-theme window-resizer;
       };
 
-      formatter.${system} = pkgs.nixpkgs-fmt;
+      # Expose overlay for others to use
+      overlays.default = customPackagesOverlay;
+
+      # Formatter for nix files
+      formatter.${system} = pkgsWithOverlays.nixfmt-tree;
+
+      # NixOS configurations
+      nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          # Apply overlay to system packages
+          { nixpkgs.overlays = [ self.overlays.default ]; }
+
+          ./hosts/frieda/configuration.nix
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.philipp = import ./home/users/philipp.nix;
+          }
+        ];
+      };
+
+      # Development shell
+      devShells.${system}.default = import ./shell.nix { inherit pkgsWithOverlays; };
     };
 }
