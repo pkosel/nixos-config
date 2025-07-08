@@ -1,18 +1,60 @@
-# My NixOS configurations
+# My NixOS configuration
 
-## Bootstrapping
+## Installation
 
-For bootstrapping a flake-enabled nix environment on a fresh install run:
+Clone the configuration repository:
 
+```sh
+git clone https://github.com/pkosel/nixos-config.git ~/.nixos-config
+cd ~/.nixos-config
 ```
-nix-shell
+
+On a new machine, first set up partitions and generate hardware configuration:
+
+```sh
+# Generate hardware configuration
+nixos-generate-config --show-hardware-config > hosts/<hostname>/hardware.nix
 ```
 
-Use `nixos-rebuild --flake .` to build system configurations.  
-Use `home-manager --flake .` to build user configurations.
+Create a new directory under `hosts/<hostname>/` with both `hardware.nix` and `configuration.nix`.
 
-## References
+Reference this host configuration in the `nixosConfigurations.<hostname>` section in `flake.nix`.
 
-- [https://m7.rs/git/nix-config/](https://m7.rs/git/nix-config/)
-- [https://gitlab.com/felschr/nixos-config](https://gitlab.com/felschr/nixos-config)
+To install, run:
 
+```sh
+sudo nixos-rebuild switch --flake '.#<hostname>'
+```
+
+After installation, set a password for your user:
+```sh
+passwd <username>
+```
+
+## Updating
+
+Update all flake inputs:
+
+```sh
+nix flake update
+```
+
+Update a specific flake input:
+
+```sh
+nix flake lock --update-input <input>
+```
+
+## Rebuilding
+
+Rebuild the system:
+
+```sh
+sudo nixos-rebuild switch --flake .
+```
+
+Rebuild home configuration:
+
+```sh
+home-manager switch --flake .
+```

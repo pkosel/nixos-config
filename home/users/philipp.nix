@@ -16,35 +16,36 @@
   # programs & packages
   home.packages = with pkgs; [
     # Development tools
-    claude-code # AI coding assistant
-    gcc # GNU Compiler Collection
+    claude-code
+    gcc
 
     # Privacy & security
-    bitwarden # Password manager
-    mullvad-vpn # VPN client
+    bitwarden
+    mullvad-vpn
 
     # Terminal utilities
-    fd # Fast file finder
-    jq # JSON processor
-    sd # String replacement tool
-    tree # Directory tree viewer
+    fd
+    jq
+    sd
+    tree
 
     # Research & productivity
-    zotero # Reference management
-    libreoffice # Office suite
+    zotero
+    libreoffice
 
     # Communication
-    signal-desktop # Secure messaging
+    signal-desktop
 
     # Media & entertainment
-    calibre # E-book management
-    foliate # E-book reader
-    celluloid # Video player (MPV frontend)
+    calibre
+    foliate
+    celluloid
 
     # German ID card software
-    ausweisapp # Official German ID card application
+    ausweisapp
   ];
 
+  # Terminal and shell
   programs.kitty = {
     enable = true;
     settings = {
@@ -64,10 +65,11 @@
     enable = true;
   };
 
+  # Development tools
   programs.git = {
     enable = true;
     userName = "Philipp Kosel";
-    userEmail = "170943+pkosel@users.noreply.github.com";
+    userEmail = "pkosel@fastmail.com";
     extraConfig = {
       init = {
         defaultBranch = "main";
@@ -80,6 +82,7 @@
     nix-direnv.enable = true;
   };
 
+  # Utilities
   programs.bat = {
     enable = true;
     config = {
@@ -87,6 +90,7 @@
     };
   };
 
+  # System
   programs.home-manager.enable = true;
 
   home.username = "philipp";
