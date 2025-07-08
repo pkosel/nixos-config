@@ -13,7 +13,7 @@
     ../../home/modules/editors
   ];
 
-  # programs & packages
+  # System packages
   home.packages = with pkgs; [
     # Development tools
     claude-code
@@ -45,7 +45,7 @@
     ausweisapp
   ];
 
-  # Terminal and shell
+  # Terminal configuration
   programs.kitty = {
     enable = true;
     settings = {
@@ -82,7 +82,6 @@
     nix-direnv.enable = true;
   };
 
-  # Utilities
   programs.bat = {
     enable = true;
     config = {
@@ -90,7 +89,7 @@
     };
   };
 
-  # System
+  # Home Manager configuration
   programs.home-manager.enable = true;
 
   home.username = "philipp";

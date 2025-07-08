@@ -17,6 +17,7 @@
     ../../modules/system/fonts.nix
   ];
 
+  # Nix configuration
   nixpkgs = {
     config = {
       allowUnfree = true;
@@ -24,6 +25,7 @@
   };
 
   nix = {
+    # Garbage collector runs weekly
     gc = {
       automatic = true;
       dates = "weekly";
@@ -41,15 +43,17 @@
     '';
   };
 
+  # Boot configuration
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
   };
 
+  # System identity
   networking.hostName = "frieda";
 
+  # Localization
   time.timeZone = "Europe/Berlin";
-
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {
@@ -69,6 +73,7 @@
     jack.enable = true; # JACK compatibility for pro audio
   };
 
+  # User configuration
   users.users.philipp = {
     isNormalUser = true;
     extraGroups = [
@@ -78,12 +83,25 @@
     shell = pkgs.fish;
   };
 
+  # Programs and services
   programs.fish.enable = true;
   programs.ssh.startAgent = true;
 
+  # System packages
   environment.systemPackages = with pkgs; [
+    # Editors
     vim
+    
+    # Version control
+    git
+    
+    # Network tools
+    curl
     wget
+    
+    # System utilities
+    htop
+    unzip
   ];
 
   system.stateVersion = "25.05";
