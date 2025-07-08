@@ -65,6 +65,13 @@
     enable = true;
   };
 
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "gruvbox-dark";
+    };
+  };
+
   # Development tools
   programs.git = {
     enable = true;
@@ -80,13 +87,6 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
-  };
-
-  programs.bat = {
-    enable = true;
-    config = {
-      theme = "gruvbox-dark";
-    };
   };
 
   # Home Manager configuration
