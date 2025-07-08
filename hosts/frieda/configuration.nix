@@ -79,6 +79,7 @@
   };
 
   programs.fish.enable = true;
+  programs.ssh.startAgent = true;
 
   environment.systemPackages = with pkgs; [
     vim
