@@ -10,7 +10,7 @@
     gnomeExtensions.blur-my-shell
     gnomeExtensions.dash-to-panel
     gnomeExtensions.pop-shell
-    #window-resizer
+    window-resizer
   ];
 
   dconf.settings = {
