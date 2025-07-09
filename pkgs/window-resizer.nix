@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pkosel";
     repo = "window-resizer";
-    rev = "0352f8e34116a8bcc55f6618ff3eb13ccee25f77";
-    sha256 = "0x6f7hg6lxmk9n186p4ki9zix41l9r1q7810hk0xi2dmywndsf8q";
+    rev = "5ba4a575dce6cbaf4f1335e0d79eb93f5afd669c";
+    sha256 = "sha256-k8QhPZxQfHGikrTWHpnSkg2sFqALIfVxL7SDI15w0NY=";
   };
 
   nativeBuildInputs = [ glib ];
