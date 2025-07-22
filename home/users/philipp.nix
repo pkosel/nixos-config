@@ -89,6 +89,12 @@
     nix-direnv.enable = true;
   };
 
+  # Obsidian configuration
+  programs.obsidian = {
+    enable = true;
+    vaults."Documents/Vault".enable = true;
+  };
+
   # Home Manager configuration
   programs.home-manager.enable = true;
 

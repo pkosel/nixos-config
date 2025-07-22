@@ -30,6 +30,7 @@
         "firefox.desktop"
         "code.desktop"
         "kitty.desktop"
+        "obsidian.desktop"
         "zotero.desktop"
         "calibre-gui.desktop"
         "signal-desktop.desktop"
