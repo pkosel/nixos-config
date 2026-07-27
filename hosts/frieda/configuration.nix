@@ -56,6 +56,10 @@
 
   # System identity
   networking.hostName = "frieda";
+  networking.nameservers = [
+    "1.1.1.1"
+    "8.8.8.8"
+  ];
 
   # Localization
   time.timeZone = "Europe/Berlin";
