@@ -90,6 +90,10 @@
 
   # Programs and services
   programs.fish.enable = true;
+  programs.ausweisapp = {
+    enable = true;
+    openFirewall = true;
+  };
   programs.ssh.startAgent = true;
 
   # System packages

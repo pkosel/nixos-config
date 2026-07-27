@@ -43,9 +43,6 @@
     calibre
     foliate
     celluloid
-
-    # German ID card software
-    ausweisapp
   ];
 
   # Terminal configuration
