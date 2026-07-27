@@ -7,10 +7,10 @@
 
 {
   imports = [
-    ../../home/modules/cli/starship.nix
-    ../../home/modules/desktop
-    ../../home/modules/firefox.nix
-    ../../home/modules/editors
+    ../home/cli/starship.nix
+    ../home/desktop
+    ../home/firefox
+    ../home/editors
   ];
 
   # System packages

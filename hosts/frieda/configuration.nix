@@ -8,13 +8,13 @@
 {
   imports = [
     ./hardware.nix
-    ../../modules/system/desktop
-    ../../modules/system/services/syncthing.nix
-    ../../modules/system/virtualization/libvirt.nix
-    ../../modules/system/virtualization/podman.nix
-    ../../modules/system/vpn.nix
-    ../../modules/system/printing.nix
-    ../../modules/system/fonts.nix
+    ../../system/desktop
+    ../../system/services/syncthing.nix
+    ../../system/virtualization/libvirt.nix
+    ../../system/virtualization/podman.nix
+    ../../system/vpn.nix
+    ../../system/printing.nix
+    ../../system/fonts.nix
   ];
 
   # Nix configuration
