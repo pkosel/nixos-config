@@ -24,9 +24,12 @@
     mullvad-vpn
 
     # Terminal utilities
+    eza
     fd
+    fzf
     jq
     mdcat
+    ripgrep
     sd
     tree
 
@@ -42,7 +45,9 @@
     # Media & entertainment
     calibre
     foliate
-    celluloid
+    # celluloid
+    spot
+
   ];
 
   # Terminal configuration
