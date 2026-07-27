@@ -21,12 +21,12 @@
     device = "https://files.pkosel.dev";
     fsType = "davfs";
     options = [
-      "noauto"                      # Don't mount at boot
-      "x-systemd.automount"         # Mount on access
-      "x-systemd.idle-timeout=300"  # Unmount after 5 min idle (optional)
-      "_netdev"                     # Network device, wait for network
-      "uid=1000"                    # Owner: philipp
-      "gid=100"                     # Group: users
+      "noauto" # Don't mount at boot
+      "x-systemd.automount" # Mount on access
+      "x-systemd.idle-timeout=300" # Unmount after 5 min idle (optional)
+      "_netdev" # Network device, wait for network
+      "uid=1000" # Owner: philipp
+      "gid=100" # Group: users
     ];
   };
 }
