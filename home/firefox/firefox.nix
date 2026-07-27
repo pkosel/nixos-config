@@ -31,6 +31,9 @@ in
       };
 
       search = {
+        # Firefox writes search.json.mozlz4 itself, so Home Manager refuses to
+        # replace it unless told to. Without this the activation aborts.
+        force = true;
         default = "ecosia";
         engines = {
           "google".metaData.hidden = true;
