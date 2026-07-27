@@ -23,23 +23,17 @@
   };
 
   outputs =
-    {
-      self,
+    inputs@{
       nixpkgs,
       home-manager,
       claude-code,
-      firefox-addons,
-      betterfox,
       ...
     }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-      };
     in
     {
-      formatter.${system} = pkgs.nixfmt-tree;
+      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-tree;
 
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
         inherit system;
@@ -47,8 +41,9 @@
           {
             nixpkgs.overlays = [
               claude-code.overlays.default
-              (final: prev: { mdcat = final.callPackage ./pkgs/mdcat.nix { }; })
               (final: prev: {
+                mdcat = final.callPackage ./pkgs/mdcat.nix { };
+
                 # Fix crash on file dialogs (e.g. Import): anki's Qt6 GTK3 theme
                 # integration needs a schema shipped by gtk3, which isn't part of
                 # this GNOME session's (gtk4-based) XDG_DATA_DIRS.
@@ -71,9 +66,9 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.users.philipp = import ./users/philipp.nix;
-            home-manager.extraSpecialArgs = {
-              inputs = { inherit firefox-addons betterfox; };
-            };
+            # Home Manager modules reach flake inputs through this; firefox uses
+            # firefox-addons and betterfox.
+            home-manager.extraSpecialArgs = { inherit inputs; };
           }
         ];
       };
