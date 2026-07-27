@@ -50,8 +50,6 @@
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
             home-manager.users.philipp = import ./users/philipp.nix;
             home-manager.extraSpecialArgs = { inputs = { inherit firefox-addons; }; };
           }
