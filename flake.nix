@@ -9,6 +9,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    claude-code.url = "github:sadjow/claude-code-nix";
+
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,45 +22,28 @@
       self,
       nixpkgs,
       home-manager,
+      claude-code,
       firefox-addons,
       ...
     }:
     let
       system = "x86_64-linux";
-
-      # Overlay that adds all custom packages
-      customPackagesOverlay = final: prev: {
-        # Individual package overlays
-        claude-code = final.callPackage ./pkgs/claude-code/package.nix { };
-        morewaita-icon-theme = final.callPackage ./pkgs/morewaita-icon-theme.nix { };
-        window-resizer = final.callPackage ./pkgs/window-resizer.nix { };
-      };
-
-      # Create nixpkgs instance with custom overlays and configuration
-      pkgsWithOverlays = import nixpkgs {
+      pkgs = import nixpkgs {
         inherit system;
-        overlays = [ customPackagesOverlay ];
-        config.allowUnfree = true;
       };
     in
     {
-      # Expose packages for direct building/running
-      packages.${system} = {
-        inherit (pkgsWithOverlays) claude-code morewaita-icon-theme window-resizer;
-      };
+      formatter.${system} = pkgs.nixfmt-tree;
 
-      # Expose overlay for others to use
-      overlays.default = customPackagesOverlay;
-
-      # Formatter for nix files
-      formatter.${system} = pkgsWithOverlays.nixfmt-tree;
-
-      # NixOS configurations
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          # Apply overlay to system packages
-          { nixpkgs.overlays = [ self.overlays.default ]; }
+          {
+            nixpkgs.overlays = [
+              claude-code.overlays.default
+              (final: prev: { window-resizer = final.callPackage ./pkgs/window-resizer.nix { }; })
+            ];
+          }
 
           ./hosts/frieda/configuration.nix
 

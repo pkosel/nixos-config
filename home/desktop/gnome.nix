@@ -7,6 +7,7 @@
 
 {
   home.packages = with pkgs; [
+    morewaita-icon-theme
     gnomeExtensions.blur-my-shell
     gnomeExtensions.dash-to-panel
     gnomeExtensions.pop-shell
