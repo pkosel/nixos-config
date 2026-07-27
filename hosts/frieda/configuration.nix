@@ -104,14 +104,14 @@
   environment.systemPackages = with pkgs; [
     # Editors
     vim
-    
+
     # Version control
     git
-    
+
     # Network tools
     curl
     wget
-    
+
     # System utilities
     htop
     unzip
