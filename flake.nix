@@ -72,8 +72,5 @@
           }
         ];
       };
-
-      # Development shell
-      devShells.${system}.default = import ./shell.nix { inherit pkgsWithOverlays; };
     };
 }
