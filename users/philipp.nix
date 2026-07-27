@@ -20,7 +20,7 @@
     gcc
 
     # Privacy & security
-    bitwarden
+    bitwarden-desktop
     mullvad-vpn
 
     # Terminal utilities
@@ -75,9 +75,11 @@
   # Development tools
   programs.git = {
     enable = true;
-    userName = "Philipp Kosel";
-    userEmail = "pkosel@fastmail.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Philipp Kosel";
+        email = "pkosel@fastmail.com";
+      };
       init = {
         defaultBranch = "main";
       };
@@ -101,5 +103,5 @@
   home.username = "philipp";
   home.homeDirectory = "/home/philipp";
 
-  home.stateVersion = "25.05";
+  home.stateVersion = "25.11";
 }

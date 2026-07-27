@@ -18,10 +18,13 @@
   ];
 
   # Nix configuration
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-    };
+  nixpkgs.config = {
+    allowUnfree = true;
+    allowUnfreePredicate = _: true;
+
+    permittedInsecurePackages = [
+      "electron-39.8.10"
+    ];
   };
 
   nix = {
@@ -104,5 +107,5 @@
     unzip
   ];
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }

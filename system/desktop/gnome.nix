@@ -14,8 +14,8 @@
       gnome-tweaks
     ];
 
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   # Exclude some default applications
   environment.gnome.excludePackages = with pkgs; [
