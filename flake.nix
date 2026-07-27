@@ -41,6 +41,7 @@
           {
             nixpkgs.overlays = [
               claude-code.overlays.default
+              (final: prev: { mdcat = final.callPackage ./pkgs/mdcat.nix { }; })
               (final: prev: { window-resizer = final.callPackage ./pkgs/window-resizer.nix { }; })
             ];
           }

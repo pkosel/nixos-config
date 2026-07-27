@@ -26,6 +26,7 @@
     # Terminal utilities
     fd
     jq
+    mdcat
     sd
     tree
 
