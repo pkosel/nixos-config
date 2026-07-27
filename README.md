@@ -1,34 +1,79 @@
 # My NixOS configuration
 
+A single flake that builds both the system and my user environment.
+Home Manager runs as a NixOS module, so there is no separate `home-manager switch`.
+
+Hosts:
+
+| Host     | Machine       |
+| -------- | ------------- |
+| `frieda` | Desktop, GNOME |
+
+## Structure
+
+```
+flake.nix         inputs, overlays and the nixosConfigurations
+hosts/<host>/     per-machine: configuration.nix + hardware.nix
+system/           system modules, imported by a host
+home/             Home Manager modules, imported by a user
+users/<user>.nix  per-user Home Manager profile
+pkgs/             packages that aren't in nixpkgs
+scripts/          installation helpers
+```
+
+Modules stay optional: a module under `system/` or `home/` configures one thing
+and does nothing until a host or user imports it. Anything machine-specific
+belongs in `hosts/`, not in a module.
+
 ## Installation
 
-Clone the configuration repository:
+Clone the configuration:
 
 ```sh
 git clone https://github.com/pkosel/nixos-config.git ~/.nixos-config
 cd ~/.nixos-config
 ```
 
-On a new machine, first set up partitions and generate hardware configuration:
+On a new machine, partition the disk:
 
 ```sh
-# Generate hardware configuration
-nixos-generate-config --show-hardware-config > hosts/<hostname>/hardware.nix
+scripts/setup-partitions
 ```
 
-Create a new directory under `hosts/<hostname>/` with both `hardware.nix` and `configuration.nix`.
-
-Reference this host configuration in the `nixosConfigurations.<hostname>` section in `flake.nix`.
-
-To install, run:
+Then generate the hardware configuration for the new host:
 
 ```sh
-sudo nixos-rebuild switch --flake '.#<hostname>'
+mkdir -p hosts/<host>
+nixos-generate-config --show-hardware-config > hosts/<host>/hardware.nix
 ```
 
-After installation, set a password for your user:
+Write `hosts/<host>/configuration.nix` next to it, importing the modules the
+machine needs, and add a `nixosConfigurations.<host>` section in `flake.nix`.
+
+Install, where `<host>` matches `nixosConfigurations.<host>`:
+
 ```sh
-passwd <username>
+sudo nixos-install --flake '.#<host>'
+```
+
+Afterwards set a password for the user:
+
+```sh
+passwd <user>
+```
+
+## Rebuilding
+
+Build and activate the configuration for this machine:
+
+```sh
+sudo nixos-rebuild switch --flake .#frieda
+```
+
+Build it without touching the running system:
+
+```sh
+nixos-rebuild build --flake .#frieda
 ```
 
 ## Updating
@@ -39,22 +84,16 @@ Update all flake inputs:
 nix flake update
 ```
 
-Update a specific flake input:
+Update a single input:
 
 ```sh
-nix flake lock --update-input <input>
+nix flake update <input>
 ```
 
-## Rebuilding
+## Formatting
 
-Rebuild the system:
-
-```sh
-sudo nixos-rebuild switch --flake .
-```
-
-Rebuild home configuration:
+Format every Nix file in the repo:
 
 ```sh
-home-manager switch --flake .
+nix fmt
 ```
