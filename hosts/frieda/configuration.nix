@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -22,8 +17,8 @@
   # Nix configuration
   nixpkgs.config = {
     allowUnfree = true;
-    allowUnfreePredicate = _: true;
 
+    # bitwarden-desktop still builds against an EOL electron.
     permittedInsecurePackages = [
       "electron-39.8.10"
     ];

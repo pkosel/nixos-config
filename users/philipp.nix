@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -13,7 +8,7 @@
     ../home/editors
   ];
 
-  # System packages
+  # User packages
   home.packages = with pkgs; [
     # Development tools
     claude-code
@@ -47,7 +42,6 @@
     foliate
     # celluloid
     spot
-
   ];
 
   # Terminal configuration
@@ -104,9 +98,6 @@
 
   # Home Manager configuration
   programs.home-manager.enable = true;
-
-  home.username = "philipp";
-  home.homeDirectory = "/home/philipp";
 
   home.stateVersion = "25.11";
 }
