@@ -1,82 +1,56 @@
 require("telescope").setup()
 require("telescope").load_extension("fzy_native")
 
+local builtin = require("telescope.builtin")
 local wk = require("which-key")
 
-wk.register({
-  t = {
-    name = "Telescope",
-    a = { require("telescope.builtin").autocommands, "Autocommands" },
-    b = {
-      require("telescope.builtin").current_buffer_fuzzy_find,
-      "Current buffer",
-    },
-    B = { require("telescope.builtin").buffers, "Buffers" },
-    c = { require("telescope.builtin").live_grep, "Live grep" },
-    C = { require("telescope.builtin").commands, "Commands" },
-    f = { require("telescope.builtin").find_files, "Files" },
-    g = {
-      name = "Git",
-      b = { require("telescope.builtin").git_branches, "Branches" },
-      c = {
-        require("telescope.builtin").git_bcommits,
-        "Commits in buffer",
-      },
-      C = { require("telescope.builtin").git_commits, "Commits" },
-      f = { require("telescope.builtin").git_files, "Files" },
-      s = { require("telescope.builtin").git_statu, "Status" },
-      S = { require("telescope.builtin").git_stash, "Stash" },
-    },
-    h = { require("telescope.builtin").search_history, "Search history" },
-    H = { require("telescope.builtin").command_history, "Command history" },
-    j = { require("telescope.builtin").jumplist, "Jump List" },
-    l = {
-      name = "LSP",
-      d = { require("telescope.builtin").lsp_definitions, "Definitions" },
-      D = { require("telescope.builtin").diagnostics, "Diagnostics" },
-      i = {
-        require("telescope.builtin").lsp_implementations,
-        "Implementations",
-      },
-      r = { require("telescope.builtin").lsp_references, "References" },
-      s = {
-        require("telescope.builtin").lsp_document_symbols,
-        "Document symbols",
-      },
-      S = {
-        require("telescope.builtin").lsp_workspace_symbols,
-        "Workspace symbols",
-      },
-      y = {
-        require("telescope.builtin").lsp_type_definitions,
-        "Type definitions",
-      },
-    },
-    L = { require("telescope.builtin").loclist, "Location list" },
-    m = { require("telescope.builtin").marks, "Marks" },
-    M = { require("telescope.builtin").man_pages, "Man pages" },
-    o = { require("telescope.builtin").oldfiles, "Previously open files" },
-    -- p = { require("telescope").extensions.project.project, "Pickers" },
-    P = { require("telescope.builtin").pickers, "Pickers" },
-    q = { require("telescope.builtin").quickfix, "Quickfix" },
-    Q = { require("telescope.builtin").quickfixhistory, "Quickfix history" },
-    r = { require("telescope.builtin").resume, "Resume" },
-    R = { require("telescope.builtin").registers, "Registers" },
-    s = {
-      require("telescope.builtin").grep_string,
-      "Grep string under cursor",
-    },
-    t = { require("telescope.builtin").tags, "Tags" },
-    T = {
-      require("telescope.builtin").current_buffer_tags,
-      "Tags in current buffer",
-    },
-    v = { require("telescope.builtin").vim_options, "Vim options" },
-    x = {
-      name = "More",
-      h = { require("telescope.builtin").highlights, "Highlights" },
-      H = { require("telescope.builtin").help_tags, "Help tags" },
-      t = { require("telescope.builtin").treesitter, "Treesitter" },
-    },
-  },
-}, { mode = "n", prefix = "<leader>" })
+wk.add({
+  { "<leader>t", group = "Telescope" },
+  { "<leader>ta", builtin.autocommands, desc = "Autocommands" },
+  { "<leader>tb", builtin.current_buffer_fuzzy_find, desc = "Current buffer" },
+  { "<leader>tB", builtin.buffers, desc = "Buffers" },
+  { "<leader>tc", builtin.live_grep, desc = "Live grep" },
+  { "<leader>tC", builtin.commands, desc = "Commands" },
+  { "<leader>tf", builtin.find_files, desc = "Files" },
+
+  { "<leader>tg", group = "Git" },
+  { "<leader>tgb", builtin.git_branches, desc = "Branches" },
+  { "<leader>tgc", builtin.git_bcommits, desc = "Commits in buffer" },
+  { "<leader>tgC", builtin.git_commits, desc = "Commits" },
+  { "<leader>tgf", builtin.git_files, desc = "Files" },
+  { "<leader>tgs", builtin.git_status, desc = "Status" },
+  { "<leader>tgS", builtin.git_stash, desc = "Stash" },
+
+  { "<leader>th", builtin.search_history, desc = "Search history" },
+  { "<leader>tH", builtin.command_history, desc = "Command history" },
+  { "<leader>tj", builtin.jumplist, desc = "Jump List" },
+
+  { "<leader>tl", group = "LSP" },
+  { "<leader>tld", builtin.lsp_definitions, desc = "Definitions" },
+  { "<leader>tlD", builtin.diagnostics, desc = "Diagnostics" },
+  { "<leader>tli", builtin.lsp_implementations, desc = "Implementations" },
+  { "<leader>tlr", builtin.lsp_references, desc = "References" },
+  { "<leader>tls", builtin.lsp_document_symbols, desc = "Document symbols" },
+  { "<leader>tlS", builtin.lsp_workspace_symbols, desc = "Workspace symbols" },
+  { "<leader>tly", builtin.lsp_type_definitions, desc = "Type definitions" },
+
+  { "<leader>tL", builtin.loclist, desc = "Location list" },
+  { "<leader>tm", builtin.marks, desc = "Marks" },
+  { "<leader>tM", builtin.man_pages, desc = "Man pages" },
+  { "<leader>to", builtin.oldfiles, desc = "Previously open files" },
+  -- { "<leader>tp", require("telescope").extensions.project.project, desc = "Projects" },
+  { "<leader>tP", builtin.pickers, desc = "Pickers" },
+  { "<leader>tq", builtin.quickfix, desc = "Quickfix" },
+  { "<leader>tQ", builtin.quickfixhistory, desc = "Quickfix history" },
+  { "<leader>tr", builtin.resume, desc = "Resume" },
+  { "<leader>tR", builtin.registers, desc = "Registers" },
+  { "<leader>ts", builtin.grep_string, desc = "Grep string under cursor" },
+  { "<leader>tt", builtin.tags, desc = "Tags" },
+  { "<leader>tT", builtin.current_buffer_tags, desc = "Tags in current buffer" },
+  { "<leader>tv", builtin.vim_options, desc = "Vim options" },
+
+  { "<leader>tx", group = "More" },
+  { "<leader>txh", builtin.highlights, desc = "Highlights" },
+  { "<leader>txH", builtin.help_tags, desc = "Help tags" },
+  { "<leader>txt", builtin.treesitter, desc = "Treesitter" },
+})

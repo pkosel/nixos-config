@@ -1,7 +1,7 @@
-local config = require("lspconfig")
-
-config.nil_ls.setup({})
-config.lua_ls.setup({
+-- nvim-lspconfig ships the server defaults (cmd, filetypes, root markers) in its
+-- lsp/ directory, which nvim picks up off the runtimepath; vim.lsp.config only
+-- layers our overrides on top of those.
+vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
       runtime = {
@@ -16,11 +16,13 @@ config.lua_ls.setup({
     },
   },
 })
-config.marksman.setup({})
 
-local wk = require("which-key")
+vim.lsp.enable({
+  "lua_ls",
+  "marksman",
+  "nil_ls",
+})
 
-wk.register(
-  { f = { vim.lsp.buf.format, "Format file" } },
-  { mode = "n", prefix = "<leader>" }
-)
+require("which-key").add({
+  { "<leader>f", vim.lsp.buf.format, desc = "Format file" },
+})

@@ -40,10 +40,9 @@ vim.keymap.set(
 local wk = require("which-key")
 
 require("nvim-tree").setup({})
-wk.register(
-  { ["<C-p>"] = { require("nvim-tree.api").tree.toggle, "Toggle NvimTree" } },
-  { mode = "n" }
-)
+wk.add({
+  { "<C-p>", require("nvim-tree.api").tree.toggle, desc = "Toggle NvimTree" },
+})
 
 require("nvim_comment").setup()
 
