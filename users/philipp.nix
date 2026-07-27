@@ -31,6 +31,8 @@
     tree
 
     # Research & productivity
+    anki
+    markdown-anki-decks
     zotero
     libreoffice
 
