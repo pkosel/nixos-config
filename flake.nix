@@ -56,7 +56,6 @@
                   '';
                 };
               })
-              (final: prev: { window-resizer = final.callPackage ./pkgs/window-resizer.nix { }; })
             ];
           }
 

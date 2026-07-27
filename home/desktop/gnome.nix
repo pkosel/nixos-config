@@ -9,9 +9,8 @@
   home.packages = with pkgs; [
     morewaita-icon-theme
     gnomeExtensions.blur-my-shell
-    gnomeExtensions.dash-to-panel
-    gnomeExtensions.pop-shell
-    window-resizer
+    gnomeExtensions.dash-to-dock
+    gnomeExtensions.tiling-shell
   ];
 
   dconf.settings = {
@@ -22,9 +21,8 @@
       disable-user-extensions = false;
       enabled-extensions = [
         "blur-my-shell@aunetx"
-        "dash-to-panel@jderose9.github.com"
-        "pop-shell@system76.com"
-        "window-resizer@pkosel.github.com"
+        "dash-to-dock@micxgx.gmail.com"
+        "tilingshell@ferrarodomenico.com"
       ];
       favorite-apps = [
         "org.gnome.Nautilus.desktop"
@@ -33,49 +31,60 @@
         "kitty.desktop"
         "obsidian.desktop"
         "zotero.desktop"
-        "calibre-gui.desktop"
-        "signal-desktop.desktop"
+        "signal.desktop"
       ];
     };
 
     "org/gnome/desktop/app-folders" = {
       folder-children = [
-        "Office"
         "Utilities"
+        "LibreOffice"
+        "Calibre"
       ];
-    };
-    "org/gnome/desktop/app-folders/folders/Office" = {
-      name = "Office";
-      translate = true;
-      categories = [ "Office" ];
     };
     "org/gnome/desktop/app-folders/folders/Utilities" = {
       name = "Utilities";
       translate = true;
-      categories = [
-        "Utility"
-        "X-GNOME-Utilities"
-        "System"
+      apps = [
+        "org.gnome.Characters.desktop"
+        "org.gnome.Console.desktop"
+        "org.gnome.baobab.desktop"
+        "org.gnome.DiskUtility.desktop"
+        "org.gnome.Extensions.desktop"
+        "org.gnome.font-viewer.desktop"
+        "htop.desktop"
+        "org.gnome.Logs.desktop"
+        "cups.desktop"
+        "org.gnome.seahorse.Application.desktop"
+        "org.gnome.SystemMonitor.desktop"
+        "org.gnome.tweaks.desktop"
+        "vim.desktop"
+        "xterm.desktop"
+        "ca.desrt.dconf-editor.desktop"
       ];
     };
-
-    "org/gnome/shell/extensions/dash-to-panel" = {
-      dot-style-focused = "SQUARES";
-      dot-style-unfocused = "SQUARES";
-      stockgs-keep-top-panel = true;
-      panel-element-positions = ''
-        {"0":[
-          {"element":"showAppsButton","visible":true,"position":"stackedBR"},
-          {"element":"activitiesButton","visible":false,"position":"stackedTL"},
-          {"element":"leftBox","visible":false,"position":"stackedTL"},
-          {"element":"taskbar","visible":true,"position":"centered"},
-          {"element":"centerBox","visible":false,"position":"stackedBR"},
-          {"element":"rightBox","visible":false,"position":"stackedBR"},
-          {"element":"dateMenu","visible":false,"position":"stackedBR"},
-          {"element":"systemMenu","visible":false,"position":"stackedBR"},
-          {"element":"desktopButton","visible":false,"position":"stackedBR"}
-        ]}
-      '';
+    "org/gnome/desktop/app-folders/folders/LibreOffice" = {
+      name = "LibreOffice";
+      translate = true;
+      apps = [
+        "startcenter.desktop"
+        "writer.desktop"
+        "calc.desktop"
+        "impress.desktop"
+        "draw.desktop"
+        "base.desktop"
+        "math.desktop"
+      ];
+    };
+    "org/gnome/desktop/app-folders/folders/Calibre" = {
+      name = "Calibre";
+      translate = true;
+      apps = [
+        "calibre-gui.desktop"
+        "calibre-ebook-edit.desktop"
+        "calibre-ebook-viewer.desktop"
+        "calibre-lrfviewer.desktop"
+      ];
     };
   };
 }
