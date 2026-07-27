@@ -98,7 +98,7 @@
     enable = true;
     openFirewall = true;
   };
-  programs.ssh.startAgent = true;
+  # programs.ssh.startAgent = true;
 
   # System packages
   environment.systemPackages = with pkgs; [
