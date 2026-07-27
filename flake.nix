@@ -15,6 +15,11 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    betterfox = {
+      url = "github:yokoffing/Betterfox";
+      flake = false;
+    };
   };
 
   outputs =
@@ -24,6 +29,7 @@
       home-manager,
       claude-code,
       firefox-addons,
+      betterfox,
       ...
     }:
     let
@@ -65,7 +71,9 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.users.philipp = import ./users/philipp.nix;
-            home-manager.extraSpecialArgs = { inputs = { inherit firefox-addons; }; };
+            home-manager.extraSpecialArgs = {
+              inputs = { inherit firefox-addons betterfox; };
+            };
           }
         ];
       };

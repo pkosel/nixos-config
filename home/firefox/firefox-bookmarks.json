@@ -1,0 +1,107 @@
+[
+  {
+    "name": "Bookmarks Toolbar",
+    "toolbar": true,
+    "bookmarks": [
+      {
+        "name": "Investing",
+        "bookmarks": [
+          {
+            "name": "Seeking Alpha",
+            "url": "https://seekingalpha.com"
+          },
+          {
+            "name": "Finviz",
+            "url": "https://finviz.com"
+          }
+        ]
+      },
+      {
+        "name": "NixOS",
+        "bookmarks": [
+          {
+            "name": "NixOS Search",
+            "url": "https://search.nixos.org",
+            "keyword": "nix"
+          },
+          {
+            "name": "NixOS Manual",
+            "url": "https://nixos.org/manual/nixos/stable/"
+          },
+          {
+            "name": "Nix Manual",
+            "url": "https://nixos.org/manual/nix/stable/"
+          },
+          {
+            "name": "Home Manager Manual",
+            "url": "https://nix-community.github.io/home-manager/"
+          },
+          {
+            "name": "NixOS Wiki",
+            "url": "https://wiki.nixos.org/wiki/NixOS_Wiki"
+          },
+          {
+            "name": "NixOS Learn Hub",
+            "url": "https://nixos.org/learn/"
+          },
+          {
+            "name": "Nix.dev",
+            "url": "https://nix.dev/"
+          },
+          {
+            "name": "Zero to Nix",
+            "url": "https://zero-to-nix.com/"
+          },
+          {
+            "name": "NixOS & Flakes Book",
+            "url": "https://nixos-and-flakes.thiscute.world/"
+          },
+          {
+            "name": "Nix Pills",
+            "url": "https://nixos.org/guides/nix-pills/"
+          },
+          {
+            "name": "Nix from First Principles",
+            "url": "https://tonyfinn.com/blog/nix-from-first-principles-flake-edition/"
+          },
+          {
+            "name": "Practical Nix Flakes",
+            "url": "https://serokell.io/blog/practical-nix-flakes"
+          },
+          {
+            "name": "Flake Anatomy Guide",
+            "url": "https://vtimofeenko.com/posts/practical-nix-flake-anatomy-a-guided-tour-of-flake.nix/"
+          },
+          {
+            "name": "Nix 1p Reference",
+            "url": "https://code.tvl.fyi/about/nix/nix-1p"
+          },
+          {
+            "name": "Flake Parts",
+            "url": "https://flake.parts/"
+          },
+          {
+            "name": "felschr's Config",
+            "url": "https://gitlab.com/felschr/nixos-config"
+          },
+          {
+            "name": "pkosel's Config",
+            "url": "https://github.com/pkosel/nixos-config"
+          },
+          {
+            "name": "Awesome Nix",
+            "url": "https://nix-community.github.io/awesome-nix/"
+          },
+          {
+            "name": "nixpkgs",
+            "url": "https://github.com/NixOS/nixpkgs"
+          },
+          {
+            "name": "NixOS Discourse",
+            "url": "https://discourse.nixos.org/"
+          }
+        ]
+      }
+    ]
+  }
+]
