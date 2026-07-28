@@ -14,7 +14,7 @@
     ../../system/fonts.nix
   ];
 
-  # Nix configuration
+  # Nix
   nixpkgs.config = {
     allowUnfree = true;
 
@@ -25,7 +25,6 @@
   };
 
   nix = {
-    # Garbage collector runs weekly
     gc = {
       automatic = true;
       dates = "weekly";
@@ -36,25 +35,26 @@
         "nix-command"
         "flakes"
       ];
+      # Keep build inputs around so `nix develop` shells survive a GC run.
+      keep-outputs = true;
+      keep-derivations = true;
     };
-    extraOptions = ''
-      keep-outputs = true
-      keep-derivations = true
-    '';
   };
 
-  # Boot configuration
+  # Boot
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
   };
 
-  # System identity
-  networking.hostName = "frieda";
-  networking.nameservers = [
-    "1.1.1.1"
-    "8.8.8.8"
-  ];
+  # Networking
+  networking = {
+    hostName = "frieda";
+    nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
+  };
 
   # Localization
   time.timeZone = "Europe/Berlin";
@@ -66,28 +66,25 @@
     };
   };
 
-  # Audio configuration using PipeWire (modern audio system)
-  security.rtkit.enable = true; # RealtimeKit for better audio performance
-  services.pulseaudio.enable = false; # Disable PulseAudio in favor of PipeWire
+  # Audio
+  security.rtkit.enable = true;
+  services.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;
-    alsa.enable = true; # ALSA compatibility
-    alsa.support32Bit = true; # 32-bit application support
-    pulse.enable = true; # PulseAudio compatibility layer
-    jack.enable = true; # JACK compatibility for pro audio
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
   };
 
-  # User configuration
+  # Users
   users.users.philipp = {
     isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "audio"
-    ];
+    extraGroups = [ "wheel" ];
     shell = pkgs.fish;
   };
 
-  # Programs and services
+  # Programs
   programs.fish.enable = true;
   programs.ausweisapp = {
     enable = true;
@@ -95,7 +92,7 @@
   };
   # programs.ssh.startAgent = true;
 
-  # System packages
+  # System packages — user-facing tools belong in users/philipp.nix.
   environment.systemPackages = with pkgs; [
     # Editors
     vim
