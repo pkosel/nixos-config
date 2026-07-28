@@ -109,6 +109,13 @@
     enable = true;
     openFirewall = true;
   };
+  programs.vim = {
+    enable = true;
+    # Point EDITOR at the editor that is actually installed system-wide.
+    # Root contexts (visudo, systemctl edit) reset the environment, so they
+    # never see the nvim that home-manager exports.
+    defaultEditor = true;
+  };
   # programs.ssh.startAgent = true;
 
   # Services
@@ -116,10 +123,8 @@
   services.thermald.enable = true;
 
   # System packages — user-facing tools belong in users/philipp.nix.
+  # vim is installed by programs.vim above.
   environment.systemPackages = with pkgs; [
-    # Editors
-    vim
-
     # Version control
     git
 
@@ -128,11 +133,16 @@
     dnsutils
     wget
 
+    # Archives
+    unzip
+    zip
+
     # System utilities
     file
     htop
+    lsof
+    ncdu
     pciutils
-    unzip
     usbutils
   ];
 
