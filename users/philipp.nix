@@ -77,7 +77,7 @@
     settings = {
       user = {
         name = "Philipp Kosel";
-        email = "pkosel@fastmail.com";
+        email = "p.kosel@tuta.io";
       };
       init = {
         defaultBranch = "main";
