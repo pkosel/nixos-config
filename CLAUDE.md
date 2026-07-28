@@ -37,13 +37,18 @@ users/philipp.nix               -> home/**     (Home Manager modules)
 `pkgs/` are `callPackage`-style expressions that only exist because they aren't in
 nixpkgs — prefer upstream, and delete a local expression once upstream catches up.
 
-`extraSpecialArgs` passes `inputs` (`firefox-addons`, `betterfox`) down to Home Manager
-modules; that is how `home/firefox/firefox.nix` reaches the addon packages and the
-Betterfox `user.js`.
+`specialArgs` and `extraSpecialArgs` both pass the whole `inputs` set down, to NixOS and
+Home Manager modules respectively. That is how `hosts/frieda/configuration.nix` pins the
+flake registry to `inputs.nixpkgs`, and how `home/firefox/firefox.nix` reaches the
+`firefox-addons` packages and the Betterfox `user.js`.
 
 Modules are plain attrsets, not parameterised NixOS modules — no `mkEnableOption`/`cfg`
 pattern, no auto-import. A file under `system/` or `home/` does nothing until a host or
-user file imports it, and each one configures a single concern. System modules touch
+user file imports it, and each one configures a single concern: one program per file,
+with `default.nix` in a directory importing its siblings as a unit. `users/philipp.nix`
+is only imports, `home.packages` and `stateVersion` — a program with configuration of
+its own belongs in a module, not there. Module headers list only the arguments the file
+actually uses, rather than a uniform `{ config, pkgs, lib, ... }`. System modules touch
 `users.users.philipp` directly (printing, docker and davfs2 all append `extraGroups`);
 that coupling is deliberate for a single-user machine — don't abstract it away.
 
