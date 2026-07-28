@@ -4,7 +4,6 @@
   imports = [
     ./hardware.nix
     ../../system/desktop
-    ../../system/services/syncthing.nix
     ../../system/services/davfs2.nix
     ../../system/virtualization/libvirt.nix
     # ../../system/virtualization/podman.nix
