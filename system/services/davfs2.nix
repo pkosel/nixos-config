@@ -12,13 +12,9 @@
   fileSystems."/mnt/webdav" = {
     device = "https://files.pkosel.dev";
     fsType = "davfs";
-    # Automount rather than a boot mount: a remote share that is unreachable at
-    # boot would otherwise hold up the whole boot on _netdev.
-    #
-    # mount.davfs resolves uid/gid by name, so these survive a uid change —
-    # unlike numeric ids, which are only correct by coincidence. The user's own
-    # uid cannot be referenced from config here, as isNormalUser allocates it at
-    # activation and it evaluates to null.
+    # Automount, so an unreachable share does not hold up boot on _netdev.
+    # uid/gid by name survive a uid change; philipp's own uid cannot be
+    # referenced here, isNormalUser allocates it at activation so it reads null.
     options = [
       "noauto"
       "x-systemd.automount"
