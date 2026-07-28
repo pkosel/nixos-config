@@ -2,14 +2,15 @@
 
 {
   imports = [
-    ../home/cli/fzf.nix
-    ../home/cli/starship.nix
+    ../home/cli
     ../home/desktop
-    ../home/firefox/firefox.nix
     ../home/editors
+    ../home/firefox/firefox.nix
+    ../home/obsidian.nix
   ];
 
-  # User packages
+  # User packages. Anything with configuration of its own lives in a module
+  # under home/ instead.
   home.packages = with pkgs; [
     # Development tools
     claude-code
@@ -44,59 +45,6 @@
     spot
   ];
 
-  # Terminal configuration
-  programs.kitty = {
-    enable = true;
-    settings = {
-      # Workaround for Wayland issues: https://github.com/kovidgoyal/kitty/issues/3284
-      linux_display_server = "x11";
-      remember_window_size = "no";
-      tab_bar_style = "powerline";
-    };
-    font = {
-      package = pkgs.fira-code;
-      name = "Fira Code";
-    };
-    themeFile = "gruvbox-dark";
-  };
-
-  programs.fish = {
-    enable = true;
-  };
-
-  programs.bat = {
-    enable = true;
-    config = {
-      theme = "gruvbox-dark";
-    };
-  };
-
-  # Development tools
-  programs.git = {
-    enable = true;
-    settings = {
-      user = {
-        name = "Philipp Kosel";
-        email = "p.kosel@tuta.io";
-      };
-      init = {
-        defaultBranch = "main";
-      };
-    };
-  };
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
-
-  # Obsidian configuration
-  programs.obsidian = {
-    enable = true;
-    vaults."Documents/Vault".enable = true;
-  };
-
-  # Home Manager configuration
   programs.home-manager.enable = true;
 
   home.stateVersion = "25.11";
