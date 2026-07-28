@@ -116,7 +116,9 @@
     # never see the nvim that home-manager exports.
     defaultEditor = true;
   };
-  # programs.ssh.startAgent = true;
+  # No programs.ssh.startAgent: GNOME ships gcr-ssh-agent, which already owns
+  # SSH_AUTH_SOCK and holds the key. OpenSSH's agent would only add a second,
+  # keyless one.
 
   # Services
   services.fwupd.enable = true;
