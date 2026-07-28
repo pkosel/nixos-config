@@ -5,7 +5,7 @@
     ../home/cli/fzf.nix
     ../home/cli/starship.nix
     ../home/desktop
-    ../home/firefox
+    ../home/firefox/firefox.nix
     ../home/editors
   ];
 
