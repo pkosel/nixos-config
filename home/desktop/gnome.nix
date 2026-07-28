@@ -54,7 +54,6 @@
         "org.gnome.SystemMonitor.desktop"
         "org.gnome.tweaks.desktop"
         "vim.desktop"
-        "xterm.desktop"
         "ca.desrt.dconf-editor.desktop"
       ];
     };
