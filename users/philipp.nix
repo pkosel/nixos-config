@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../home/cli/fzf.nix
     ../home/cli/starship.nix
     ../home/desktop
     ../home/firefox
@@ -21,7 +22,6 @@
     # Terminal utilities
     eza
     fd
-    fzf
     jq
     mdcat
     ripgrep
