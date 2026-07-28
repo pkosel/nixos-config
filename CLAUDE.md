@@ -58,12 +58,15 @@ that coupling is deliberate for a single-user machine — don't abstract it away
 
 - Simple over clever. New flake inputs, overlays and local packages each need to earn
   their place; reach for an existing nixpkgs or NixOS module option first.
-- Comments explain *why*, not what. See `system/printing.nix` (why `browsed` is off) and
-  the `anki` overlay in `flake.nix` (why the wrapper exists) for the intended tone.
+- Comments explain *why*, not what — and then stop. Don't narrate what was investigated,
+  ruled out, or has since been fixed; that belongs in the commit or `todo.md`. A comment
+  longer than the config it explains is a smell. See `system/printing.nix` (why `browsed`
+  is off) and the `anki` overlay in `flake.nix` (why the wrapper exists) for the tone.
 - Commented-out config is deliberate, not dead code: the podman import in
   `configuration.nix`, GNOME's `excludePackages`, `celluloid`. Don't tidy it away.
 - Commits use conventional prefixes (`feat`, `fix`, `chore`, `refactor`, `style`, `docs`)
-  with an optional scope, one concern each, and a body explaining the reasoning.
+  with an optional scope, one concern each, and a body of a few lines explaining the
+  reasoning — the decision and what forced it, not a transcript of the investigation.
 - `todo.md` is gitignored scratch, prioritised top to bottom. Keep it current as items land.
 - No secrets management yet (it's on the todo list). Credentials stay out of the repo —
   davfs2 reads `/etc/davfs2/secrets` on the machine.
