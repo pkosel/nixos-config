@@ -80,7 +80,10 @@
       LC_MONETARY = "de_DE.UTF-8";
     };
   };
-  # Match the console to the graphical layout (eu, set in system/desktop/x11.nix).
+  # The system keyboard layout, despite the option path — nothing here needs an
+  # X server. It reaches GNOME via /etc/X11/xorg.conf.d/00-keyboard.conf and
+  # systemd-localed, and ckbcomp derives the tty keymap from it below.
+  services.xserver.xkb.layout = "eu";
   console.useXkbConfig = true;
 
   # Audio

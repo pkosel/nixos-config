@@ -1,14 +1,14 @@
 { pkgs, ... }:
 
 {
-  # No services.xserver.enable here. The session is wayland, and the XWayland
-  # that X11 clients actually talk to is spawned by mutter, not by xorg-server —
-  # enabling it only added an X server that never ran, plus xterm and a dozen
-  # X utilities. The cost is that GDM no longer offers a GNOME-on-Xorg session,
-  # so a broken wayland stack means booting an older generation.
+  # X11 client support for the applications still running under XWayland. kitty
+  # is pinned to linux_display_server = "x11" because its wayland titlebar
+  # decorations still render wrong under GNOME (kitty#3284, retested on 0.44.0),
+  # and xclip is the clipboard tool for that side.
+  #
+  # No services.xserver.enable: XWayland is spawned by mutter rather than by
+  # xorg-server, so enabling it only added an X server that never ran plus a
+  # dozen X utilities. The cost is that GDM no longer offers a GNOME-on-Xorg
+  # session, so a broken wayland stack means booting an older generation.
   environment.systemPackages = with pkgs; [ xclip ];
-
-  # Not X-only despite living under services.xserver: console.useXkbConfig
-  # derives the tty keymap from this, and GNOME takes its layout from it.
-  services.xserver.xkb.layout = "eu";
 }
