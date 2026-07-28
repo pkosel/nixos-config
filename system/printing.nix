@@ -8,12 +8,11 @@
     # disappeared or cups-browsed shutdown"). Use a static queue instead.
     browsed.enable = false;
 
-    drivers = with pkgs; [
-      cups-filters
-      brlaser
-      brgenml1lpr
-      brgenml1cupswrapper
-    ];
+    # Only brlaser: it supplies the PPD the queue below names, and its
+    # rastertobrlaser filter. cups-filters is already in the module's own
+    # package set, and brother's generic BrGenML1 driver is a competing driver
+    # for this same printer that nothing here selects.
+    drivers = [ pkgs.brlaser ];
   };
 
   hardware.printers = {
@@ -32,17 +31,14 @@
     ensureDefaultPrinter = "Brother_HL_L2350DW";
   };
 
+  # Resolves the printer's .local name; openFirewall opens mDNS (udp 5353).
+  #
+  # That is the only hole printing needs. cupsd binds loopback only, so an
+  # inbound rule for tcp 631 would guard a port nothing can reach, and sending
+  # a job is an outbound connection the firewall already allows.
   services.avahi = {
     enable = true;
     nssmdns4 = true;
     openFirewall = true;
   };
-
-  users.users.philipp.extraGroups = [ "lp" ];
-
-  networking.firewall.allowedTCPPorts = [ 631 ];
-  networking.firewall.allowedUDPPorts = [
-    5353
-    631
-  ];
 }
