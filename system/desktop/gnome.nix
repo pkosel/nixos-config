@@ -1,13 +1,10 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages =
-    with pkgs;
-    with gnomeExtensions;
-    [
-      dconf-editor
-      gnome-tweaks
-    ];
+  environment.systemPackages = with pkgs; [
+    dconf-editor
+    gnome-tweaks
+  ];
 
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
