@@ -18,7 +18,6 @@
 
     # Privacy & security
     bitwarden-desktop
-    mullvad-vpn
 
     # Terminal utilities
     eza
