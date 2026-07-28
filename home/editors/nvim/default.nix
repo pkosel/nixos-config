@@ -67,11 +67,16 @@ in
       cmp-buffer
       cmp-nvim-lsp
 
-      # treesitter
-      #nvim-treesitter
-      nvim-treesitter.withAllGrammars
+      # treesitter — pinned to the legacy generation. 26.05 made
+      # nvim-treesitter the upstream "main" rewrite, which drops the module
+      # system; treesitter.lua configures refactor and textobjects through
+      # require("nvim-treesitter.configs").setup, which only exists here.
+      # Mixing the two is a build error, not a runtime surprise.
+      # Migrating is an nvim-config job: deprecated in 26.05, error in 26.11.
+      #nvim-treesitter-legacy
+      nvim-treesitter-legacy.withAllGrammars
       nvim-treesitter-refactor
-      nvim-treesitter-textobjects
+      nvim-treesitter-textobjects-legacy
       nvim-treesitter-context
 
       # lsp
