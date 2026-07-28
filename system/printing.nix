@@ -3,7 +3,6 @@
 {
   services.printing = {
     enable = true;
-    browsing = true;
     # cups-browsed creates a flaky, mDNS-dependent "implicitclass" queue that
     # gets disabled whenever the printer's broadcast has a hiccup ("Printer
     # disappeared or cups-browsed shutdown"). Use a static queue instead.
