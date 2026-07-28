@@ -35,6 +35,10 @@ in
         ./treesitter.lua
       ];
     extraPackages = with pkgs; [
+      # telescope shells out to these
+      fd
+      ripgrep
+
       # language servers
       lua-language-server
       marksman

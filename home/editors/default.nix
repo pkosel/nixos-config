@@ -1,19 +1,9 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ ... }:
 
 {
   imports = [
     ./nvim
     ./vscode.nix
-  ];
-
-  home.packages = with pkgs; [
-    fzf
-    ripgrep
   ];
 
   home.sessionVariables.EDITOR = "nvim";
