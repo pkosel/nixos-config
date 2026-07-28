@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   imports = [
@@ -42,6 +42,11 @@
       keep-outputs = true;
       keep-derivations = true;
     };
+
+    # Resolve `nixpkgs` to the tree this system was built from, so ad-hoc
+    # `nix shell nixpkgs#...` reuses the store instead of fetching its own.
+    registry.nixpkgs.flake = inputs.nixpkgs;
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
 
   # Boot

@@ -37,6 +37,9 @@
 
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
         inherit system;
+        # NixOS modules reach flake inputs through this; configuration.nix
+        # pins the flake registry to them.
+        specialArgs = { inherit inputs; };
         modules = [
           {
             nixpkgs.overlays = [
@@ -66,8 +69,8 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.users.philipp = import ./users/philipp.nix;
-            # Home Manager modules reach flake inputs through this; firefox uses
-            # firefox-addons and betterfox.
+            # Same for Home Manager modules; firefox uses firefox-addons and
+            # betterfox.
             home-manager.extraSpecialArgs = { inherit inputs; };
           }
         ];
