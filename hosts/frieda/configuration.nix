@@ -106,6 +106,10 @@
   };
   # programs.ssh.startAgent = true;
 
+  # Services
+  services.fwupd.enable = true;
+  services.thermald.enable = true;
+
   # System packages — user-facing tools belong in users/philipp.nix.
   environment.systemPackages = with pkgs; [
     # Editors
@@ -116,11 +120,15 @@
 
     # Network tools
     curl
+    dnsutils
     wget
 
     # System utilities
+    file
     htop
+    pciutils
     unzip
+    usbutils
   ];
 
   system.stateVersion = "25.11";
