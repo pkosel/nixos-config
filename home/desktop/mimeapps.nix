@@ -24,6 +24,9 @@ in
   };
 
   # GNOME and the applications above write mimeapps.list directly, so Home
-  # Manager refuses to replace it unless told to.
+  # Manager refuses to replace it unless told to. It maintains two copies: the
+  # real one, and the deprecated pre-spec location that some applications still
+  # read. Both need forcing, or activation aborts on whichever is unmanaged.
   xdg.configFile."mimeapps.list".force = true;
+  xdg.dataFile."applications/mimeapps.list".force = true;
 }
