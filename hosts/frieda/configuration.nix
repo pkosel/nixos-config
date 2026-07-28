@@ -28,6 +28,9 @@
     gc = {
       automatic = true;
       dates = "weekly";
+      # Without this the collector only drops unreachable paths, and every
+      # generation is a GC root — so nothing is ever actually freed.
+      options = "--delete-older-than 30d";
     };
     settings = {
       auto-optimise-store = true;
@@ -42,9 +45,18 @@
   };
 
   # Boot
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        # /boot is a 512M ESP; unlimited entries fill it up.
+        configurationLimit = 10;
+      };
+      efi.canTouchEfiVariables = true;
+    };
+
+    # /tmp lives on the root filesystem, so nothing clears it otherwise.
+    tmp.cleanOnBoot = true;
   };
 
   # Networking
