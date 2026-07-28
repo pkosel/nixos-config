@@ -11,11 +11,10 @@
   # completed — what was completed is the CSD support, not native decorations.
   # Verified still the case on 0.47.0.
   #
-  # So this is permanent, and it has a cost under GNOME 50: kitty is an XWayland
-  # surface inside a mutter-drawn decoration, and the pointer changes size
-  # crossing that seam. Native wayland clients like firefox do not show it.
-  # The trade is a native titlebar against that seam — revisit if the seam ever
-  # annoys more than the CSD look would.
+  # So this is permanent rather than pending, and the cost is just that kitty
+  # renders through XWayland. That is cheap here: the pointer-size seam seen at
+  # kitty's border right after the 26.05 upgrade was stale XWayland state from
+  # changing the display scale mid-session, and a re-login cleared it.
   #
   # No services.xserver.enable: XWayland is spawned by mutter rather than by
   # xorg-server, so enabling it only added an X server that never ran plus a
