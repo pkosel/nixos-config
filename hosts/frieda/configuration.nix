@@ -77,6 +77,8 @@
       LC_MONETARY = "de_DE.UTF-8";
     };
   };
+  # Match the console to the graphical layout (eu, set in system/desktop/x11.nix).
+  console.useXkbConfig = true;
 
   # Audio
   security.rtkit.enable = true;
