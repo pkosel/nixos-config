@@ -1,13 +1,5 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ ... }:
 
 {
-  programs.starship = {
-    enable = true;
-    settings = { };
-  };
+  programs.starship.enable = true;
 }

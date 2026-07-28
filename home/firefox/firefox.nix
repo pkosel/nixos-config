@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ pkgs, inputs, ... }:
 
 let
   addons = inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system};
