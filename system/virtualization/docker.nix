@@ -9,14 +9,13 @@
   virtualisation.docker = {
     enable = true;
 
-    # Important: avoid insecure docker-28 default.
-    package = pkgs.docker_29;
-
-    # autoPrune = {
-    #   enable = true;
-    #   dates = "weekly";
-    #   flags = [ "--all" ];
-    # };
+    # --all also collects images no container references, which is where the
+    # space actually goes.
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+      flags = [ "--all" ];
+    };
   };
 
   users.users.philipp.extraGroups = [ "docker" ];
