@@ -13,5 +13,7 @@
     ./ripgrep.nix
     ./ssh.nix
     ./starship.nix
+    ./tealdeer.nix
+    ./zoxide.nix
   ];
 }
