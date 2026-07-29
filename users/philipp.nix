@@ -20,13 +20,10 @@
     bitwarden-desktop
 
     # Terminal utilities
-    eza
     fd
     jq
     mdcat
-    ripgrep
     sd
-    tree
 
     # Research & productivity
     anki
