@@ -24,6 +24,8 @@ in
       signByDefault = true;
     };
 
+    ignores = [ "**/.claude/settings.local.json" ];
+
     settings = {
       user = {
         name = "Philipp Kosel";
@@ -33,6 +35,16 @@ in
         defaultBranch = "main";
       };
       gpg.ssh.allowedSignersFile = toString allowedSigners;
+
+      push.autoSetupRemote = true;
+      fetch.prune = true;
+      # Linear history; nobody else pushes here.
+      pull.rebase = true;
+      diff.algorithm = "histogram";
+      # zdiff3 puts the common ancestor in the conflict markers.
+      merge.conflictStyle = "zdiff3";
+      # Diff in the commit editor, so the message describes what is staged.
+      commit.verbose = true;
     };
   };
 }
