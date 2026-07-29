@@ -3,6 +3,7 @@
 {
   imports = [
     ./bat.nix
+    ./delta.nix
     ./direnv.nix
     ./fish.nix
     ./fzf.nix
