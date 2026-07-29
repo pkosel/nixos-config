@@ -5,7 +5,6 @@
     ./hardware.nix
     ../../system/desktop
     ../../system/services/davfs2.nix
-    # ../../system/virtualization/podman.nix
     ../../system/virtualization/docker.nix
     ../../system/vpn.nix
     ../../system/printing.nix

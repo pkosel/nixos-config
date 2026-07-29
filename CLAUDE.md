@@ -62,8 +62,8 @@ that coupling is deliberate for a single-user machine — don't abstract it away
   ruled out, or has since been fixed; that belongs in the commit or `todo.md`. A comment
   longer than the config it explains is a smell. See `system/printing.nix` (why `browsed`
   is off) and the `anki` overlay in `flake.nix` (why the wrapper exists) for the tone.
-- Commented-out config is deliberate, not dead code: the podman import in
-  `configuration.nix`, GNOME's `excludePackages`, `celluloid`. Don't tidy it away.
+- Commented-out config is deliberate, not dead code: GNOME's `excludePackages`,
+  `celluloid`, the `docker` client in `docker.nix`. Don't tidy it away.
 - Commits use conventional prefixes (`feat`, `fix`, `chore`, `refactor`, `style`, `docs`)
   with an optional scope, one concern each, and a body of a few lines explaining the
   reasoning — the decision and what forced it, not a transcript of the investigation.
