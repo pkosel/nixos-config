@@ -19,7 +19,13 @@ in
   programs.neovim = {
     # defaultEditor = true;
     enable = true;
-    extraLuaConfig =
+
+    # 26.05 defaults both to false. Nothing in the lua config uses either
+    # provider, and ruby alone was 98M.
+    withRuby = false;
+    withPython3 = false;
+
+    initLua =
       with builtins;
       lib.foldl (r: f: r + "\n" + readFile f) "" [
         ./init.lua
