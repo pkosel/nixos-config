@@ -1,4 +1,4 @@
-{ ... }:
+{ theme, ... }:
 
 {
   programs.fzf = {
@@ -7,19 +7,20 @@
     enable = true;
 
     # fzf's built-in colours assume a light-ish terminal and are unreadable on
-    # gruvbox. These match the kitty and bat themes.
-    colors = {
-      "bg+" = "#3c3836";
-      "fg+" = "#ebdbb2";
-      "hl+" = "#fabd2f";
-      fg = "#bdae93";
-      hl = "#fabd2f";
-      header = "#928374";
-      info = "#83a598";
-      marker = "#b8bb26";
-      pointer = "#fb4934";
-      prompt = "#8ec07c";
-      spinner = "#d3869b";
+    # gruvbox. Taking them from home/theme.nix keeps them from drifting away
+    # from the kitty and bat themes.
+    colors = with theme.palette; {
+      "bg+" = bg1;
+      "fg+" = fg;
+      "hl+" = yellow;
+      fg = fg2;
+      hl = yellow;
+      header = gray;
+      info = blue;
+      marker = green;
+      pointer = red;
+      prompt = aqua;
+      spinner = purple;
     };
   };
 }

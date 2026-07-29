@@ -1,6 +1,9 @@
 { pkgs, ... }:
 
 {
+  # Available to every module below as the `theme` argument.
+  _module.args.theme = import ../home/theme.nix;
+
   imports = [
     ../home/cli
     ../home/desktop

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, theme, ... }:
 
 {
   programs.kitty = {
@@ -18,6 +18,6 @@
       package = pkgs.fira-code;
       name = "Fira Code";
     };
-    themeFile = "gruvbox-dark";
+    themeFile = theme.kitty;
   };
 }

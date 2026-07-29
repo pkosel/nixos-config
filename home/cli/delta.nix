@@ -1,4 +1,4 @@
-{ ... }:
+{ theme, ... }:
 
 {
   programs.delta = {
@@ -8,7 +8,7 @@
 
     options = {
       # Same theme as bat, which shares delta's syntax highlighter.
-      syntax-theme = "gruvbox-dark";
+      syntax-theme = theme.bat;
       line-numbers = true;
       # n and N jump between files in a long diff.
       navigate = true;
