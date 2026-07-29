@@ -16,6 +16,11 @@
     claude-code
     gcc
 
+    # Nix tooling. nvd diffs two generations, so a rebuild says what actually
+    # changed; nom turns the build log into a live dependency tree.
+    nix-output-monitor
+    nvd
+
     # Privacy & security
     bitwarden-desktop
 
