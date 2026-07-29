@@ -20,8 +20,7 @@ in
     # defaultEditor = true;
     enable = true;
 
-    # 26.05 defaults both to false. Nothing in the lua config uses either
-    # provider, and ruby alone was 98M.
+    # 26.05 defaults both to false. Nothing in the lua config uses either.
     withRuby = false;
     withPython3 = false;
 
