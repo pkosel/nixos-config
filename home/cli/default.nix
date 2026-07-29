@@ -8,6 +8,7 @@
     ./fzf.nix
     ./git.nix
     ./kitty.nix
+    ./ssh.nix
     ./starship.nix
   ];
 }
