@@ -1,4 +1,4 @@
-{ ... }:
+{ theme, ... }:
 
 {
   programs.eza = {
@@ -7,5 +7,9 @@
     enable = true;
     icons = "auto";
     git = true;
+
+    # Written to ~/.config/eza/theme.yml, which eza reads on its own. Without it
+    # eza is the one tool here still on its built-in palette.
+    theme = theme.eza;
   };
 }
