@@ -74,14 +74,16 @@ in
 
       # treesitter — pinned to the legacy generation. 26.05 made
       # nvim-treesitter the upstream "main" rewrite, which drops the module
-      # system; treesitter.lua configures refactor and textobjects through
+      # system; treesitter.lua configures it through
       # require("nvim-treesitter.configs").setup, which only exists here.
       # Mixing the two is a build error, not a runtime surprise.
       # Migrating is an nvim-config job: deprecated in 26.05, error in 26.11.
+      # Only highlight, indent and incremental_selection are still usable: nvim
+      # 0.12 dropped iter_matches' all=false, so every query the legacy plugin
+      # runs yields node lists where it expects one node. That killed the
+      # refactor and textobjects companions, which are gone until the migration.
       #nvim-treesitter-legacy
       nvim-treesitter-legacy.withAllGrammars
-      nvim-treesitter-refactor
-      nvim-treesitter-textobjects-legacy
       nvim-treesitter-context
 
       # lsp
