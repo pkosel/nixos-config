@@ -47,6 +47,10 @@ in
         user_pref("browser.startup.homepage", "https://ecosia.org/");
         user_pref("browser.startup.page", 3);
         user_pref("privacy.clearOnShutdown.history", false);
+
+        // Content defaults to 3, "follow the browser theme", so the dark
+        // chrome darkened every page with it. 1 pins pages to light.
+        user_pref("layout.css.prefers-color-scheme.content-override", 1);
       '';
     };
   };
