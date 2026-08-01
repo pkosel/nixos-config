@@ -23,6 +23,7 @@ in
   # Each tool names its themes differently; delta reads bat's set.
   bat = "gruvbox-dark";
   kitty = "gruvbox-dark";
+  mdcat = "gruvbox-dark";
 
   # eza has no named themes, so every element is spelled out. Grouped the way
   # a long listing reads: type, permissions, size, owner, date, git.

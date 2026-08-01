@@ -27,11 +27,10 @@
     # Privacy & security
     bitwarden-desktop
 
-    # Terminal utilities, none of them worth a module: sd and mdcat have none,
-    # fd's defaults already do the right thing, jq's only sets output colours.
+    # Terminal utilities, none of them worth a module: sd has none, fd's
+    # defaults already do the right thing, jq's only sets output colours.
     fd
     jq
-    mdcat
     sd
 
     # Research & productivity
