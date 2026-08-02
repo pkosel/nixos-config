@@ -44,8 +44,10 @@ in
       marksman
       nil
 
-      # linters & formatters
-      nixfmt-classic
+      # linters & formatters. nixfmt, not nixfmt-classic: both install a binary
+      # called nixfmt, so none-ls needs no change, but classic is 0.6.0 and the
+      # pre-RFC style, which fought `nix fmt` over every file.
+      nixfmt
       stylua
     ];
     plugins = with pkgs.vimPlugins; [
