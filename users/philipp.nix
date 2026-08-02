@@ -45,6 +45,7 @@
     # Media & entertainment
     calibre
     foliate
+    newsflash
     # celluloid
     spot
   ];
