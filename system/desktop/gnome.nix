@@ -9,6 +9,15 @@
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
+  # An override supplies the schema *default*, so the Appearance switch in GNOME
+  # Settings still works and its choice sticks — a value written through
+  # home-manager's dconf.settings would be reimposed on the next activation.
+  # The cost is that dark only applies where no value has been set by hand.
+  services.desktopManager.gnome.extraGSettingsOverrides = ''
+    [org.gnome.desktop.interface]
+    color-scheme='prefer-dark'
+  '';
+
   # Stock applications that are installed but unused. epiphany is the one that
   # mattered: it claimed the http/https and text/html handlers, which is how
   # links opened from outside a browser ended up in GNOME Web.
