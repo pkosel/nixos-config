@@ -13,6 +13,9 @@
 
     claude-code.url = "github:sadjow/claude-code-nix";
 
+    # nixpkgs' pi-coding-agent lags upstream by a major version.
+    pi.url = "github:earendil-works/pi/stable";
+
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,6 +32,7 @@
       nixpkgs,
       home-manager,
       claude-code,
+      pi,
       ...
     }:
     let
@@ -46,6 +50,7 @@
           {
             nixpkgs.overlays = [
               claude-code.overlays.default
+              pi.overlays.default
               (final: prev: {
                 mdcat = final.callPackage ./pkgs/mdcat.nix { };
 

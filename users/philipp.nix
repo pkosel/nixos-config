@@ -17,6 +17,7 @@
   home.packages = with pkgs; [
     # Development tools
     claude-code
+    pi
     gcc
 
     # Nix tooling. nvd diffs two generations, so a rebuild says what actually
