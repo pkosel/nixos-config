@@ -75,6 +75,12 @@
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
+            # Without this every activation installs home-manager-path into
+            # ~/.local/state/nix/profiles as a new generation, which nix.gc
+            # (running as root) never prunes. With it the packages ride along
+            # in the system closure, so the system generations are the only
+            # history there is.
+            home-manager.useUserPackages = true;
             home-manager.users.philipp = import ./users/philipp.nix;
             # Same for Home Manager modules; firefox uses firefox-addons and
             # betterfox.
