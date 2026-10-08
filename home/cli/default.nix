@@ -11,6 +11,7 @@
     ./git.nix
     ./kitty.nix
     ./mdcat.nix
+    ./pi.nix
     ./ripgrep.nix
     ./ssh.nix
     ./starship.nix

@@ -1,5 +1,6 @@
 # Terminal colours, in one place so a scheme change is one edit. Not here on
 # purpose: GTK is Adwaita-dark, and nvim picks gruvbox-material from its own lua.
+# pi's copy of the scheme is home/cli/pi/nightowl.json.
 let
   # Night Owl, only the entries fzf, eza and mdcat actually use.
   palette = {
