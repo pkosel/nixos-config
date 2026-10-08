@@ -11,10 +11,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    claude-code.url = "github:sadjow/claude-code-nix";
+    # Both overlays below build with this flake's nixpkgs (final.callPackage),
+    # so the nixpkgs trees these inputs lock themselves are never used for what
+    # gets installed. Following keeps them out of flake.lock. Neither has a
+    # binary cache that matches that build, so every update builds locally.
+    claude-code = {
+      url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # nixpkgs' pi-coding-agent lags upstream by a major version.
-    pi.url = "github:earendil-works/pi/stable";
+    pi = {
+      url = "github:earendil-works/pi/stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+      # nixpkgs-darwin-x64 is left alone: it only serves pi's own x86_64-darwin
+      # package, so it is never evaluated here.
+    };
 
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
