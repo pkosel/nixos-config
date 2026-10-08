@@ -1,18 +1,18 @@
 # Terminal colours, in one place so a scheme change is one edit. Not here on
 # purpose: GTK is Adwaita-dark, and nvim picks gruvbox-material from its own lua.
 let
-  # gruvbox dark, only the entries fzf and eza actually use.
+  # Night Owl, only the entries fzf, eza and mdcat actually use.
   palette = {
-    bg1 = "#3c3836";
-    fg = "#ebdbb2";
-    fg2 = "#bdae93";
-    gray = "#928374";
-    red = "#fb4934";
-    green = "#b8bb26";
-    yellow = "#fabd2f";
-    blue = "#83a598";
-    purple = "#d3869b";
-    aqua = "#8ec07c";
+    bg1 = "#1d3b53";
+    fg = "#d6deeb";
+    fg2 = "#7e97ac";
+    gray = "#5f7e97";
+    red = "#ef5350";
+    green = "#addb67";
+    yellow = "#ffcb8b";
+    blue = "#82aaff";
+    purple = "#c792ea";
+    aqua = "#7fdbca";
   };
 
   fore = c: { foreground = c; };
@@ -21,9 +21,12 @@ in
   inherit palette;
 
   # Each tool names its themes differently; delta reads bat's set.
-  bat = "gruvbox-dark";
-  kitty = "gruvbox-dark";
-  mdcat = "gruvbox-dark";
+  # bat's theme is built from home/cli/bat/nightowl.tmTheme; kitty's ships in
+  # kitty-themes. mdcat has no Night Owl, so it starts from its plain dark theme
+  # and home/cli/mdcat.nix recolours it.
+  bat = "nightowl";
+  kitty = "night_owl";
+  mdcat = "dark";
 
   # eza has no named themes, so every element is spelled out. Grouped the way
   # a long listing reads: type, permissions, size, owner, date, git.

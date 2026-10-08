@@ -7,7 +7,7 @@
     enable = true;
 
     # fzf's built-in colours assume a light-ish terminal and are unreadable on
-    # gruvbox. Taking them from home/theme.nix keeps them from drifting away
+    # a dark scheme. Taking them from home/theme.nix keeps them from drifting away
     # from the kitty and bat themes.
     colors = with theme.palette; {
       "bg+" = bg1;
