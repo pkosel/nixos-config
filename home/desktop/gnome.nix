@@ -24,6 +24,7 @@
         "firefox.desktop"
         "code.desktop"
         "kitty.desktop"
+        "todoist.desktop"
         "obsidian.desktop"
         "zotero.desktop"
         "signal.desktop"

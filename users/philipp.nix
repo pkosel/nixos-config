@@ -39,6 +39,7 @@
     markdown-anki-decks
     zotero
     libreoffice
+    todoist-electron
 
     # Communication
     signal-desktop
