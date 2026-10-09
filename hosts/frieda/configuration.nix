@@ -5,6 +5,7 @@
     ./hardware.nix
     ../../system/nix.nix
     ../../system/nixpkgs.nix
+    ../../system/audio.nix
     ../../system/desktop
     ../../system/services/davfs2.nix
     ../../system/virtualization/docker.nix
@@ -44,17 +45,6 @@
   # systemd-localed, and ckbcomp derives the tty keymap from it below.
   services.xserver.xkb.layout = "eu";
   console.useXkbConfig = true;
-
-  # Audio
-  security.rtkit.enable = true;
-  services.pulseaudio.enable = false;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
 
   # Users
   users.users.philipp = {
