@@ -12,14 +12,7 @@
   ];
 
   # Nix
-  nixpkgs.config = {
-    allowUnfree = true;
-
-    # bitwarden-desktop still builds against an EOL electron.
-    permittedInsecurePackages = [
-      "electron-39.8.10"
-    ];
-  };
+  nixpkgs.config.allowUnfree = true;
 
   nix = {
     gc = {
