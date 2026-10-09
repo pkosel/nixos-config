@@ -19,6 +19,4 @@
       flags = [ "--all" ];
     };
   };
-
-  users.users.philipp.extraGroups = [ "docker" ];
 }
