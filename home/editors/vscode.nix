@@ -3,6 +3,7 @@
 {
   programs.vscode = {
     enable = true;
+    # FHS variant, for extensions that fetch prebuilt binaries NixOS can't run.
     package = pkgs.vscode.fhs;
     profiles.default = {
       enableUpdateCheck = false;

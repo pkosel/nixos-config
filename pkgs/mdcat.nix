@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   pname = "mdcat";
   version = "2.13.0";
 
+  # The BIRSAx2 fork: upstream (swsnr/mdcat) has gone quiet and nixpkgs is at
+  # 2.7.1. Drop it if either catches up.
   src = fetchFromGitHub {
     owner = "BIRSAx2";
     repo = "mdcat";
