@@ -5,11 +5,12 @@
     enable = true;
 
     settings = {
-      # Off by default, so a failed command left no trace in the prompt.
+      # Off by default, which leaves a failed command without a trace in the
+      # prompt.
       status.disabled = false;
       status.symbol = "❌ ";
 
-      # On by default and reads ~/.aws/config, so it rendered everywhere.
+      # On by default and reads ~/.aws/config, so it would show in every prompt.
       aws.disabled = true;
 
       # kitty and nvim mis-measure multi-width emoji.

@@ -3,7 +3,7 @@
 {
   programs.fzf = {
     # The module writes the fish key bindings (ctrl-r, ctrl-t, alt-c); the bare
-    # package never did, so history search was plain readline.
+    # package has none, so history search would stay plain readline.
     enable = true;
 
     # fzf's built-in colours assume a light-ish terminal and are unreadable on

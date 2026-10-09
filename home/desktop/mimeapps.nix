@@ -12,8 +12,8 @@ let
   # Only contested or unclaimed types are listed. Images, video, audio,
   # archives and directories have one candidate each and already resolve to it.
   types = {
-    # GNOME ships epiphany and claims these, so links opened from outside a
-    # browser (terminal, mail, desktop files) landed in GNOME Web.
+    # GNOME's epiphany claims these, so links opened from outside a browser
+    # (terminal, mail, desktop files) would open in GNOME Web.
     browser = [
       "text/html"
       "application/xhtml+xml"
@@ -49,8 +49,8 @@ let
   defaults = lib.concatMapAttrs (category: mimes: lib.genAttrs mimes (_: apps.${category})) types;
 
   # calibre's three desktop files claim every document format it can convert,
-  # which is how .docx ended up opening in the ebook *editor*. Removing them as
-  # candidates keeps them out of "Open With" too, not just off the default.
+  # so .docx would open in the ebook *editor*. Removing them as candidates
+  # keeps them out of "Open With" too, not just off the default.
   # Left alone: epub, mobi, comics and djvu, where calibre is a real answer.
   calibre =
     lib.genAttrs
