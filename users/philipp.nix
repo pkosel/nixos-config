@@ -48,7 +48,6 @@
     calibre
     foliate
     newsflash
-    # celluloid
     spot
   ];
 
