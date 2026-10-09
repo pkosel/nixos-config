@@ -6,17 +6,22 @@
     gnome-tweaks
   ];
 
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  services = {
+    displayManager.gdm.enable = true;
+    desktopManager.gnome = {
+      enable = true;
 
-  # An override supplies the schema *default*, so the Appearance switch in GNOME
-  # Settings still works and its choice sticks — a value written through
-  # home-manager's dconf.settings would be reimposed on the next activation.
-  # The cost is that dark only applies where no value has been set by hand.
-  services.desktopManager.gnome.extraGSettingsOverrides = ''
-    [org.gnome.desktop.interface]
-    color-scheme='prefer-dark'
-  '';
+      # An override supplies the schema *default*, so the Appearance switch in
+      # GNOME Settings still works and its choice sticks — a value written
+      # through home-manager's dconf.settings would be reimposed on the next
+      # activation. The cost is that dark only applies where no value has been
+      # set by hand.
+      extraGSettingsOverrides = ''
+        [org.gnome.desktop.interface]
+        color-scheme='prefer-dark'
+      '';
+    };
+  };
 
   # Stock applications that are installed but unused. epiphany is the one that
   # matters: it claims the http/https and text/html handlers, so links opened

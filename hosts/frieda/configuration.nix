@@ -39,10 +39,7 @@
       LC_MONETARY = "de_DE.UTF-8";
     };
   };
-  # The system keyboard layout, despite the option path — nothing here needs an
-  # X server. It reaches GNOME via /etc/X11/xorg.conf.d/00-keyboard.conf and
-  # systemd-localed, and ckbcomp derives the tty keymap from it below.
-  services.xserver.xkb.layout = "eu";
+  # The tty keymap is derived (via ckbcomp) from the keyboard layout below.
   console.useXkbConfig = true;
 
   # Users
@@ -57,26 +54,34 @@
   };
 
   # Programs
-  programs.fish.enable = true;
-  programs.ausweisapp = {
-    enable = true;
-    openFirewall = true;
+  programs = {
+    fish.enable = true;
+    ausweisapp = {
+      enable = true;
+      openFirewall = true;
+    };
+    vim = {
+      enable = true;
+      # Point EDITOR at the editor that is actually installed system-wide.
+      # Root contexts (visudo, systemctl edit) reset the environment, so they
+      # never see the nvim that home-manager exports.
+      defaultEditor = true;
+    };
+    # No programs.ssh.startAgent: GNOME ships gcr-ssh-agent, which already owns
+    # SSH_AUTH_SOCK and holds the key. OpenSSH's agent would only add a second,
+    # keyless one.
   };
-  programs.vim = {
-    enable = true;
-    # Point EDITOR at the editor that is actually installed system-wide.
-    # Root contexts (visudo, systemctl edit) reset the environment, so they
-    # never see the nvim that home-manager exports.
-    defaultEditor = true;
-  };
-  # No programs.ssh.startAgent: GNOME ships gcr-ssh-agent, which already owns
-  # SSH_AUTH_SOCK and holds the key. OpenSSH's agent would only add a second,
-  # keyless one.
 
   # Services
-  services.fwupd.enable = true;
-  services.thermald.enable = true;
-  services.davfs2.enable = true;
+  services = {
+    # The system keyboard layout, despite the option path — nothing here needs
+    # an X server. It reaches GNOME via /etc/X11/xorg.conf.d/00-keyboard.conf
+    # and systemd-localed.
+    xserver.xkb.layout = "eu";
+    fwupd.enable = true;
+    thermald.enable = true;
+    davfs2.enable = true;
+  };
 
   # WebDAV share, mounted on first access.
   systemd.tmpfiles.rules = [
