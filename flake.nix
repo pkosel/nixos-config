@@ -40,13 +40,7 @@
   };
 
   outputs =
-    inputs@{
-      nixpkgs,
-      home-manager,
-      claude-code,
-      pi,
-      ...
-    }:
+    inputs@{ nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
     in
@@ -55,33 +49,10 @@
 
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
         inherit system;
-        # NixOS modules reach flake inputs through this; configuration.nix
-        # pins the flake registry to them.
+        # NixOS modules reach flake inputs through this (the nixpkgs overlays,
+        # the flake registry pin).
         specialArgs = { inherit inputs; };
         modules = [
-          {
-            nixpkgs.overlays = [
-              claude-code.overlays.default
-              pi.overlays.default
-              (final: prev: {
-                mdcat = final.callPackage ./pkgs/mdcat.nix { };
-
-                # Fix crash on file dialogs (e.g. Import): anki's Qt6 GTK3 theme
-                # integration needs a schema shipped by gtk3, which isn't part of
-                # this GNOME session's (gtk4-based) XDG_DATA_DIRS.
-                anki = prev.symlinkJoin {
-                  name = "anki-${prev.anki.version}";
-                  paths = [ prev.anki ];
-                  nativeBuildInputs = [ prev.makeWrapper ];
-                  postBuild = ''
-                    wrapProgram $out/bin/anki \
-                      --prefix XDG_DATA_DIRS : ${prev.gtk3}/share/gsettings-schemas/${prev.gtk3.name}
-                  '';
-                };
-              })
-            ];
-          }
-
           ./hosts/frieda/configuration.nix
 
           home-manager.nixosModules.home-manager

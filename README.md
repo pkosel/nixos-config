@@ -12,12 +12,13 @@ Hosts:
 ## Structure
 
 ```
-flake.nix         inputs, overlays and the nixosConfigurations
+flake.nix         inputs and the nixosConfigurations
 hosts/<host>/     per-machine: configuration.nix + hardware.nix
 system/           system modules, imported by a host
 home/             Home Manager modules, imported by a user
 users/<user>.nix  per-user Home Manager profile
 pkgs/             packages that aren't in nixpkgs
+overlays/         wires those packages into nixpkgs, and patches some of its own
 scripts/          installation helpers
 ```
 

@@ -4,6 +4,7 @@
   imports = [
     ./hardware.nix
     ../../system/nix.nix
+    ../../system/nixpkgs.nix
     ../../system/desktop
     ../../system/services/davfs2.nix
     ../../system/virtualization/docker.nix
@@ -11,9 +12,6 @@
     ../../system/printing.nix
     ../../system/fonts.nix
   ];
-
-  # Nix
-  nixpkgs.config.allowUnfree = true;
 
   # Boot
   boot = {
