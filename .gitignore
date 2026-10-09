@@ -1,4 +1,5 @@
-# Personal scratch notes, not part of the configuration
-todo.md
-# pi's local state, including the todo list that replaced todo.md
+# Output links of nix build and nixos-rebuild build
+result
+result-*
+# pi's local state, including its todo list
 .pi/
