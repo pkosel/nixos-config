@@ -13,7 +13,6 @@
     ../../system/fonts.nix
   ];
 
-  # Boot
   boot = {
     loader = {
       systemd-boot = {
@@ -42,7 +41,6 @@
   # The tty keymap is derived (via ckbcomp) from the keyboard layout below.
   console.useXkbConfig = true;
 
-  # Users
   users.users.philipp = {
     isNormalUser = true;
     shell = pkgs.fish;
@@ -53,7 +51,6 @@
     ];
   };
 
-  # Programs
   programs = {
     fish.enable = true;
     ausweisapp = {
@@ -72,7 +69,6 @@
     # keyless one.
   };
 
-  # Services
   services = {
     # The system keyboard layout, despite the option path — nothing here needs
     # an X server. It reaches GNOME via /etc/X11/xorg.conf.d/00-keyboard.conf
