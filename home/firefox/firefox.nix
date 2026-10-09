@@ -18,7 +18,7 @@ in
     enable = true;
 
     # 26.05 moves this under XDG. Pinned to the legacy path because the profile
-    # is 608M and only moves by hand; migrating is its own job.
+    # is large and only moves by hand; migrating is its own job.
     configPath = ".mozilla/firefox";
     profiles.philipp = {
       extensions.packages = extensions;

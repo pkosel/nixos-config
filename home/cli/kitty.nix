@@ -10,7 +10,7 @@
       remember_window_size = "no";
       tab_bar_style = "powerline";
 
-      # 2000 is about one nixos-rebuild log.
+      # The default, 2000, holds about one nixos-rebuild log.
       scrollback_lines = 10000;
       enable_audio_bell = "no";
     };

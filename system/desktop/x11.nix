@@ -6,7 +6,7 @@
   # does not do server-side decorations on wayland, so kitty draws its own and
   # they never match the desktop. Upstream advises the same in kitty#3284.
   #
-  # No services.xserver.enable: mutter spawns XWayland itself, so enabling it only
-  # added an X server that never ran. The cost is no GNOME-on-Xorg session at GDM.
+  # No services.xserver.enable: mutter spawns XWayland itself, so enabling it would
+  # only add an X server that never runs. The cost is no GNOME-on-Xorg session at GDM.
   environment.systemPackages = with pkgs; [ xclip ];
 }

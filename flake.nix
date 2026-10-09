@@ -86,8 +86,8 @@
               # history there is.
               useUserPackages = true;
               users.philipp = import ./users/philipp.nix;
-              # Same for Home Manager modules; firefox uses firefox-addons and
-              # betterfox.
+              # Home Manager modules get the inputs too; firefox uses
+              # firefox-addons and betterfox.
               extraSpecialArgs = { inherit inputs; };
             };
           }

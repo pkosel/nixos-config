@@ -6,7 +6,7 @@
   virtualisation.docker = {
     enable = true;
 
-    # docker.socket still starts the daemon on the first command, so the 128M
+    # docker.socket still starts the daemon on the first command, so the memory
     # dockerd and containerd hold is only paid when containers are actually
     # used. The trade is that restart=always does not survive a reboot.
     enableOnBoot = false;
