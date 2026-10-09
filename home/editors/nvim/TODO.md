@@ -41,6 +41,7 @@ gets its own pass. Roughly in order of importance.
 - `default.nix`: the `pomo-nvim` let binding is built but never used (the plugin
   line is commented out, as is `defaultEditor = true;` and the
   `#nvim-treesitter-legacy` line).
+  Once it is gone, drop that file from the `deadnix` exclusion in `flake.nix`.
 - `telescope.lua`: commented-out `<leader>tp` mapping.
 
 ## Worth checking

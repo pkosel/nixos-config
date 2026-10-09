@@ -13,15 +13,16 @@ workflows.
 
 ```sh
 nix fmt                                   # format all Nix files (nixfmt-tree)
-nix flake check                           # evaluate all flake outputs
+nix flake check                           # evaluate all flake outputs; runs deadnix and statix
 nixos-rebuild build --flake .#frieda      # build the system without activating it
 
 nix eval .#nixosConfigurations.frieda.config.<option>   # inspect an option's value
 nix build .#nixosConfigurations.frieda.pkgs.<package>   # build one package from the overlaid set
 ```
 
-There is no CI and no test suite. A change is correct when `frieda` evaluates
-and builds.
+There is no CI and no test suite beyond the lint checks. A change is correct
+when `frieda` evaluates and builds. The lint rules are configured in
+`statix.toml` and in `checks` in `flake.nix`.
 
 ## Architecture
 

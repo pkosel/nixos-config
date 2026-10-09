@@ -43,9 +43,29 @@
     inputs@{ nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
     in
     {
-      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-tree;
+      formatter.${system} = pkgs.nixfmt-tree;
+
+      # Run by `nix flake check`.
+      checks.${system} = {
+        # Unused arguments and bindings. hardware.nix is generated; the nvim
+        # module's unused pomo-nvim waits for the Neovim cleanup (see
+        # home/editors/nvim/TODO.md), after which that exclusion goes.
+        deadnix = pkgs.runCommand "deadnix" { nativeBuildInputs = [ pkgs.deadnix ]; } ''
+          cd ${./.}
+          deadnix --fail . --exclude hosts/frieda/hardware.nix home/editors/nvim/default.nix
+          touch $out
+        '';
+
+        # Anti-patterns. The disabled rule and ignored paths are in statix.toml.
+        statix = pkgs.runCommand "statix" { nativeBuildInputs = [ pkgs.statix ]; } ''
+          cd ${./.}
+          statix check .
+          touch $out
+        '';
+      };
 
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
         inherit system;
