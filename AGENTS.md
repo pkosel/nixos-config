@@ -67,6 +67,13 @@ should too.
 There is no secrets management. Everything in the repository ends up
 world-readable in `/nix/store`, so credentials are kept outside it.
 
+## Comments
+
+A comment says why, not what: the constraint, the workaround, or the reason a
+setting differs from the default. It describes the current state; history
+belongs in the commit message. A workaround names the condition under which it
+can go. Unused code is deleted, not commented out.
+
 ## Working in this repo
 
 Flakes only see git-tracked files, so new files must be `git add`ed before a
