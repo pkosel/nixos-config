@@ -28,16 +28,9 @@
         "nix-command"
         "flakes"
       ];
-      # Keep the .drv of everything alive, which is cheap. keep-outputs stays
-      # off: it also keeps the outputs of every input derivation, so the
-      # rustc, clang and llvm behind each old build of mdcat, bitwarden and
-      # claude-code piled up to about 57 GiB. nix-direnv roots its own dev
-      # shells, so nothing here needs it.
-      keep-derivations = true;
-
       # The claude-code input is not in nixpkgs, so without its own cache every
-      # release is an npm build on this machine — 51 of them so far. Both lists
-      # merge with the defaults the nix module appends, so cache.nixos.org stays.
+      # release is an npm build on this machine. Both lists merge with the
+      # defaults the nix module appends, so cache.nixos.org stays.
       #
       # Set here rather than as the flake's nixConfig: that form is only honoured
       # for trusted-users, which is root alone, so it would be silently ignored.
