@@ -52,7 +52,7 @@ let
   # so .docx would open in the ebook *editor*. Removing them as candidates
   # keeps them out of "Open With" too, not just off the default.
   # Left alone: epub, mobi, comics and djvu, where calibre is a real answer.
-  calibre =
+  calibreClaims =
     lib.genAttrs
       [
         "application/pdf"
@@ -73,7 +73,7 @@ in
 {
   xdg.mimeApps = {
     enable = true;
-    associations.removed = calibre;
+    associations.removed = calibreClaims;
     defaultApplications = defaults // {
       # Registered by the applications themselves; declared here because the
       # file below is force-managed and would otherwise drop them.
