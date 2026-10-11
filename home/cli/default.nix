@@ -10,7 +10,6 @@
     ./fzf.nix
     ./ghostty.nix
     ./git.nix
-    ./kitty.nix
     ./mdcat.nix
     ./pi.nix
     ./ripgrep.nix

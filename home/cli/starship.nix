@@ -13,7 +13,7 @@
       # On by default and reads ~/.aws/config, so it would show in every prompt.
       aws.disabled = true;
 
-      # kitty and nvim mis-measure multi-width emoji.
+      # nvim mis-measures multi-width emoji.
       nix_shell.symbol = " ";
     };
   };

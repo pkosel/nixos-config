@@ -8,7 +8,7 @@
 
     # fzf's built-in colours assume a light-ish terminal and are unreadable on
     # a dark scheme. Taking them from home/theme.nix keeps them from drifting away
-    # from the kitty and bat themes.
+    # from the Ghostty and bat themes.
     colors = with theme.palette; {
       "bg+" = bg1;
       "fg+" = fg;
