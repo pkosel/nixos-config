@@ -23,7 +23,7 @@
         "org.gnome.Nautilus.desktop"
         "firefox.desktop"
         "code.desktop"
-        "kitty.desktop"
+        "com.mitchellh.ghostty.desktop"
         "todoist.desktop"
         "obsidian.desktop"
         "zotero.desktop"

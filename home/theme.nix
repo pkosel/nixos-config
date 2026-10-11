@@ -23,10 +23,11 @@ in
 
   # Each tool names its themes differently; delta reads bat's set.
   # bat's theme is built from home/cli/bat/nightowl.tmTheme; kitty's ships in
-  # kitty-themes. mdcat has no Night Owl, so it starts from its plain dark theme
+  # kitty-themes; Ghostty's ships with the ghostty package. mdcat has no Night Owl, so it starts from its plain dark theme
   # and home/cli/mdcat.nix recolours it.
   bat = "nightowl";
   kitty = "night_owl";
+  ghostty = "Night Owl";
   mdcat = "dark";
 
   # eza has no named themes, so every element is spelled out. Grouped the way
