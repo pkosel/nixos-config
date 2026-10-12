@@ -8,7 +8,7 @@
 
     options = {
       # Same theme as bat, which shares delta's syntax highlighter.
-      syntax-theme = theme.bat;
+      syntax-theme = theme.bat.dark;
       line-numbers = true;
       navigate = true;
     };

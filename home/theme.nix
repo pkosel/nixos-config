@@ -1,6 +1,6 @@
 # Terminal colours, in one place so a scheme change is one edit. Not here on
 # purpose: GTK is Adwaita-dark, and nvim picks gruvbox-material from its own lua.
-# pi's copy of the scheme is home/cli/pi/nightowl.json.
+# pi's copies of the scheme are home/cli/pi/nightowl*.json.
 let
   # Night Owl, only the entries fzf, eza and mdcat actually use.
   palette = {
@@ -21,12 +21,19 @@ in
 {
   inherit palette;
 
-  # Each tool names its themes differently; delta reads bat's set.
-  # bat's theme is built from home/cli/bat/nightowl.tmTheme; Ghostty's ships
-  # with the ghostty package. mdcat has no Night Owl, so it starts from its plain
-  # dark theme and home/cli/mdcat.nix recolours it.
-  bat = "nightowl";
-  ghostty = "Night Owl";
+  # Each tool names its themes differently. bat's are built from
+  # home/cli/bat/*.tmTheme; Ghostty's ship with the ghostty package. Light and
+  # dark are picked from the system setting. delta reads bat's dark theme.
+  # mdcat has no Night Owl, so it starts from its plain dark theme and
+  # home/cli/mdcat.nix recolours it.
+  bat = {
+    dark = "nightowl";
+    light = "nightowl-light";
+  };
+  ghostty = {
+    dark = "Night Owl";
+    light = "Light Owl";
+  };
   mdcat = "dark";
 
   # eza has no named themes, so every element is spelled out. Grouped the way

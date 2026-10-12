@@ -3,10 +3,20 @@
 {
   programs.bat = {
     enable = true;
-    config.theme = theme.bat;
+    # bat asks the terminal for its background and picks the matching theme.
+    # Ghostty answers with the colours of the current system setting, so the
+    # highlighting follows GNOME's dark/light switch.
+    config = {
+      theme = "auto";
+      theme-dark = theme.bat.dark;
+      theme-light = theme.bat.light;
+    };
 
-    # No Night Owl ships with bat. The module rebuilds bat's cache for this, and
-    # delta reads the same cache, so both pick it up.
-    themes.${theme.bat}.src = ./bat/nightowl.tmTheme;
+    # Neither theme ships with bat. The module rebuilds bat's cache for these,
+    # and delta reads the same cache.
+    themes = {
+      ${theme.bat.dark}.src = ./bat/nightowl.tmTheme;
+      ${theme.bat.light}.src = ./bat/nightowl-light.tmTheme;
+    };
   };
 }
