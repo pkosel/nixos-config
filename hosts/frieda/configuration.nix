@@ -29,7 +29,6 @@
 
   networking.hostName = "frieda";
 
-  # Localization
   time.timeZone = "Europe/Berlin";
   i18n = {
     defaultLocale = "en_US.UTF-8";
@@ -64,31 +63,32 @@
       # never see the nvim that home-manager exports.
       defaultEditor = true;
     };
-    # No programs.ssh.startAgent: GNOME ships gcr-ssh-agent, which already owns
-    # SSH_AUTH_SOCK and holds the key. OpenSSH's agent would only add a second,
-    # keyless one.
+    # programs.ssh.startAgent stays off: GNOME ships gcr-ssh-agent, which already
+    # owns SSH_AUTH_SOCK and holds the key. OpenSSH's agent would only add a
+    # second, keyless one.
   };
 
   services = {
-    # The system keyboard layout, despite the option path — nothing here needs
-    # an X server. It reaches GNOME via /etc/X11/xorg.conf.d/00-keyboard.conf
-    # and systemd-localed.
+    # Sets the system keyboard layout despite the option path; nothing here needs
+    # an X server. GNOME reads it from /etc/X11/xorg.conf.d/00-keyboard.conf and
+    # systemd-localed.
     xserver.xkb.layout = "eu";
     fwupd.enable = true;
     thermald.enable = true;
     davfs2.enable = true;
   };
 
-  # WebDAV share, mounted on first access.
+  # The WebDAV share is mounted on first access.
   systemd.tmpfiles.rules = [
     "d /mnt/webdav 0755 root root -"
   ];
   fileSystems."/mnt/webdav" = {
     device = "https://files.pkosel.dev";
     fsType = "davfs";
-    # Automount, so an unreachable share does not hold up boot on _netdev.
-    # uid/gid by name survive a uid change; philipp's own uid cannot be
-    # referenced here, isNormalUser allocates it at activation so it reads null.
+    # The automount with _netdev keeps an unreachable share from holding up boot.
+    # uid and gid are given by name so they survive a uid change. philipp's own
+    # uid cannot be referenced here: isNormalUser allocates it at activation, so
+    # it reads null.
     options = [
       "noauto"
       "x-systemd.automount"
@@ -99,22 +99,17 @@
     ];
   };
 
-  # System packages — user-facing tools belong in users/philipp.nix.
-  # vim is installed by programs.vim above.
+  # User-facing tools belong in users/philipp.nix. vim comes from programs.vim above.
   environment.systemPackages = with pkgs; [
-    # Version control
     git
 
-    # Network tools
     curl
     dnsutils
     wget
 
-    # Archives
     unzip
     zip
 
-    # System utilities
     file
     htop
     lsof

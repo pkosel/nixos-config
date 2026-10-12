@@ -51,7 +51,7 @@ let
   # calibre's three desktop files claim every document format it can convert,
   # so .docx would open in the ebook *editor*. Removing them as candidates
   # keeps them out of "Open With" too, not just off the default.
-  # Left alone: epub, mobi, comics and djvu, where calibre is a real answer.
+  # Epub, mobi, comics and djvu are left alone: calibre is a real answer for those.
   calibreClaims =
     lib.genAttrs
       [
@@ -87,10 +87,9 @@ in
     };
 
     # GNOME and the applications above write mimeapps.list directly, so Home
-    # Manager refuses to replace it unless told to. It maintains two copies: the
-    # real one, and the deprecated pre-spec location that some applications
-    # still read. Both need forcing, or activation aborts on whichever is
-    # unmanaged.
+    # Manager refuses to replace it unless forced. Two copies need forcing: the
+    # real file, and the deprecated pre-spec location some applications still
+    # read. Activation aborts on whichever one is unmanaged.
     configFile."mimeapps.list".force = true;
     dataFile."applications/mimeapps.list".force = true;
   };

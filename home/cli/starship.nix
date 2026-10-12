@@ -5,15 +5,16 @@
     enable = true;
 
     settings = {
-      # Off by default, which leaves a failed command without a trace in the
+      # The module is off by default, so a failed command leaves no trace in the
       # prompt.
       status.disabled = false;
       status.symbol = "❌ ";
 
-      # On by default and reads ~/.aws/config, so it would show in every prompt.
+      # The module is on by default and reads ~/.aws/config, so it would show in
+      # every prompt.
       aws.disabled = true;
 
-      # nvim mis-measures multi-width emoji.
+      # The symbol is a space because nvim mis-measures multi-width emoji.
       nix_shell.symbol = " ";
     };
   };

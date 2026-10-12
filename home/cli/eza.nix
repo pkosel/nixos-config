@@ -3,7 +3,7 @@
 let
   # ANSI names, so the colours come from Ghostty's active theme and follow the
   # dark/light switch. eza only knows these spellings: anything else, such as
-  # BrightRed, is silently ignored. DarkGray is the muted tone.
+  # BrightRed, is silently ignored.
   palette = {
     fg = "Default";
     fg2 = "Default";
@@ -27,10 +27,8 @@ in
     git = true;
 
     # Written to ~/.config/eza/theme.yml, which eza reads on its own. Without it
-    # eza keeps its built-in palette.
-    #
-    # eza has no named themes, so every element is spelled out. Grouped the way
-    # a long listing reads: type, permissions, size, owner, date, git.
+    # eza keeps its built-in palette. eza has no named themes, so every element
+    # is spelled out.
     theme = with palette; {
       filekinds = {
         normal = fore fg;
@@ -45,7 +43,7 @@ in
         mount_point = fore aqua;
       };
 
-      # Read yellow, write red, execute green, so a stray write bit stands out.
+      # Write is red so a stray write bit stands out.
       perms = {
         user_read = fore yellow;
         user_write = fore red;
@@ -62,7 +60,6 @@ in
         attribute = fore gray;
       };
 
-      # Brighter as the file gets bigger.
       size = {
         major = fore fg2;
         minor = fore aqua;

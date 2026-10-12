@@ -41,32 +41,25 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 1
 fi
 
-# create partition table
 parted "$drive" -- mklabel gpt
 
-# create boot partition
 parted "$drive" -- mkpart boot fat32 1MiB 512MiB
 parted "$drive" -- set 1 esp on
 mkfs.fat -F 32 -n boot "$boot"
 
-# create system partition
 parted "$drive" -- mkpart nixos ext4 512MiB -4GiB
 mkfs.ext4 -L nixos "$system"
 
-# create swap partition
 parted "$drive" -- mkpart swap linux-swap -4GiB 100%
 mkswap -L swap "$swap"
 
-# mount partitions
 mount /dev/disk/by-label/nixos /mnt
 
 mkdir -p /mnt/boot
 mount /dev/disk/by-label/boot /mnt/boot
 
-# activate swap
 swapon "$swap"
 
-# generate default configuration
 nixos-generate-config --root /mnt
 
 echo

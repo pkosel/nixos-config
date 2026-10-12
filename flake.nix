@@ -50,16 +50,15 @@
 
       # Run by `nix flake check`.
       checks.${system} = {
-        # Unused arguments and bindings. hardware.nix is generated; the nvim
-        # module's unused pomo-nvim waits for the Neovim cleanup (see
-        # home/editors/nvim/TODO.md), after which that exclusion goes.
+        # hardware.nix is generated. The nvim module's unused pomo-nvim stays
+        # excluded until the Neovim cleanup (home/editors/nvim/TODO.md) removes it.
         deadnix = pkgs.runCommand "deadnix" { nativeBuildInputs = [ pkgs.deadnix ]; } ''
           cd ${./.}
           deadnix --fail . --exclude hosts/frieda/hardware.nix home/editors/nvim/default.nix
           touch $out
         '';
 
-        # Anti-patterns. The disabled rule and ignored paths are in statix.toml.
+        # Disabled rules and ignored paths are set in statix.toml.
         statix = pkgs.runCommand "statix" { nativeBuildInputs = [ pkgs.statix ]; } ''
           cd ${./.}
           statix check .
@@ -69,8 +68,8 @@
 
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
         inherit system;
-        # NixOS modules reach flake inputs through this (the nixpkgs overlays,
-        # the flake registry pin).
+        # NixOS modules reach flake inputs through this, for the nixpkgs overlays
+        # and the flake registry pin.
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/frieda/configuration.nix
@@ -79,11 +78,10 @@
           {
             home-manager = {
               useGlobalPkgs = true;
-              # Without this every activation installs home-manager-path into
+              # Without this, every activation installs home-manager-path into
               # ~/.local/state/nix/profiles as a new generation, which nix.gc
-              # (running as root) never prunes. With it the packages ride along
-              # in the system closure, so the system generations are the only
-              # history there is.
+              # (running as root) never prunes. With it, the packages ride along
+              # in the system closure, so system generations are the only history.
               useUserPackages = true;
               users.philipp = import ./users/philipp.nix;
               # Home Manager modules get the inputs too; firefox uses

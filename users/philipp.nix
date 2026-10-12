@@ -15,7 +15,6 @@
   # User packages. Anything with configuration of its own lives in a module
   # under home/ instead.
   home.packages = with pkgs; [
-    # Development tools
     claude-code
     pi
     gcc
@@ -25,7 +24,6 @@
     nix-output-monitor
     nvd
 
-    # Privacy & security
     bitwarden-desktop
 
     # Terminal utilities, none of them worth a module: sd has none, fd's
@@ -34,17 +32,14 @@
     jq
     sd
 
-    # Research & productivity
     anki
     markdown-anki-decks
     zotero
     libreoffice
     todoist-electron
 
-    # Communication
     signal-desktop
 
-    # Media & entertainment
     calibre
     foliate
     newsflash

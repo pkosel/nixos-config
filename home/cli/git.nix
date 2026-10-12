@@ -38,7 +38,7 @@ in
 
       push.autoSetupRemote = true;
       fetch.prune = true;
-      # Linear history; nobody else pushes here.
+      # Rebase on pull to keep history linear. Nobody else pushes here.
       pull.rebase = true;
       diff.algorithm = "histogram";
       # zdiff3 puts the common ancestor in the conflict markers.
