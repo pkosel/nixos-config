@@ -1,4 +1,4 @@
-{ theme, ... }:
+{ ... }:
 
 {
   programs.fzf = {
@@ -6,21 +6,23 @@
     # package has none, so history search would stay plain readline.
     enable = true;
 
-    # fzf's built-in colours assume a light-ish terminal and are unreadable on
-    # a dark scheme. Taking them from home/theme.nix keeps them from drifting away
-    # from the Ghostty and bat themes.
-    colors = with theme.palette; {
-      "bg+" = bg1;
-      "fg+" = fg;
-      "hl+" = yellow;
-      fg = fg2;
-      hl = yellow;
-      header = gray;
-      info = blue;
-      marker = green;
-      pointer = red;
-      prompt = aqua;
-      spinner = purple;
+    # ANSI names, so the colours come from Ghostty's active theme and follow the
+    # dark/light switch. Without them fzf's own palette is unreadable on one of
+    # the two.
+    colors = {
+      bg = "-1";
+      "bg+" = "bright-black";
+      fg = "-1";
+      "fg+" = "-1";
+      gutter = "-1";
+      "hl+" = "yellow";
+      hl = "yellow";
+      header = "bright-black";
+      info = "blue";
+      marker = "green";
+      pointer = "red";
+      prompt = "cyan";
+      spinner = "magenta";
     };
   };
 }

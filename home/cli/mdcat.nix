@@ -1,4 +1,4 @@
-{ pkgs, theme, ... }:
+{ pkgs, ... }:
 
 let
   toml = pkgs.formats.toml { };
@@ -8,13 +8,12 @@ in
 
   # mdcat has no home-manager module. config.toml is its own mechanism and
   # beats MDCAT_THEME on reach: session variables only exist in a login shell.
-  # base means "start from this built-in theme"; mdcat has no Night Owl, so the
-  # elements that carry colour are overridden from the shared palette.
+  # No base theme, so mdcat keeps detecting dark or light from the terminal.
+  # mdcat has no Night Owl, so the elements that carry colour are overridden with
+  # ANSI names, which Ghostty maps to its active theme.
   xdg.configFile."mdcat/config.toml".source = toml.generate "mdcat-config.toml" {
     theme = {
-      base = theme.mdcat;
-      rule = "gray";
-      palette = { inherit (theme.palette) blue aqua gray; };
+      rule = "bright-black";
       styles =
         let
           heading = {
@@ -22,7 +21,7 @@ in
             modifiers = [ "bold" ];
           };
           link = {
-            fg = "aqua";
+            fg = "cyan";
             modifiers = [ "underline" ];
           };
         in
@@ -33,11 +32,11 @@ in
           h4 = heading;
           h5 = heading;
           h6 = heading;
-          code.fg = "aqua";
+          code.fg = "cyan";
           inherit link;
           image_link = link;
-          quote_border.fg = "gray";
-          footnote.fg = "gray";
+          quote_border.fg = "bright-black";
+          footnote.fg = "bright-black";
         };
     };
   };
