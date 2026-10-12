@@ -16,8 +16,10 @@
     colorScheme = "dark";
     gtk3.colorScheme = null;
     gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
-    # 26.05 defaults this to null; pinned so gtk4 keeps following gtk3 rather
-    # than changing because home.stateVersion says 25.11.
+    # The default is null from home.stateVersion 26.05, and gtk3's theme before.
+    # Setting it explicitly keeps gtk4 following gtk3 and silences the deprecation
+    # warning. Drop it once stateVersion is 26.05 or later and gtk4 no longer needs
+    # to follow gtk3.
     gtk4.theme = config.gtk.theme;
   };
 }

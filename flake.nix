@@ -20,7 +20,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # nixpkgs' pi-coding-agent lags upstream by a major version.
+    # nixpkgs' pi-coding-agent lags upstream by a major version. Drop this input
+    # and its overlay in system/nixpkgs.nix once nixpkgs catches up with stable.
     pi = {
       url = "github:earendil-works/pi/stable";
       inputs.nixpkgs.follows = "nixpkgs";

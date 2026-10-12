@@ -17,8 +17,10 @@ in
   programs.firefox = {
     enable = true;
 
-    # 26.05 moves this under XDG. Pinned to the legacy path because the profile
-    # is large and only moves by hand; migrating is its own job.
+    # The default is under XDG from home.stateVersion 26.05. This pins the legacy
+    # path because the profile is large and only moves by hand. Replace the pin
+    # after moving ~/.mozilla/firefox to $XDG_CONFIG_HOME/mozilla/firefox; native
+    # messaging hosts are not moved by the option and need moving too.
     configPath = ".mozilla/firefox";
     profiles.philipp = {
       extensions.packages = extensions;
