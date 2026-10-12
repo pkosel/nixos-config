@@ -101,15 +101,19 @@
 
   # User-facing tools belong in users/philipp.nix. vim comes from programs.vim above.
   environment.systemPackages = with pkgs; [
+    # Version control
     git
 
+    # Networking
     curl
     dnsutils
     wget
 
+    # Archives
     unzip
     zip
 
+    # System and hardware
     file
     htop
     lsof

@@ -15,16 +15,15 @@
   # User packages. Anything with configuration of its own lives in a module
   # under home/ instead.
   home.packages = with pkgs; [
+    # Development
     claude-code
-    pi
     gcc
+    pi
 
     # Nix tooling. nvd diffs two generations, so a rebuild says what actually
     # changed; nom turns the build log into a live dependency tree.
     nix-output-monitor
     nvd
-
-    bitwarden-desktop
 
     # Terminal utilities, none of them worth a module: sd has none, fd's
     # defaults already do the right thing, jq's only sets output colours.
@@ -32,14 +31,22 @@
     jq
     sd
 
-    anki
-    markdown-anki-decks
-    zotero
-    libreoffice
-    todoist-electron
+    # Security and privacy
+    bitwarden-desktop
 
+    # Communication
     signal-desktop
 
+    # Productivity
+    anki
+    libreoffice
+    markdown-anki-decks
+    todoist-electron
+
+    # Research
+    zotero
+
+    # Entertainment
     calibre
     foliate
     newsflash
