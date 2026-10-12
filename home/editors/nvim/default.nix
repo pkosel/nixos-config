@@ -51,9 +51,9 @@ in
       stylua
     ];
     plugins = with pkgs.vimPlugins; [
-      gruvbox-material
       lualine-nvim
       luasnip
+      night-owl-nvim
       nvim-comment
       nvim-tree-lua
       nvim-web-devicons

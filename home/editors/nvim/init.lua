@@ -15,7 +15,7 @@ vim.opt.timeoutlen = 500
 
 vim.opt.clipboard = "unnamedplus"
 
-vim.cmd("colorscheme gruvbox-material")
+vim.cmd("colorscheme night-owl")
 
 -- Mappings
 local keymap_set = vim.keymap.set
