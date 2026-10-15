@@ -33,6 +33,7 @@
 
     # Security and privacy
     bitwarden-desktop
+    proton-pass
 
     # Communication
     signal-desktop
