@@ -5,9 +5,7 @@ let
 
   extensions = with addons; [
     ublock-origin
-    bitwarden
     proton-pass
-    duckduckgo-privacy-essentials
     zotero-connector
   ];
 
