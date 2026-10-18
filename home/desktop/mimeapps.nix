@@ -2,7 +2,12 @@
 
 let
   apps = {
-    browser = [ "firefox.desktop" ];
+    # Firefox stays first, so it remains the default; Brave Origin is offered
+    # as an alternative for "Open With" and fallback selection.
+    browser = [
+      "firefox.desktop"
+      "brave-origin.desktop"
+    ];
     plaintext = [ "org.gnome.TextEditor.desktop" ];
     pdf = [ "org.gnome.Papers.desktop" ];
     ebook = [ "com.github.johnfactotum.Foliate.desktop" ];
