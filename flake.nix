@@ -33,11 +33,6 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    betterfox = {
-      url = "github:yokoffing/Betterfox";
-      flake = false;
-    };
   };
 
   outputs =
@@ -86,7 +81,7 @@
               useUserPackages = true;
               users.philipp = import ./users/philipp.nix;
               # Home Manager modules get the inputs too; firefox uses
-              # firefox-addons and betterfox.
+              # firefox-addons.
               extraSpecialArgs = { inherit inputs; };
             };
           }
