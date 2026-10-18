@@ -5,11 +5,10 @@
   _module.args.theme = import ../home/theme.nix;
 
   imports = [
-    ../home/brave.nix
+    ../home/browsers
     ../home/cli
     ../home/desktop
     ../home/editors
-    ../home/firefox/firefox.nix
     ../home/obsidian.nix
   ];
 
