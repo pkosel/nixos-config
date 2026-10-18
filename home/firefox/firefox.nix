@@ -8,8 +8,6 @@ let
     proton-pass
     zotero-connector
   ];
-
-  bookmarks = builtins.fromJSON (builtins.readFile ./firefox-bookmarks.json);
 in
 {
   programs.firefox = {
@@ -22,11 +20,6 @@ in
     configPath = ".mozilla/firefox";
     profiles.philipp = {
       extensions.packages = extensions;
-
-      bookmarks = {
-        force = true;
-        settings = bookmarks;
-      };
 
       search = {
         # Firefox writes search.json.mozlz4 itself, so Home Manager refuses to
@@ -144,6 +137,20 @@ in
         user_pref("browser.ml.chat.menu", false);
         user_pref("browser.ml.linkPreview.enabled", false);
         user_pref("browser.tabs.groups.smart.enabled", false);
+
+        // The removed declarative bookmarks block set this to true. Removing it
+        // from user.js does not clear the value already in the profile, so force
+        // it off to stop a re-import of the old bookmarks file.
+        user_pref("browser.places.importBookmarksHTML", false);
+
+        // Firefox Sync carries bookmarks only. Passwords, payments, add-ons and
+        // prefs are handled by Proton Pass and Nix, and syncing them would fight
+        // the config.
+        user_pref("services.sync.engine.addons", false);
+        user_pref("services.sync.engine.passwords", false);
+        user_pref("services.sync.engine.creditcards", false);
+        user_pref("services.sync.engine.addresses", false);
+        user_pref("services.sync.engine.prefs", false);
 
         // Overrides
         user_pref("browser.startup.homepage", "https://ecosia.org/");
