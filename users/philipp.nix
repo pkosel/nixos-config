@@ -5,6 +5,7 @@
   _module.args.theme = import ../home/theme.nix;
 
   imports = [
+    ../home/brave.nix
     ../home/cli
     ../home/desktop
     ../home/editors
