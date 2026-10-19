@@ -1,5 +1,9 @@
 /**
- * Q&A extraction hook - extracts questions from assistant responses
+ * Q&A extraction hook - extracts questions from assistant responses.
+ *
+ * Fork of extensions/answer.ts from mitsuhiko/agent-stuff. The only change is
+ * that selectExtractionModel reads PI_ANSWER_MODEL (provider/modelId) instead
+ * of the upstream hardcoded Codex/Anthropic chain.
  *
  * Custom interactive TUI for answering questions.
  *
