@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./bat.nix
+    ./bat
     ./delta.nix
     ./direnv.nix
     ./eza.nix
@@ -11,7 +11,7 @@
     ./ghostty.nix
     ./git.nix
     ./mdcat.nix
-    ./pi.nix
+    ./pi
     ./ripgrep.nix
     ./ssh.nix
     ./starship.nix
