@@ -34,4 +34,5 @@ There is no test suite. A change is correct when `frieda` builds.
 
 - Do not activate or install: no `nixos-rebuild switch` or `boot`, no `nixos-install`.
 - Do not use `sudo`, run `scripts/setup-partitions`, update `flake.lock`, or commit unless asked.
+- Do not use `--impure`; it lets the build read untracked files and the host environment, breaking reproducibility.
 - Flakes see only git-tracked files. Run `git add` on new files before building.
