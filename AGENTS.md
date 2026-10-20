@@ -4,10 +4,13 @@ NixOS flake for one host, `frieda` (x86_64-linux). Home Manager is a NixOS modul
 
 ## Commands
 
-- `nix fmt`: format Nix files (nixfmt-tree).
-- `nix flake check`: evaluate all outputs; runs deadnix and statix.
-- `nixos-rebuild build --flake .#frieda`: build without activating.
-- `nix eval .#nixosConfigurations.frieda.config.<option>`: inspect an option.
+Run in order, stopping at the first failure:
+
+1. `nix fmt`: format Nix files (nixfmt-tree).
+2. `nix flake check`: evaluate all outputs; runs deadnix and statix.
+3. `nix eval .#nixosConfigurations.frieda.config.<option>`: confirm the option you changed evaluates as intended. Skip if you didn't change an option value.
+4. `nixos-rebuild build --flake .#frieda`: build without activating; leaves `result` in the current directory.
+5. `nvd diff /run/current-system result`: review what the build would actually change.
 
 There is no test suite. A change is correct when `frieda` builds.
 
