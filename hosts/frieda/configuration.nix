@@ -63,6 +63,19 @@
       # never see the nvim that home-manager exports.
       defaultEditor = true;
     };
+
+    # uvx downloads its own CPython, which is dynamically linked for FHS Linux.
+    # nix-ld provides ld-linux and a linker lookup path so such binaries run.
+    nix-ld = {
+      enable = true;
+      # Start with the minimum shared libraries every FHS binary expects.
+      # When a tool fails with a missing .so, add its package here.
+      libraries = with pkgs; [
+        glibc
+        zlib
+      ];
+    };
+
     # programs.ssh.startAgent stays off: GNOME ships gcr-ssh-agent, which already
     # owns SSH_AUTH_SOCK and holds the key. OpenSSH's agent would only add a
     # second, keyless one.
