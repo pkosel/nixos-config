@@ -24,8 +24,7 @@
     uv
 
     # Nix tooling. nvd diffs two generations, so a rebuild says what actually
-    # changed; nom turns the build log into a live dependency tree.
-    nix-output-monitor
+    # changed.
     nvd
 
     # Terminal utilities, none of them worth a module: sd has none, fd's
