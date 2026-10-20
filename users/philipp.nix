@@ -20,6 +20,9 @@
     gcc
     pi
 
+    # uv provides uvx, which pi uses to run the mcp-nixos server in .pi/mcp.json.
+    uv
+
     # Nix tooling. nvd diffs two generations, so a rebuild says what actually
     # changed; nom turns the build log into a live dependency tree.
     nix-output-monitor
