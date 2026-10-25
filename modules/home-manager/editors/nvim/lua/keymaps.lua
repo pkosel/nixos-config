@@ -35,6 +35,7 @@ wk.setup({
     { mode = { "n", "x" }, { "g", group = "goto" } },
     { mode = { "n", "x" }, { "gs", group = "surround" } },
     { mode = { "n", "x" }, { "z", group = "fold" } },
+    { mode = { "n" }, { "<leader><tab>", group = "tabs" } },
     { mode = { "n", "x" }, { "gx", desc = "Open with system app" } },
   },
 })
@@ -183,4 +184,12 @@ wk.add({
 -- nvim-tree toggle
 wk.add({
   { "<C-p>", require("nvim-tree.api").tree.toggle, desc = "Toggle file tree" },
+})
+
+-- Tab navigation
+wk.add({
+  { "<leader><tab>n", "<cmd>tabnew<cr>", desc = "New tab" },
+  { "<leader><tab>]", "<cmd>tabnext<cr>", desc = "Next tab" },
+  { "<leader><tab>[", "<cmd>tabprevious<cr>", desc = "Prev tab" },
+  { "<leader><tab>d", "<cmd>tabclose<cr>", desc = "Close tab" },
 })

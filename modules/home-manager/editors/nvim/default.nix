@@ -57,6 +57,9 @@
       # editing
       indent-blankline-nvim
 
+      # highlights
+      todo-comments-nvim
+
       # diagnostics
       trouble-nvim
 
@@ -101,5 +104,7 @@
       "${cfgDir}/lua/trouble.lua".text = builtins.readFile ./lua/trouble.lua;
       "${cfgDir}/lua/oil.lua".text = builtins.readFile ./lua/oil.lua;
       "${cfgDir}/lua/harpoon.lua".text = builtins.readFile ./lua/harpoon.lua;
+      "${cfgDir}/lua/tabline.lua".text = builtins.readFile ./lua/tabline.lua;
+      "${cfgDir}/lua/todo.lua".text = builtins.readFile ./lua/todo.lua;
     };
 }
