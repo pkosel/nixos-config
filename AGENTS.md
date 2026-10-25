@@ -18,11 +18,11 @@ There is no test suite. A change is correct when `frieda` builds.
 
 - `flake.nix`: inputs, formatter, checks, `nixosConfigurations.frieda`.
 - `hosts/frieda/`: the host. Machine-specific settings go here, not in modules.
-- `system/`, `home/`: modules. A module has no effect until imported, so check the import lists (`hosts/frieda/configuration.nix`, `users/philipp.nix`, and the `default.nix` files).
-- Per-user settings that need no root go in `home/` (Home Manager); system-level settings (boot, kernel, services, hardware, firewall, display manager) go in `system/`. When in doubt, prefer `home/`.
-- `users/philipp.nix`: the Home Manager user profile. It sets `_module.args.theme` from `home/theme.nix`.
+- `home/philipp/`: the Home Manager user profile. It sets `_module.args.theme` from `modules/home-manager/theme.nix`.
+- `modules/nixos/`, `modules/home-manager/`: modules. A module has no effect until imported, so check the import lists (`hosts/frieda/default.nix`, `home/philipp/default.nix`, and the `default.nix` files).
+- Per-user settings that need no root go in `modules/home-manager/` (Home Manager); system-level settings (boot, kernel, services, hardware, firewall, display manager) go in `modules/nixos/`. When in doubt, prefer `modules/home-manager/`.
 - Modules get `inputs` as an argument. Home Manager modules also get `theme`.
-- Neovim open cleanup items: `home/editors/nvim/TODO.md`.
+- Neovim open cleanup items: `modules/home-manager/editors/nvim/TODO.md`.
 
 ## Versions and pins
 

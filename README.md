@@ -12,17 +12,17 @@ Hosts:
 ## Structure
 
 ```
-flake.nix         inputs and the nixosConfigurations
-hosts/<host>/     per-machine: configuration.nix + hardware.nix
-system/           system modules, imported by a host
-home/             Home Manager modules, imported by a user
-users/<user>.nix  per-user Home Manager profile
-pkgs/             packages that aren't in nixpkgs
-overlays/         wires those packages into nixpkgs, and patches some of its own
-scripts/          installation helpers
+flake.nix            inputs and the nixosConfigurations
+hosts/<host>/        per-machine: default.nix + hardware-configuration.nix
+modules/nixos/       system modules, imported by a host
+modules/home-manager/ Home Manager modules, imported by a user
+home/<user>/         per-user Home Manager profile
+pkgs/                packages that aren't in nixpkgs
+overlays/            wires those packages into nixpkgs, and patches some of its own
+scripts/             installation helpers
 ```
 
-Modules stay optional: a module under `system/` or `home/` configures one thing
+Modules stay optional: a module under `modules/nixos/` or `modules/home-manager/` configures one thing
 and does nothing until a host or user imports it. Anything machine-specific
 belongs in `hosts/`, not in a module.
 
@@ -45,10 +45,10 @@ Then generate the hardware configuration for the new host:
 
 ```sh
 mkdir -p hosts/<host>
-nixos-generate-config --show-hardware-config > hosts/<host>/hardware.nix
+nixos-generate-config --show-hardware-config > hosts/<host>/hardware-configuration.nix
 ```
 
-Write `hosts/<host>/configuration.nix` next to it, importing the modules the
+Write `hosts/<host>/default.nix` next to it, importing the modules the
 machine needs, and add a `nixosConfigurations.<host>` section in `flake.nix`.
 
 Install, where `<host>` matches `nixosConfigurations.<host>`:
