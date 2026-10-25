@@ -22,7 +22,6 @@ There is no test suite. A change is correct when `frieda` builds.
 - `modules/nixos/`, `modules/home-manager/`: modules. A module has no effect until imported, so check the import lists (`hosts/frieda/default.nix`, `home/philipp/default.nix`, and the `default.nix` files).
 - Per-user settings that need no root go in `modules/home-manager/` (Home Manager); system-level settings (boot, kernel, services, hardware, firewall, display manager) go in `modules/nixos/`. When in doubt, prefer `modules/home-manager/`.
 - Modules get `inputs` as an argument. Home Manager modules also get `theme`.
-- Neovim open cleanup items: `modules/home-manager/editors/nvim/TODO.md`.
 
 ## Versions and pins
 

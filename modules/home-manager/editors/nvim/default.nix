@@ -39,16 +39,25 @@
       stylua
     ];
     plugins = with pkgs.vimPlugins; [
+      # ui
       lualine-nvim
-      luasnip
       night-owl-nvim
-      mini-nvim
-      nvim-tree-lua
       nvim-web-devicons
+      which-key-nvim
+
+      # snippets
+      luasnip
+
+      # mini
+      mini-nvim
+
+      # file tree
+      nvim-tree-lua
+
+      # telescope
       plenary-nvim
       telescope-fzy-native-nvim
       telescope-nvim
-      which-key-nvim
 
       # git
       diffview-nvim
