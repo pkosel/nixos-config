@@ -15,6 +15,7 @@ wk.setup({
     { mode = { "n", "x" }, { "<leader>s", group = "search" } },
     { mode = { "n", "x" }, { "<leader>u", group = "ui/toggle" } },
     { mode = { "n", "x" }, { "<leader>x", group = "diagnostics/quickfix" } },
+    { mode = { "n", "x" }, { "<leader>h", group = "harpoon" } },
     -- Proxy: <leader>w shows all <c-w> window commands automatically
     {
       mode = { "n", "x" },

@@ -58,6 +58,10 @@
       # diagnostics
       trouble-nvim
 
+      # navigation
+      harpoon2
+      oil-nvim
+
       # formatting / linting
       conform-nvim
       nvim-lint
@@ -93,5 +97,7 @@
       "${cfgDir}/lua/surround.lua".text = builtins.readFile ./lua/surround.lua;
       "${cfgDir}/lua/indent.lua".text = builtins.readFile ./lua/indent.lua;
       "${cfgDir}/lua/trouble.lua".text = builtins.readFile ./lua/trouble.lua;
+      "${cfgDir}/lua/oil.lua".text = builtins.readFile ./lua/oil.lua;
+      "${cfgDir}/lua/harpoon.lua".text = builtins.readFile ./lua/harpoon.lua;
     };
 }
