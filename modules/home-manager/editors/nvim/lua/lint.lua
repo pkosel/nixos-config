@@ -2,7 +2,12 @@
 local lint = require("lint")
 
 lint.linters_by_ft = {
+  dockerfile = { "hadolint" },
+  markdown = { "markdownlint" },
   nix = { "statix" },
+  python = { "ruff" },
+  rust = { "clippy" },
+  sh = { "shellcheck" },
 }
 
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {

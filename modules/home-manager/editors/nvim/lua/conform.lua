@@ -3,8 +3,12 @@ local conform = require("conform")
 
 conform.setup({
   formatters_by_ft = {
-    nix = { "nixfmt" },
     lua = { "stylua" },
+    nix = { "nixfmt" },
+    python = { "ruff_format" },
+    rust = { "rustfmt" },
+    sh = { "shfmt" },
+    toml = { "taplo" },
   },
   format_on_save = {
     timeout_ms = 500,

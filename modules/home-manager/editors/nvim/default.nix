@@ -15,13 +15,26 @@
       ripgrep
 
       # language servers
+      bash-language-server
+      dockerfile-language-server
       lua-language-server
       marksman
       nil
+      pyright
+      rust-analyzer
+      sqls
+      taplo
+      terraform-ls
+      yaml-language-server
 
-      # nixfmt, not nixfmt-classic: both name their binary nixfmt,
-      # so the formatter config needs no change, but classic is the pre-RFC style.
+      # formatters / linters
+      hadolint
+      markdownlint-cli
       nixfmt
+      ruff
+      rustfmt
+      shellcheck
+      shfmt
       statix
       stylua
     ];

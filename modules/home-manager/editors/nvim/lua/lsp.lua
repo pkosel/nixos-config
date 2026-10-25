@@ -18,9 +18,17 @@ vim.lsp.config("lua_ls", {
 })
 
 vim.lsp.enable({
+  "bashls",
+  "basedpyright",
+  "dockerls",
   "lua_ls",
   "marksman",
   "nil_ls",
+  "rust_analyzer",
+  "sqlls",
+  "taplo",
+  "terraformls",
+  "yamlls",
 })
 
 -- Underline the other uses of whatever the cursor is resting on, and drop them
