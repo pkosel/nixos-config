@@ -1,16 +1,24 @@
-require("nvim-treesitter.configs").setup({
-  highlight = { enable = true },
-  indent = { enable = true },
-  incremental_selection = {
-    enable = true,
-    -- Under gn, not gr: nvim 0.11 claimed gr* for the built-in LSP maps, so grn
-    -- was shadowing vim.lsp.buf.rename. init_selection is normal mode and the
-    -- rest are visual, which is why gnn can serve both.
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "gnn",
-      scope_incremental = "gnc",
-      node_decremental = "gnm",
-    },
-  },
+-- nvim-treesitter: parser management and queries.
+-- Highlighting and indentation are enabled via autocommands below.
+-- Incremental selection was dropped in the upstream rewrite and has no
+-- replacement yet. The old keymaps (gnn, gnc, gnm) are removed.
+require("nvim-treesitter").setup({})
+
+-- Enable treesitter highlighting for filetypes that have parsers installed.
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
 })
+
+-- Treesitter-based indentation (experimental).
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    local ok = pcall(vim.treesitter.language.get_parser, vim.api.nvim_get_current_buf())
+    if ok then
+      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    end
+  end,
+})
+
+require("nvim-treesitter-context").setup({})

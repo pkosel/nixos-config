@@ -47,12 +47,8 @@
       cmp-buffer
       cmp-nvim-lsp
 
-      # treesitter — pinned to the legacy generation. 26.05 rewrote
-      # nvim-treesitter and dropped the module system that treesitter.lua
-      # depends on. Migrating is an nvim-config job: deprecated in 26.05,
-      # error in 26.11. nvim 0.12 broke the refactor and textobjects
-      # companions; only highlight, indent and incremental_selection work.
-      nvim-treesitter-legacy.withAllGrammars
+      # treesitter
+      nvim-treesitter.withAllGrammars
       nvim-treesitter-context
 
       # lsp
