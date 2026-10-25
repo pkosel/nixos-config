@@ -22,6 +22,7 @@
       # nixfmt, not nixfmt-classic: both name their binary nixfmt,
       # so none-ls needs no change, but classic is the pre-RFC style.
       nixfmt
+      statix
       stylua
     ];
     plugins = with pkgs.vimPlugins; [
@@ -51,9 +52,12 @@
       nvim-treesitter.withAllGrammars
       nvim-treesitter-context
 
+      # formatting / linting
+      conform-nvim
+      nvim-lint
+
       # lsp
       nvim-lspconfig
-      none-ls-nvim
     ];
     viAlias = true;
     vimAlias = true;
@@ -75,6 +79,7 @@
       "${cfgDir}/lua/lsp.lua".text = builtins.readFile ./lua/lsp.lua;
       "${cfgDir}/lua/lualine.lua".text = builtins.readFile ./lua/lualine.lua;
       "${cfgDir}/lua/telescope.lua".text = builtins.readFile ./lua/telescope.lua;
-      "${cfgDir}/lua/treesitter.lua".text = builtins.readFile ./lua/treesitter.lua;
+      "${cfgDir}/lua/conform.lua".text = builtins.readFile ./lua/conform.lua;
+      "${cfgDir}/lua/lint.lua".text = builtins.readFile ./lua/lint.lua;
     };
 }

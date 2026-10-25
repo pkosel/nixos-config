@@ -53,6 +53,3 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
-require("which-key").add({
-  { "<leader>f", vim.lsp.buf.format, desc = "Format file" },
-})
