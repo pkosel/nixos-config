@@ -1,39 +1,22 @@
 { pkgs, lib, ... }:
 
-let
-  pomo-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "pomo.nvim";
-    buildInputs = with pkgs; [
-      stylua
-      luajitPackages.luacheck
-    ];
-    src = pkgs.fetchFromGitHub {
-      owner = "epwalsh";
-      repo = "pomo.nvim";
-      rev = "05486f9f11516cacd43ccf0b65c80ed5978114ab";
-      hash = "sha256-nhWje8xBXE4TgaNGRjwXtBKFuBecGroYEOn0Q7Rhx14=";
-    };
-  };
-in
 {
   programs.neovim = {
-    # defaultEditor = true;
+    # defaultEditor is in hosts/frieda/configuration.nix.
     enable = true;
 
     # 26.05 defaults both to false. Nothing in the lua config uses either.
     withRuby = false;
     withPython3 = false;
 
-    initLua =
-      with builtins;
-      lib.foldl (r: f: r + "\n" + readFile f) "" [
-        ./init.lua
-        ./completion.lua
-        ./lsp.lua
-        ./lualine.lua
-        ./telescope.lua
-        ./treesitter.lua
-      ];
+    initLua = lib.concatMapStringsSep "\n" builtins.readFile [
+      ./init.lua
+      ./completion.lua
+      ./lsp.lua
+      ./lualine.lua
+      ./telescope.lua
+      ./treesitter.lua
+    ];
     extraPackages = with pkgs; [
       # telescope shells out to these
       fd
@@ -44,9 +27,8 @@ in
       marksman
       nil
 
-      # linters & formatters. nixfmt, not nixfmt-classic: both install a binary
-      # called nixfmt, so none-ls needs no change, but classic is 0.6.0 and the
-      # pre-RFC style, which fought `nix fmt` over every file.
+      # nixfmt, not nixfmt-classic: both name their binary nixfmt,
+      # so none-ls needs no change, but classic is the pre-RFC style.
       nixfmt
       stylua
     ];
@@ -61,7 +43,6 @@ in
       telescope-fzy-native-nvim
       telescope-nvim
       which-key-nvim
-      # pomo-nvim
 
       # git
       diffview-nvim
@@ -74,17 +55,11 @@ in
       cmp-buffer
       cmp-nvim-lsp
 
-      # treesitter — pinned to the legacy generation. 26.05 made
-      # nvim-treesitter the upstream "main" rewrite, which drops the module
-      # system; treesitter.lua configures it through
-      # require("nvim-treesitter.configs").setup, which only exists here.
-      # Mixing the two is a build error, not a runtime surprise.
-      # Migrating is an nvim-config job: deprecated in 26.05, error in 26.11.
-      # Only highlight, indent and incremental_selection are still usable: nvim
-      # 0.12 dropped iter_matches' all=false, so every query the legacy plugin
-      # runs yields node lists where it expects one node. That killed the
-      # refactor and textobjects companions, which are gone until the migration.
-      #nvim-treesitter-legacy
+      # treesitter — pinned to the legacy generation. 26.05 rewrote
+      # nvim-treesitter and dropped the module system that treesitter.lua
+      # depends on. Migrating is an nvim-config job: deprecated in 26.05,
+      # error in 26.11. nvim 0.12 broke the refactor and textobjects
+      # companions; only highlight, indent and incremental_selection work.
       nvim-treesitter-legacy.withAllGrammars
       nvim-treesitter-context
 
