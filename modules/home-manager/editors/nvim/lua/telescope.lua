@@ -46,7 +46,11 @@ wk.add({
   { "<leader>tR", builtin.registers, desc = "Registers" },
   { "<leader>ts", builtin.grep_string, desc = "Grep string under cursor" },
   { "<leader>tt", builtin.tags, desc = "Tags" },
-  { "<leader>tT", builtin.current_buffer_tags, desc = "Tags in current buffer" },
+  {
+    "<leader>tT",
+    builtin.current_buffer_tags,
+    desc = "Tags in current buffer",
+  },
   { "<leader>tv", builtin.vim_options, desc = "Vim options" },
 
   { "<leader>tx", group = "More" },

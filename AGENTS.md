@@ -30,6 +30,14 @@ There is no test suite. A change is correct when `frieda` builds.
 - nixpkgs and home-manager track the same release branch and are bumped together.
 - Pins and workarounds carry a comment saying why and when they can go.
 
+## Formatting Lua files
+
+Run `stylua` on Lua files in the nvim config before committing:
+
+```
+stylua modules/home-manager/editors/nvim/
+```
+
 ## Rules
 
 - Do not activate or install: no `nixos-rebuild switch` or `boot`, no `nixos-install`.

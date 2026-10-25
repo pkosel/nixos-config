@@ -16,8 +16,16 @@ wk.setup({
     { mode = { "n", "x" }, { "<leader>u", group = "ui/toggle" } },
     { mode = { "n", "x" }, { "<leader>x", group = "diagnostics/quickfix" } },
     -- Proxy: <leader>w shows all <c-w> window commands automatically
-    { mode = { "n", "x" },
-      { "<leader>w", group = "windows", proxy = "<c-w>", expand = function() return require("which-key.extras").expand.win() end },
+    {
+      mode = { "n", "x" },
+      {
+        "<leader>w",
+        group = "windows",
+        proxy = "<c-w>",
+        expand = function()
+          return require("which-key.extras").expand.win()
+        end,
+      },
     },
     -- [ and ] are prev/next for many things
     { mode = { "n", "x" }, { "[", group = "prev" } },
@@ -31,7 +39,15 @@ wk.setup({
 })
 
 -- Helper: show buffer-local keymaps
-wk.add({ { "<leader>?", function() require("which-key").show({ global = false }) end, desc = "Buffer keymaps" } })
+wk.add({
+  {
+    "<leader>?",
+    function()
+      require("which-key").show({ global = false })
+    end,
+    desc = "Buffer keymaps",
+  },
+})
 
 -- Window navigation
 wk.add({
@@ -53,12 +69,64 @@ wk.add({
 
 -- Diagnostic navigation (built-in, no plugin needed)
 wk.add({
-  { "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, desc = "Prev diagnostic" },
-  { "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, desc = "Next diagnostic" },
-  { "[e", function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR, float = true }) end, desc = "Prev error" },
-  { "]e", function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR, float = true }) end, desc = "Next error" },
-  { "[w", function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.WARN, float = true }) end, desc = "Prev warning" },
-  { "]w", function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.WARN, float = true }) end, desc = "Next warning" },
+  {
+    "[d",
+    function()
+      vim.diagnostic.jump({ count = -1, float = true })
+    end,
+    desc = "Prev diagnostic",
+  },
+  {
+    "]d",
+    function()
+      vim.diagnostic.jump({ count = 1, float = true })
+    end,
+    desc = "Next diagnostic",
+  },
+  {
+    "[e",
+    function()
+      vim.diagnostic.jump({
+        count = -1,
+        severity = vim.diagnostic.severity.ERROR,
+        float = true,
+      })
+    end,
+    desc = "Prev error",
+  },
+  {
+    "]e",
+    function()
+      vim.diagnostic.jump({
+        count = 1,
+        severity = vim.diagnostic.severity.ERROR,
+        float = true,
+      })
+    end,
+    desc = "Next error",
+  },
+  {
+    "[w",
+    function()
+      vim.diagnostic.jump({
+        count = -1,
+        severity = vim.diagnostic.severity.WARN,
+        float = true,
+      })
+    end,
+    desc = "Prev warning",
+  },
+  {
+    "]w",
+    function()
+      vim.diagnostic.jump({
+        count = 1,
+        severity = vim.diagnostic.severity.WARN,
+        float = true,
+      })
+    end,
+    desc = "Next warning",
+  },
   { "<leader>cd", vim.diagnostic.open_float, desc = "Line diagnostics" },
 })
 
@@ -66,8 +134,18 @@ wk.add({
 wk.add({
   { { "n", "v" }, "<A-j>", ":move .+1<cr>==", desc = "Move line down" },
   { { "n", "v" }, "<A-k>", ":move .-2<cr>==", desc = "Move line up" },
-  { "n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" } },
-  { "n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev search result" } },
+  {
+    "n",
+    "n",
+    "'Nn'[v:searchforward].'zv'",
+    { expr = true, desc = "Next search result" },
+  },
+  {
+    "n",
+    "N",
+    "'nN'[v:searchforward].'zv'",
+    { expr = true, desc = "Prev search result" },
+  },
   { "x", "<", "<gv", desc = "Indent left" },
   { "x", ">", ">gv", desc = "Indent right" },
 })
@@ -81,11 +159,22 @@ vim.keymap.set("i", ";", ";<c-g>u")
 wk.add({ { { "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", desc = "Save" } })
 
 -- Escape clears hlsearch
-wk.add({ { { "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", desc = "Escape and clear hlsearch" } })
+wk.add({
+  {
+    { "i", "n" },
+    "<esc>",
+    "<cmd>noh<cr><esc>",
+    desc = "Escape and clear hlsearch",
+  },
+})
 
 -- Misc
 wk.add({
-  { "<leader>ur", "<cmd>nohlsearch<bar>diffupdate<bar>normal! <C-L><cr>", desc = "Redraw / Clear hlsearch" },
+  {
+    "<leader>ur",
+    "<cmd>nohlsearch<bar>diffupdate<bar>normal! <C-L><cr>",
+    desc = "Redraw / Clear hlsearch",
+  },
   { "<leader>fn", "<cmd>enew<cr>", desc = "New file" },
   { "<leader>qq", "<cmd>qa<cr>", desc = "Quit all" },
 })
