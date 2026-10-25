@@ -40,6 +40,8 @@ in
       fetch.prune = true;
       # Rebase on pull to keep history linear. Nobody else pushes here.
       pull.rebase = true;
+      # Stash and unstash around rebase so dirty worktrees don't block it.
+      rebase.autoStash = true;
       diff.algorithm = "histogram";
       # zdiff3 puts the common ancestor in the conflict markers.
       merge.conflictStyle = "zdiff3";
