@@ -19,7 +19,7 @@
     };
 
     # nixpkgs' pi-coding-agent lags upstream. Drop this input and its
-    # overlay in system/nixpkgs.nix once nixpkgs catches up with stable.
+    # overlay in modules/nixos/nixpkgs.nix once nixpkgs catches up with stable.
     pi = {
       url = "github:earendil-works/pi/stable";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -43,10 +43,10 @@
 
       # Run by `nix flake check`.
       checks.${system} = {
-        # hardware.nix is generated and stays excluded.
+        # hardware-configuration.nix is generated and stays excluded.
         deadnix = pkgs.runCommand "deadnix" { nativeBuildInputs = [ pkgs.deadnix ]; } ''
           cd ${./.}
-          deadnix --fail . --exclude hosts/frieda/hardware.nix
+          deadnix --fail . --exclude hosts/frieda/hardware-configuration.nix
           touch $out
         '';
 
@@ -64,7 +64,7 @@
         # and the flake registry pin.
         specialArgs = { inherit inputs; };
         modules = [
-          ./hosts/frieda/configuration.nix
+          ./hosts/frieda/default.nix
 
           home-manager.nixosModules.home-manager
           {
@@ -73,7 +73,7 @@
               # Without this, every activation installs home-manager-path as a
               # new GC root. With it, packages ride in the system closure instead.
               useUserPackages = true;
-              users.philipp = import ./users/philipp.nix;
+              users.philipp = import ./home/philipp/default.nix;
               # Home Manager modules get inputs; firefox uses firefox-addons.
               extraSpecialArgs = { inherit inputs; };
             };
