@@ -22,4 +22,4 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-require("nvim-treesitter-context").setup({})
+require("treesitter-context").setup({})
