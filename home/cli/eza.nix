@@ -26,9 +26,8 @@ in
     icons = "auto";
     git = true;
 
-    # Written to ~/.config/eza/theme.yml, which eza reads on its own. Without it
-    # eza keeps its built-in palette. eza has no named themes, so every element
-    # is spelled out.
+    # Written to ~/.config/eza/theme.yml. eza has no named themes,
+    # so every element is spelled out.
     theme = with palette; {
       filekinds = {
         normal = fore fg;
@@ -43,7 +42,6 @@ in
         mount_point = fore aqua;
       };
 
-      # Write is red so a stray write bit stands out.
       perms = {
         user_read = fore yellow;
         user_write = fore red;

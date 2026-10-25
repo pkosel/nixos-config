@@ -2,8 +2,7 @@
 
 let
   apps = {
-    # Firefox stays first, so it remains the default; Brave Origin is offered
-    # as an alternative for "Open With" and fallback selection.
+    # Firefox first so it stays the default; Brave Origin as alternative.
     browser = [
       "firefox.desktop"
       "brave-origin.desktop"
@@ -14,11 +13,9 @@ let
     office = [ "writer.desktop" ];
   };
 
-  # Only contested or unclaimed types are listed. Images, video, audio,
-  # archives and directories have one candidate each and already resolve to it.
+  # Only contested or unclaimed types. The rest have one candidate already.
   types = {
-    # GNOME's epiphany claims these, so links opened from outside a browser
-    # (terminal, mail, desktop files) would open in GNOME Web.
+    # epiphany claims these, so links from outside a browser open in GNOME Web.
     browser = [
       "text/html"
       "application/xhtml+xml"
@@ -53,10 +50,9 @@ let
 
   defaults = lib.concatMapAttrs (category: mimes: lib.genAttrs mimes (_: apps.${category})) types;
 
-  # calibre's three desktop files claim every document format it can convert,
-  # so .docx would open in the ebook *editor*. Removing them as candidates
-  # keeps them out of "Open With" too, not just off the default.
-  # Epub, mobi, comics and djvu are left alone: calibre is a real answer for those.
+  # calibre claims every document format it can convert, so .docx would open
+  # in the ebook editor. Removing them as candidates keeps them out of
+  # "Open With". Epub, mobi, comics and djvu are left alone.
   calibreClaims =
     lib.genAttrs
       [
@@ -81,8 +77,8 @@ in
       enable = true;
       associations.removed = calibreClaims;
       defaultApplications = defaults // {
-        # Registered by the applications themselves; declared here because the
-        # file below is force-managed and would otherwise drop them.
+        # Registered by the applications; declared here because the file
+        # below is force-managed and would drop them otherwise.
         "x-scheme-handler/sgnl" = [ "signal.desktop" ];
         "x-scheme-handler/signalcaptcha" = [ "signal.desktop" ];
         "x-scheme-handler/claude-cli" = [ "claude-code-url-handler.desktop" ];
@@ -91,10 +87,9 @@ in
       };
     };
 
-    # GNOME and the applications above write mimeapps.list directly, so Home
-    # Manager refuses to replace it unless forced. Two copies need forcing: the
-    # real file, and the deprecated pre-spec location some applications still
-    # read. Activation aborts on whichever one is unmanaged.
+    # GNOME and applications write mimeapps.list directly, so Home Manager
+    # refuses to replace it unless forced. Two copies: the real file, and
+    # the deprecated pre-spec location some applications still read.
     configFile."mimeapps.list".force = true;
     dataFile."applications/mimeapps.list".force = true;
   };

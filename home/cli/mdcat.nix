@@ -6,11 +6,9 @@ in
 {
   home.packages = [ pkgs.mdcat ];
 
-  # mdcat has no home-manager module. config.toml is its own mechanism and
-  # beats MDCAT_THEME on reach: session variables only exist in a login shell.
-  # No base theme, so mdcat keeps detecting dark or light from the terminal.
-  # mdcat has no Night Owl, so the elements that carry colour are overridden with
-  # ANSI names, which Ghostty maps to its active theme.
+  # mdcat has no home-manager module. A config file reaches every shell
+  # and keeps theme detection on. No Night Owl theme, so elements are
+  # overridden with ANSI names that Ghostty maps to its active theme.
   xdg.configFile."mdcat/config.toml".source = toml.generate "mdcat-config.toml" {
     theme = {
       rule = "bright-black";
