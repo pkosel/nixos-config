@@ -55,6 +55,9 @@
       # editing
       indent-blankline-nvim
 
+      # diagnostics
+      trouble-nvim
+
       # formatting / linting
       conform-nvim
       nvim-lint
@@ -89,5 +92,6 @@
       "${cfgDir}/lua/pairs.lua".text = builtins.readFile ./lua/pairs.lua;
       "${cfgDir}/lua/surround.lua".text = builtins.readFile ./lua/surround.lua;
       "${cfgDir}/lua/indent.lua".text = builtins.readFile ./lua/indent.lua;
+      "${cfgDir}/lua/trouble.lua".text = builtins.readFile ./lua/trouble.lua;
     };
 }
