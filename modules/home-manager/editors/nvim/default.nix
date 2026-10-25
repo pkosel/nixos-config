@@ -20,7 +20,7 @@
       nil
 
       # nixfmt, not nixfmt-classic: both name their binary nixfmt,
-      # so none-ls needs no change, but classic is the pre-RFC style.
+      # so the formatter config needs no change, but classic is the pre-RFC style.
       nixfmt
       statix
       stylua

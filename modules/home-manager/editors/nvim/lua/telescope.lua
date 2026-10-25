@@ -38,7 +38,6 @@ wk.add({
   { "<leader>tm", builtin.marks, desc = "Marks" },
   { "<leader>tM", builtin.man_pages, desc = "Man pages" },
   { "<leader>to", builtin.oldfiles, desc = "Previously open files" },
-  -- { "<leader>tp", require("telescope").extensions.project.project, desc = "Projects" },
   { "<leader>tP", builtin.pickers, desc = "Pickers" },
   { "<leader>tq", builtin.quickfix, desc = "Quickfix" },
   { "<leader>tQ", builtin.quickfixhistory, desc = "Quickfix history" },
