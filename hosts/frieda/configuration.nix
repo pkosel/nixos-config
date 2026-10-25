@@ -37,8 +37,9 @@
       LC_MONETARY = "de_DE.UTF-8";
     };
   };
-  # The tty keymap is derived (via ckbcomp) from the keyboard layout below.
+  # tty keymap via ckbcomp, GNOME via /etc/X11/xorg.conf.d.
   console.useXkbConfig = true;
+  services.xserver.xkb.layout = "eu";
 
   users.users.philipp = {
     isNormalUser = true;
@@ -50,6 +51,12 @@
     ];
   };
 
+  services = {
+    fwupd.enable = true;
+    thermald.enable = true;
+    davfs2.enable = true;
+  };
+
   programs = {
     fish.enable = true;
     ausweisapp = {
@@ -58,37 +65,24 @@
     };
     vim = {
       enable = true;
-      # Point EDITOR at the editor that is actually installed system-wide.
-      # Root contexts (visudo, systemctl edit) reset the environment, so they
-      # never see the nvim that home-manager exports.
+      # Root shells reset the environment, so they never see the nvim that
+      # home-manager exports.
       defaultEditor = true;
     };
 
-    # uvx downloads its own CPython, which is dynamically linked for FHS Linux.
-    # nix-ld provides ld-linux and a linker lookup path so such binaries run.
+    # uvx downloads dynamically linked CPython for FHS Linux.
+    # nix-ld provides the linker and lookup path to run such binaries.
     nix-ld = {
       enable = true;
-      # Start with the minimum shared libraries every FHS binary expects.
-      # When a tool fails with a missing .so, add its package here.
+      # Add packages here when a tool fails with a missing .so.
       libraries = with pkgs; [
         glibc
         zlib
       ];
     };
 
-    # programs.ssh.startAgent stays off: GNOME ships gcr-ssh-agent, which already
-    # owns SSH_AUTH_SOCK and holds the key. OpenSSH's agent would only add a
-    # second, keyless one.
-  };
-
-  services = {
-    # Sets the system keyboard layout despite the option path; nothing here needs
-    # an X server. GNOME reads it from /etc/X11/xorg.conf.d/00-keyboard.conf and
-    # systemd-localed.
-    xserver.xkb.layout = "eu";
-    fwupd.enable = true;
-    thermald.enable = true;
-    davfs2.enable = true;
+    # Off: GNOME's gcr-ssh-agent already owns SSH_AUTH_SOCK and holds the key.
+    # OpenSSH's agent would only add a second, keyless one.
   };
 
   # The WebDAV share is mounted on first access.
@@ -98,10 +92,8 @@
   fileSystems."/mnt/webdav" = {
     device = "https://files.pkosel.dev";
     fsType = "davfs";
-    # The automount with _netdev keeps an unreachable share from holding up boot.
-    # uid and gid are given by name so they survive a uid change. philipp's own
-    # uid cannot be referenced here: isNormalUser allocates it at activation, so
-    # it reads null.
+    # _netdev keeps an unreachable share from holding up boot. uid/gid by name
+    # survive a uid change; isNormalUser allocates uid at activation, reads null.
     options = [
       "noauto"
       "x-systemd.automount"
@@ -112,7 +104,7 @@
     ];
   };
 
-  # User-facing tools belong in users/philipp.nix. vim comes from programs.vim above.
+  # System-wide tools, available before home-manager activates and in root shells.
   environment.systemPackages = with pkgs; [
     # Version control
     git

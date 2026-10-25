@@ -12,23 +12,19 @@
     ../home/obsidian.nix
   ];
 
-  # User packages. Anything with configuration of its own lives in a module
-  # under home/ instead.
+  # User packages. Anything with its own configuration lives under home/.
   home.packages = with pkgs; [
     # Development
     claude-code
-    gcc
     pi
 
-    # uv provides uvx, which pi uses to run the mcp-nixos server in .pi/mcp.json.
+    # uv provides uvx, which pi uses to run the mcp-nixos server.
     uv
 
-    # Nix tooling. nvd diffs two generations, so a rebuild says what actually
-    # changed.
+    # nvd diffs two generations so a rebuild shows what changed.
     nvd
 
-    # Terminal utilities, none of them worth a module: sd has none, fd's
-    # defaults already do the right thing, jq's only sets output colours.
+    # sd, fd and jq have no defaults worth a module.
     fd
     jq
     sd
