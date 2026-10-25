@@ -47,8 +47,12 @@ in
         # Highlight moved blocks of code in a different colour from added/removed.
         colorMoved = "default";
       };
-      # zdiff3 puts the common ancestor in the conflict markers.
-      merge.conflictStyle = "zdiff3";
+      merge = {
+        # zdiff3 puts the common ancestor in the conflict markers.
+        conflictStyle = "zdiff3";
+        # Git's built-in nvimdiff mergetool opens nvim with 3-way splits.
+        tool = "nvimdiff";
+      };
       # Diff in the commit editor, so the message describes what is staged.
       commit.verbose = true;
     };
