@@ -52,6 +52,9 @@
       nvim-treesitter.withAllGrammars
       nvim-treesitter-context
 
+      # editing
+      indent-blankline-nvim
+
       # formatting / linting
       conform-nvim
       nvim-lint
@@ -83,5 +86,8 @@
       "${cfgDir}/lua/lint.lua".text = builtins.readFile ./lua/lint.lua;
       "${cfgDir}/lua/treesitter.lua".text = builtins.readFile ./lua/treesitter.lua;
       "${cfgDir}/lua/comment.lua".text = builtins.readFile ./lua/comment.lua;
+      "${cfgDir}/lua/pairs.lua".text = builtins.readFile ./lua/pairs.lua;
+      "${cfgDir}/lua/surround.lua".text = builtins.readFile ./lua/surround.lua;
+      "${cfgDir}/lua/indent.lua".text = builtins.readFile ./lua/indent.lua;
     };
 }
