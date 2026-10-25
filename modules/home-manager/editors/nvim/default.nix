@@ -43,10 +43,12 @@
       neogit
 
       # cmp
-      nvim-cmp
+      cmp_luasnip
+      cmp-nvim-lsp
       cmp-path
       cmp-buffer
-      cmp-nvim-lsp
+      friendly-snippets
+      nvim-cmp
 
       # treesitter
       nvim-treesitter.withAllGrammars
