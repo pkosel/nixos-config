@@ -16,6 +16,10 @@
 
       # The symbol is a space because nvim mis-measures multi-width emoji.
       nix_shell.symbol = " ";
+
+      # Show path relative to the repository root, not the home directory.
+      # Default is true; explicit for clarity.
+      directory.truncate_to_repo = true;
     };
   };
 }
