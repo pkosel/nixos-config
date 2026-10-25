@@ -55,6 +55,10 @@ in
       };
       # Diff in the commit editor, so the message describes what is staged.
       commit.verbose = true;
+      # List branches and tags in columns instead of one per line.
+      column.ui = "auto";
+      # Most recently worked-on branches at the top.
+      branch.sort = "-committerdate";
     };
   };
 }
