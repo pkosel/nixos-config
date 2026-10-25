@@ -15,5 +15,11 @@ conform.setup({
 -- Manual format keybinding.
 local wk = require("which-key")
 wk.add({
-  { "<leader>cf", function() conform.format({ force = true }) end, desc = "Format buffer" },
+  {
+    "<leader>cf",
+    function()
+      conform.format({ force = true })
+    end,
+    desc = "Format buffer",
+  },
 })

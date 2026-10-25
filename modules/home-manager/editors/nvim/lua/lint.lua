@@ -14,5 +14,11 @@ vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
 -- Manual lint keybinding.
 local wk = require("which-key")
 wk.add({
-  { "<leader>cl", function() lint.try_lint() end, desc = "Lint file" },
+  {
+    "<leader>cl",
+    function()
+      lint.try_lint()
+    end,
+    desc = "Lint file",
+  },
 })

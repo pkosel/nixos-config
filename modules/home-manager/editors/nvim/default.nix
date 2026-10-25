@@ -29,7 +29,7 @@
       lualine-nvim
       luasnip
       night-owl-nvim
-      nvim-comment
+      mini-nvim
       nvim-tree-lua
       nvim-web-devicons
       plenary-nvim
@@ -81,5 +81,7 @@
       "${cfgDir}/lua/telescope.lua".text = builtins.readFile ./lua/telescope.lua;
       "${cfgDir}/lua/conform.lua".text = builtins.readFile ./lua/conform.lua;
       "${cfgDir}/lua/lint.lua".text = builtins.readFile ./lua/lint.lua;
+      "${cfgDir}/lua/treesitter.lua".text = builtins.readFile ./lua/treesitter.lua;
+      "${cfgDir}/lua/comment.lua".text = builtins.readFile ./lua/comment.lua;
     };
 }

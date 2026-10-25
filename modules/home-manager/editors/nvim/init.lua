@@ -3,6 +3,7 @@
 require("options")
 require("keymaps")
 require("plugin_setups")
+require("comment")
 require("conform")
 require("lint")
 require("completion")

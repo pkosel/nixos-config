@@ -14,7 +14,8 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Treesitter-based indentation (experimental).
 vim.api.nvim_create_autocmd("FileType", {
   callback = function()
-    local ok = pcall(vim.treesitter.language.get_parser, vim.api.nvim_get_current_buf())
+    local ok =
+      pcall(vim.treesitter.language.get_parser, vim.api.nvim_get_current_buf())
     if ok then
       vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
     end
