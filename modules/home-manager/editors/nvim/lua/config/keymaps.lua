@@ -134,22 +134,12 @@ wk.add({
 
 -- Editing quality-of-life
 wk.add({
-  { { "n", "v" }, "<A-j>", ":move .+1<cr>==", desc = "Move line down" },
-  { { "n", "v" }, "<A-k>", ":move .-2<cr>==", desc = "Move line up" },
-  {
-    "n",
-    "n",
-    "'Nn'[v:searchforward].'zv'",
-    { expr = true, desc = "Next search result" },
-  },
-  {
-    "n",
-    "N",
-    "'nN'[v:searchforward].'zv'",
-    { expr = true, desc = "Prev search result" },
-  },
-  { "x", "<", "<gv", desc = "Indent left" },
-  { "x", ">", ">gv", desc = "Indent right" },
+  { "<A-j>", ":move .+1<cr>==", mode = { "n", "v" }, desc = "Move line down" },
+  { "<A-k>", ":move .-2<cr>==", mode = { "n", "v" }, desc = "Move line up" },
+  { "n", "'Nn'[v:searchforward].'zv'", mode = "n", expr = true, desc = "Next search result" },
+  { "N", "'nN'[v:searchforward].'zv'", mode = "n", expr = true, desc = "Prev search result" },
+  { "<", "<gv", mode = "x", desc = "Indent left" },
+  { ">", ">gv", mode = "x", desc = "Indent right" },
 })
 
 -- Undo break-points (undo stops at each punctuation)
@@ -158,17 +148,10 @@ vim.keymap.set("i", ".", ".<c-g>u")
 vim.keymap.set("i", ";", ";<c-g>u")
 
 -- Save file (works from insert mode too)
-wk.add({ { { "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", desc = "Save" } })
+wk.add({ { "<C-s>", "<cmd>w<cr><esc>", mode = { "i", "x", "n", "s" }, desc = "Save" } })
 
 -- Escape clears hlsearch
-wk.add({
-  {
-    { "i", "n" },
-    "<esc>",
-    "<cmd>noh<cr><esc>",
-    desc = "Escape and clear hlsearch",
-  },
-})
+wk.add({ { "<esc>", "<cmd>noh<cr><esc>", mode = { "i", "n" }, desc = "Escape and clear hlsearch" } })
 
 -- Misc
 wk.add({
