@@ -6,13 +6,11 @@
   virtualisation.docker = {
     enable = true;
 
-    # docker.socket still starts the daemon on the first command, so the memory
-    # dockerd and containerd hold is only paid when containers are actually
-    # used. The trade is that restart=always does not survive a reboot.
+    # docker.socket still starts the daemon on the first command.
+    # The trade is that restart=always does not survive a reboot.
     enableOnBoot = false;
 
-    # --all also collects images no container references, which is where the
-    # space actually goes.
+    # --all collects unreferenced images, where the space goes.
     autoPrune = {
       enable = true;
       dates = "weekly";

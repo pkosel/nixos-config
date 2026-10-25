@@ -1,5 +1,5 @@
-# Packages that are missing from nixpkgs or need patching. system/nixpkgs.nix
-# wires them in.
+# Packages missing from nixpkgs or needing patches. Wired in by
+# system/nixpkgs.nix.
 final: prev: {
   mdcat = final.callPackage ../pkgs/mdcat.nix { };
 
@@ -7,9 +7,8 @@ final: prev: {
     nixpkgsPath = final.path;
   };
 
-  # Without this, anki's file dialogs crash. Its Qt6 GTK3 theme integration needs
-  # a schema shipped by gtk3, which is not in this GNOME session's (gtk4-based)
-  # XDG_DATA_DIRS. Drop this once nixpkgs' anki wraps that schema itself.
+  # Anki's Qt6 GTK3 integration needs a gtk3 schema not in this GNOME
+  # session's (gtk4-based) XDG_DATA_DIRS. Drop once nixpkgs wraps it.
   anki = prev.symlinkJoin {
     name = "anki-${prev.anki.version}";
     paths = [ prev.anki ];

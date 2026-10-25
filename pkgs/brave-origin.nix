@@ -1,7 +1,5 @@
-# Brave Origin is not in nixpkgs. Reuse nixpkgs' Brave builder for the
-# dependency set and wrapper flags, and override only what differs: origin uses
-# brave-origin paths instead of brave/brave-browser. Drop this package once
-# nixpkgs ships brave-origin.
+# Brave Origin is not in nixpkgs. Reuse the Brave builder and override
+# only what differs. Drop once nixpkgs ships brave-origin.
 {
   stdenv,
   callPackage,
@@ -12,8 +10,8 @@
 let
   version = "1.97.59";
 
-  # make-brave.nix is a two-stage function: callPackage supplies the build
-  # dependencies, then the archive arguments select the release.
+  # make-brave.nix: callPackage gives build deps, then archive args
+  # select the release.
   brave = (callPackage "${nixpkgsPath}/pkgs/by-name/br/brave/make-brave.nix" { }) {
     pname = "brave-origin";
     inherit version;
@@ -46,8 +44,8 @@ brave.overrideAttrs (old: {
 
     substituteInPlace $out/share/applications/{brave-origin,com.brave.Origin}.desktop \
       --replace-fail /usr/bin/brave-origin-stable $out/bin/brave-origin
-    # Point GNOME's default-app entry at the wrapped binary, not the raw
-    # launcher. Only $out/bin carries the library path added during fixup.
+    # Point GNOME's default-app entry at the wrapped binary.
+    # Only $out/bin carries the library path from fixup.
     substituteInPlace $out/share/gnome-control-center/default-apps/brave-origin.xml \
       --replace-fail /opt/brave.com/brave-origin/brave-origin $out/bin/brave-origin
     substituteInPlace $out/opt/brave.com/brave-origin/default-app-block \
@@ -67,8 +65,8 @@ brave.overrideAttrs (old: {
     runHook postInstall
   '';
 
-  # The wrapper that adds the library path is created in fixup, after install
-  # checks. Checking the unwrapped binary here would need the full rpath.
+  # The wrapper is created in fixup, after install checks.
+  # Checking the unwrapped binary here would need the full rpath.
   doInstallCheck = false;
 
   passthru = { };
