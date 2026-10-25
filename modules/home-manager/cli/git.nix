@@ -42,7 +42,11 @@ in
       pull.rebase = true;
       # Stash and unstash around rebase so dirty worktrees don't block it.
       rebase.autoStash = true;
-      diff.algorithm = "histogram";
+      diff = {
+        algorithm = "histogram";
+        # Highlight moved blocks of code in a different colour from added/removed.
+        colorMoved = "default";
+      };
       # zdiff3 puts the common ancestor in the conflict markers.
       merge.conflictStyle = "zdiff3";
       # Diff in the commit editor, so the message describes what is staged.
