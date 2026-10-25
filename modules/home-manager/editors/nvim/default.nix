@@ -100,9 +100,9 @@
     {
       "${cfgDir}/init.lua".text = builtins.readFile ./init.lua;
 
-      "${cfgDir}/lua/options.lua".text = builtins.readFile ./lua/options.lua;
-      "${cfgDir}/lua/keymaps.lua".text = builtins.readFile ./lua/keymaps.lua;
-      "${cfgDir}/lua/plugin_setups.lua".text = builtins.readFile ./lua/plugin_setups.lua;
+      "${cfgDir}/lua/config/options.lua".text = builtins.readFile ./lua/config/options.lua;
+      "${cfgDir}/lua/config/keymaps.lua".text = builtins.readFile ./lua/config/keymaps.lua;
+      "${cfgDir}/lua/config/plugin_setups.lua".text = builtins.readFile ./lua/config/plugin_setups.lua;
       "${cfgDir}/lua/config/comment.lua".text = builtins.readFile ./lua/config/comment.lua;
       "${cfgDir}/lua/config/completion.lua".text = builtins.readFile ./lua/config/completion.lua;
       "${cfgDir}/lua/config/conform.lua".text = builtins.readFile ./lua/config/conform.lua;
@@ -117,7 +117,7 @@
       "${cfgDir}/lua/config/todo.lua".text = builtins.readFile ./lua/config/todo.lua;
       "${cfgDir}/lua/config/treesitter.lua".text = builtins.readFile ./lua/config/treesitter.lua;
       "${cfgDir}/lua/config/trouble.lua".text = builtins.readFile ./lua/config/trouble.lua;
-      "${cfgDir}/lua/lsp.lua".text = builtins.readFile ./lua/lsp.lua;
-      "${cfgDir}/lua/lualine.lua".text = builtins.readFile ./lua/lualine.lua;
+      "${cfgDir}/lua/config/lsp.lua".text = builtins.readFile ./lua/config/lsp.lua;
+      "${cfgDir}/lua/config/lualine.lua".text = builtins.readFile ./lua/config/lualine.lua;
     };
 }
