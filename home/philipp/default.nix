@@ -2,17 +2,17 @@
 
 {
   # Available to every module below as the `theme` argument.
-  _module.args.theme = import ../home/theme.nix;
+  _module.args.theme = import ../../modules/home-manager/theme.nix;
 
   imports = [
-    ../home/browsers
-    ../home/cli
-    ../home/desktop
-    ../home/editors
-    ../home/obsidian.nix
+    ../../modules/home-manager/browsers
+    ../../modules/home-manager/cli
+    ../../modules/home-manager/desktop
+    ../../modules/home-manager/editors
+    ../../modules/home-manager/obsidian.nix
   ];
 
-  # User packages. Anything with its own configuration lives under home/.
+  # User packages. Anything with its own configuration lives under modules/home-manager/.
   home.packages = with pkgs; [
     # Development
     claude-code

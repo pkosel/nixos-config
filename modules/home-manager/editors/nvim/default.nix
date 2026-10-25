@@ -2,7 +2,7 @@
 
 {
   programs.neovim = {
-    # defaultEditor is in hosts/frieda/configuration.nix.
+    # defaultEditor is in hosts/frieda/default.nix.
     enable = true;
 
     # 26.05 defaults both to false. Nothing in the lua config uses either.

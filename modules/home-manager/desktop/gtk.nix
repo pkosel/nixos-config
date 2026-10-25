@@ -9,7 +9,7 @@
     };
     theme.name = "Adwaita-dark";
     # The theme name only reaches GTK3. libadwaita apps read the colour-scheme
-    # dconf key instead, set as a default in system/desktop/gnome.nix so the
+    # dconf key instead, set as a default in modules/nixos/desktop/gnome.nix so the
     # GNOME Settings switch still works.
     colorScheme = "dark";
     gtk3.colorScheme = null;
