@@ -8,6 +8,7 @@
       inputs.claude-code.overlays.default
       inputs.pi.overlays.default
       (import ../../overlays)
+      (import ../../overlays/night-owl-light.nix)
     ];
   };
 }
