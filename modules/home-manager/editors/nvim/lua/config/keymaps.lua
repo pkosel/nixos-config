@@ -136,8 +136,20 @@ wk.add({
 wk.add({
   { "<A-j>", ":move .+1<cr>==", mode = { "n", "v" }, desc = "Move line down" },
   { "<A-k>", ":move .-2<cr>==", mode = { "n", "v" }, desc = "Move line up" },
-  { "n", "'Nn'[v:searchforward].'zv'", mode = "n", expr = true, desc = "Next search result" },
-  { "N", "'nN'[v:searchforward].'zv'", mode = "n", expr = true, desc = "Prev search result" },
+  {
+    "n",
+    "'Nn'[v:searchforward].'zv'",
+    mode = "n",
+    expr = true,
+    desc = "Next search result",
+  },
+  {
+    "N",
+    "'nN'[v:searchforward].'zv'",
+    mode = "n",
+    expr = true,
+    desc = "Prev search result",
+  },
   { "<", "<gv", mode = "x", desc = "Indent left" },
   { ">", ">gv", mode = "x", desc = "Indent right" },
 })
@@ -148,10 +160,19 @@ vim.keymap.set("i", ".", ".<c-g>u")
 vim.keymap.set("i", ";", ";<c-g>u")
 
 -- Save file (works from insert mode too)
-wk.add({ { "<C-s>", "<cmd>w<cr><esc>", mode = { "i", "x", "n", "s" }, desc = "Save" } })
+wk.add({
+  { "<C-s>", "<cmd>w<cr><esc>", mode = { "i", "x", "n", "s" }, desc = "Save" },
+})
 
 -- Escape clears hlsearch
-wk.add({ { "<esc>", "<cmd>noh<cr><esc>", mode = { "i", "n" }, desc = "Escape and clear hlsearch" } })
+wk.add({
+  {
+    "<esc>",
+    "<cmd>noh<cr><esc>",
+    mode = { "i", "n" },
+    desc = "Escape and clear hlsearch",
+  },
+})
 
 -- Misc
 wk.add({

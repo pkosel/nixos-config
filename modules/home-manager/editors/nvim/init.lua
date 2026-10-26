@@ -3,6 +3,7 @@
 require("config.options")
 require("config.keymaps")
 require("config.plugin_setups")
+require("config.align")
 require("config.comment")
 require("config.pairs")
 require("config.surround")

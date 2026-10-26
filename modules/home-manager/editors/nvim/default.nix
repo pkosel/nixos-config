@@ -112,6 +112,7 @@
       "${cfgDir}/lua/config/options.lua".text = builtins.readFile ./lua/config/options.lua;
       "${cfgDir}/lua/config/keymaps.lua".text = builtins.readFile ./lua/config/keymaps.lua;
       "${cfgDir}/lua/config/plugin_setups.lua".text = builtins.readFile ./lua/config/plugin_setups.lua;
+      "${cfgDir}/lua/config/align.lua".text = builtins.readFile ./lua/config/align.lua;
       "${cfgDir}/lua/config/comment.lua".text = builtins.readFile ./lua/config/comment.lua;
       "${cfgDir}/lua/config/completion.lua".text = builtins.readFile ./lua/config/completion.lua;
       "${cfgDir}/lua/config/conform.lua".text = builtins.readFile ./lua/config/conform.lua;
