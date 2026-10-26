@@ -1,8 +1,4 @@
-require("telescope").setup({
-  defaults = {
-    file_ignore_patterns = { "result" },
-  },
-})
+require("telescope").setup()
 require("telescope").load_extension("fzy_native")
 
 local builtin = require("telescope.builtin")
