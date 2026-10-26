@@ -1,4 +1,4 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
   programs.fzf = {
@@ -6,8 +6,8 @@
     # package has none, so history search would stay plain readline.
     enable = true;
 
-    # Exclude the flake build result symlink so Ctrl+T does not scan the Nix store.
-    fileWidgetCommand = "fd --type f --exclude result";
+    # Preserve the walker's default exclusions and avoid scanning flake build outputs.
+    defaultOptions = [ "--walker-skip=.git,node_modules,result" ];
 
     # ANSI names, so the colours come from Ghostty's active theme and follow the
     # dark/light switch. Without them fzf's own palette is unreadable on one of
@@ -28,4 +28,10 @@
       spinner = "magenta";
     };
   };
+
+  # Home Manager loads session variables only once per login. Refresh these options
+  # so newly opened Fish shells pick up rebuilt exclusions without a new login.
+  programs.fish.interactiveShellInit = ''
+    set -gx FZF_DEFAULT_OPTS ${lib.escapeShellArg config.home.sessionVariables.FZF_DEFAULT_OPTS}
+  '';
 }
