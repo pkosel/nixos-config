@@ -6,6 +6,9 @@
     # package has none, so history search would stay plain readline.
     enable = true;
 
+    # Exclude the flake build result symlink so Ctrl+T does not scan the Nix store.
+    fileWidgetCommand = "fd --type f --exclude result";
+
     # ANSI names, so the colours come from Ghostty's active theme and follow the
     # dark/light switch. Without them fzf's own palette is unreadable on one of
     # the two.
