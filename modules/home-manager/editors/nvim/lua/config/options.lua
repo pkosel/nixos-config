@@ -23,4 +23,17 @@ vim.opt.undofile = true
 vim.opt.updatetime = 200
 vim.opt.wrap = false
 
-vim.cmd("colorscheme night-owl")
+-- Auto-select colorscheme based on background (follows the terminal).
+local function set_colorscheme()
+  if vim.o.background == "light" then
+    vim.cmd("colorscheme light-owl")
+  else
+    vim.cmd("colorscheme night-owl")
+  end
+end
+set_colorscheme()
+
+vim.api.nvim_create_autocmd("OptionSet", {
+  pattern = "background",
+  callback = set_colorscheme,
+})
