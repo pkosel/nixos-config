@@ -111,8 +111,6 @@
     {
       "${cfgDir}/init.lua".text = builtins.readFile ./init.lua;
 
-      "${cfgDir}/colors/light-owl.lua".text = builtins.readFile ./colors/light-owl.lua;
-      "${cfgDir}/lua/light-owl/palette.lua".text = builtins.readFile ./lua/light-owl/palette.lua;
       "${cfgDir}/lua/config/options.lua".text = builtins.readFile ./lua/config/options.lua;
       "${cfgDir}/lua/config/keymaps.lua".text = builtins.readFile ./lua/config/keymaps.lua;
       "${cfgDir}/lua/config/plugin_setups.lua".text = builtins.readFile ./lua/config/plugin_setups.lua;
