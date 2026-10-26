@@ -1,3 +1,12 @@
+-- The wildcard config preserves per-server capabilities, including Rust's extensions.
+vim.lsp.config("*", {
+  capabilities = vim.tbl_deep_extend(
+    "force",
+    vim.lsp.protocol.make_client_capabilities(),
+    require("cmp_nvim_lsp").default_capabilities()
+  ),
+})
+
 -- nvim-lspconfig ships the server defaults (cmd, filetypes, root markers) in its
 -- lsp/ directory, which nvim picks up off the runtimepath; vim.lsp.config only
 -- layers our overrides on top of those.
@@ -19,13 +28,13 @@ vim.lsp.config("lua_ls", {
 
 vim.lsp.enable({
   "bashls",
-  "basedpyright",
+  "pyright",
   "dockerls",
   "lua_ls",
   "marksman",
   "nil_ls",
   "rust_analyzer",
-  "sqlls",
+  "sqls",
   "taplo",
   "terraformls",
   "yamlls",
