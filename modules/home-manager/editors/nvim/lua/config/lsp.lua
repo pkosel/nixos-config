@@ -26,6 +26,57 @@ vim.lsp.config("lua_ls", {
   },
 })
 
+vim.lsp.config("bashls", {
+  settings = {
+    bashIde = {
+      -- nvim-lint owns ShellCheck diagnostics, including without an LSP client.
+      shellcheckPath = "",
+    },
+  },
+})
+
+-- Neovim supplies rust-analyzer, but the project shell supplies the toolchain
+-- so Cargo, rustc, Clippy, and rust-src match the project rather than a global version.
+local rust_root_dir = vim.lsp.config.rust_analyzer.root_dir
+local has_clippy = vim.fn.executable("cargo-clippy") == 1
+  and vim.fn.executable("clippy-driver") == 1
+
+vim.lsp.config("rust_analyzer", {
+  root_dir = function(bufnr, on_dir)
+    local missing = {}
+    for _, tool in ipairs({ "cargo", "rustc" }) do
+      if vim.fn.executable(tool) == 0 then
+        table.insert(missing, tool)
+      end
+    end
+    if #missing > 0 then
+      -- The upstream root resolver invokes both rustc and cargo before starting the server.
+      vim.notify_once(
+        "Rust LSP disabled: missing "
+          .. table.concat(missing, ", ")
+          .. ". Restart Neovim from the project's development shell.",
+        vim.log.levels.WARN
+      )
+      return
+    end
+    if not has_clippy then
+      vim.notify_once(
+        "Rust LSP: Clippy is unavailable; using cargo check. For Clippy diagnostics, provide cargo-clippy and clippy-driver in the project shell and restart Neovim.",
+        vim.log.levels.WARN
+      )
+    end
+
+    -- Preserve upstream Cargo workspace discovery rather than using Neovim's cwd.
+    rust_root_dir(bufnr, on_dir)
+  end,
+  settings = {
+    ["rust-analyzer"] = {
+      checkOnSave = true,
+      check = { command = has_clippy and "clippy" or "check" },
+    },
+  },
+})
+
 vim.lsp.enable({
   "bashls",
   "pyright",
