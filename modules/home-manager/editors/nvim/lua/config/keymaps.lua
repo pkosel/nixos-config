@@ -33,7 +33,7 @@ wk.setup({
     { mode = { "n", "x" }, { "]", group = "next" } },
     -- Native group labels
     { mode = { "n", "x" }, { "g", group = "goto" } },
-    { mode = { "n", "x" }, { "gs", group = "surround" } },
+    { mode = { "n", "x" }, { "s", group = "surround" } },
     { mode = { "n", "x" }, { "z", group = "fold" } },
     { mode = { "n" }, { "<leader><tab>", group = "tabs" } },
     { mode = { "n", "x" }, { "gx", desc = "Open with system app" } },
@@ -53,10 +53,10 @@ wk.add({
 
 -- Window navigation
 wk.add({
-  { "<C-h>", "<C-w>h", { desc = "Go to left window" } },
-  { "<C-j>", "<C-w>j", { desc = "Go to lower window" } },
-  { "<C-k>", "<C-w>k", { desc = "Go to upper window" } },
-  { "<C-l>", "<C-w>l", { desc = "Go to right window" } },
+  { "<C-h>", "<C-w>h", desc = "Go to left window" },
+  { "<C-j>", "<C-w>j", desc = "Go to lower window" },
+  { "<C-k>", "<C-w>k", desc = "Go to upper window" },
+  { "<C-l>", "<C-w>l", desc = "Go to right window" },
 })
 
 -- Window splits (under <leader>w, auto-shown via proxy)
@@ -132,10 +132,55 @@ wk.add({
   { "<leader>cd", vim.diagnostic.open_float, desc = "Line diagnostics" },
 })
 
+local function move_lines(direction, visual)
+  return function()
+    local first, last = vim.fn.line("."), vim.fn.line(".")
+    if visual then
+      first, last =
+        math.min(first, vim.fn.line("v")), math.max(last, vim.fn.line("v"))
+    end
+    if
+      (direction < 0 and first == 1)
+      or (direction > 0 and last == vim.fn.line("$"))
+    then
+      return ""
+    end
+    local destination = direction < 0 and first - 2 or last + 1
+    local move = ("<Cmd>%d,%dmove %d<CR>"):format(first, last, destination)
+    return visual and "<Esc>" .. move .. "gv=gv" or move .. "=="
+  end
+end
+
 -- Editing quality-of-life
 wk.add({
-  { "<A-j>", ":move .+1<cr>==", mode = { "n", "v" }, desc = "Move line down" },
-  { "<A-k>", ":move .-2<cr>==", mode = { "n", "v" }, desc = "Move line up" },
+  {
+    "<A-j>",
+    move_lines(1, false),
+    mode = "n",
+    expr = true,
+    desc = "Move line down",
+  },
+  {
+    "<A-k>",
+    move_lines(-1, false),
+    mode = "n",
+    expr = true,
+    desc = "Move line up",
+  },
+  {
+    "<A-j>",
+    move_lines(1, true),
+    mode = "x",
+    expr = true,
+    desc = "Move selection down",
+  },
+  {
+    "<A-k>",
+    move_lines(-1, true),
+    mode = "x",
+    expr = true,
+    desc = "Move selection up",
+  },
   {
     "n",
     "'Nn'[v:searchforward].'zv'",
