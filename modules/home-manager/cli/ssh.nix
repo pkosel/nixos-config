@@ -8,9 +8,8 @@
     # home-manager plans to deprecate it.
     enableDefaultConfig = false;
 
-    # Personal hosts go in ~/.ssh/config.local, which stays off the repo.
-    # Emitted first, and ssh takes the first value it obtains, so anything
-    # there wins over the block below.
+    # SSH uses the first obtained value, so the untracked config.local overrides
+    # the defaults below.
     includes = [ "config.local" ];
 
     settings."*" = {

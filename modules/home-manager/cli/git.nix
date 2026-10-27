@@ -44,20 +44,15 @@ in
       rebase.autoStash = true;
       diff = {
         algorithm = "histogram";
-        # Highlight moved blocks of code in a different colour from added/removed.
         colorMoved = "default";
       };
       merge = {
-        # zdiff3 puts the common ancestor in the conflict markers.
         conflictStyle = "zdiff3";
-        # Git's built-in nvimdiff mergetool opens nvim with 3-way splits.
         tool = "nvimdiff";
       };
       # Diff in the commit editor, so the message describes what is staged.
       commit.verbose = true;
-      # List branches and tags in columns instead of one per line.
       column.ui = "auto";
-      # Most recently worked-on branches at the top.
       branch.sort = "-committerdate";
     };
   };

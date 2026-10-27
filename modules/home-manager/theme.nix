@@ -1,10 +1,8 @@
-# Theme names for the tools that load a theme by name, kept in one place so a
-# scheme change is one edit. Ghostty and bat follow the system light/dark
-# setting. fzf, eza and mdcat use ANSI colour names, which Ghostty maps to its
-# active theme. pi's copies of the scheme are modules/home-manager/cli/pi/nightowl*.json.
+# Ghostty and bat follow the system light/dark setting. Ghostty maps the ANSI
+# colours used by fzf, eza and mdcat to its active theme.
 {
-  # bat's themes are built from modules/home-manager/cli/bat/*.tmTheme; Ghostty's ship with the
-  # ghostty package. delta reads bat's dark theme.
+  # bat themes come from cli/bat/*.tmTheme; Ghostty themes ship with the package.
+  # delta uses bat's dark theme; pi has separate copies in cli/pi/nightowl*.json.
   bat = {
     dark = "nightowl";
     light = "nightowl-light";
