@@ -27,7 +27,6 @@
     tab_width = 8
 
     [*.md]
-    insert_final_newline = false
     trim_trailing_whitespace = false
   '';
 }
