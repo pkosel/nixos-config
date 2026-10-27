@@ -57,6 +57,7 @@
     davfs2.enable = true;
   };
 
+  # The OpenSSH agent is disabled by default; GNOME's gcr-ssh-agent provides SSH_AUTH_SOCK.
   programs = {
     fish.enable = true;
     ausweisapp = {
@@ -80,9 +81,6 @@
         zlib
       ];
     };
-
-    # Off: GNOME's gcr-ssh-agent already owns SSH_AUTH_SOCK and holds the key.
-    # OpenSSH's agent would only add a second, keyless one.
   };
 
   # The WebDAV share is mounted on first access.
@@ -92,8 +90,8 @@
   fileSystems."/mnt/webdav" = {
     device = "https://files.pkosel.dev";
     fsType = "davfs";
-    # _netdev keeps an unreachable share from holding up boot. uid/gid by name
-    # survive a uid change; isNormalUser allocates uid at activation, reads null.
+    # Automounting defers access to the share; _netdev gives it network-mount ordering.
+    # Names keep ownership stable when the user's allocated UID changes.
     options = [
       "noauto"
       "x-systemd.automount"

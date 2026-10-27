@@ -70,8 +70,7 @@
           {
             home-manager = {
               useGlobalPkgs = true;
-              # Without this, every activation installs home-manager-path as a
-              # new GC root. With it, packages ride in the system closure instead.
+              # Manage user packages through the NixOS per-user profile.
               useUserPackages = true;
               users.philipp = import ./home/philipp/default.nix;
               # Home Manager modules get inputs; firefox uses firefox-addons.

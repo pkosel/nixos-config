@@ -24,7 +24,7 @@
     # nvd diffs two generations so a rebuild shows what changed.
     nvd
 
-    # GitHub CLI. Auth via gcr-ssh-agent.
+    # Git operations over SSH can use gcr-ssh-agent.
     gh
 
     # sd, fd and jq have no defaults worth a module.
