@@ -1,4 +1,3 @@
--- Formatting via conform.nvim.
 local conform = require("conform")
 
 conform.setup({
@@ -10,19 +9,20 @@ conform.setup({
     sh = { "shfmt" },
     toml = { "taplo" },
   },
-  format_on_save = {
+  default_format_opts = {
+    lsp_format = "fallback",
     timeout_ms = 500,
-    lsp_fallback = true,
   },
+  -- Formatting must finish before the write so the file contains the edits.
+  format_on_save = {},
 })
 
--- Manual format keybinding.
 local wk = require("which-key")
 wk.add({
   {
     "<leader>cf",
     function()
-      conform.format({ force = true })
+      conform.format()
     end,
     desc = "Format buffer",
   },
