@@ -1,5 +1,3 @@
--- My nvim config: entry point
-
 require("config.options")
 require("config.keymaps")
 require("config.plugin_setups")

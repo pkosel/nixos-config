@@ -1,9 +1,5 @@
--- My nvim config: keymaps and which-key setup
-
 local wk = require("which-key")
 
--- which-key: central configuration. All group namespaces declared here once.
--- Later tasks add only leaf keymaps.
 wk.setup({
   preset = "helix",
   spec = {
@@ -40,7 +36,6 @@ wk.setup({
   },
 })
 
--- Helper: show buffer-local keymaps
 wk.add({
   {
     "<leader>?",
@@ -51,7 +46,6 @@ wk.add({
   },
 })
 
--- Window navigation
 wk.add({
   { "<C-h>", "<C-w>h", desc = "Go to left window" },
   { "<C-j>", "<C-w>j", desc = "Go to lower window" },
@@ -59,11 +53,9 @@ wk.add({
   { "<C-l>", "<C-w>l", desc = "Go to right window" },
 })
 
--- Window splits (under <leader>w, auto-shown via proxy)
 vim.keymap.set("n", "<leader>-", "<C-w>s", { desc = "Split below" })
 vim.keymap.set("n", "<leader>|", "<C-w>v", { desc = "Split right" })
 
--- Buffer navigation
 wk.add({
   { "<S-h>", "<cmd>bprevious<cr>", desc = "Prev buffer" },
   { "<S-l>", "<cmd>bnext<cr>", desc = "Next buffer" },
@@ -204,12 +196,10 @@ vim.keymap.set("i", ",", ",<c-g>u")
 vim.keymap.set("i", ".", ".<c-g>u")
 vim.keymap.set("i", ";", ";<c-g>u")
 
--- Save file (works from insert mode too)
 wk.add({
   { "<C-s>", "<cmd>w<cr><esc>", mode = { "i", "x", "n", "s" }, desc = "Save" },
 })
 
--- Escape clears hlsearch
 wk.add({
   {
     "<esc>",
@@ -230,12 +220,10 @@ wk.add({
   { "<leader>qq", "<cmd>qa<cr>", desc = "Quit all" },
 })
 
--- nvim-tree toggle
 wk.add({
   { "<C-p>", require("nvim-tree.api").tree.toggle, desc = "Toggle file tree" },
 })
 
--- Tab navigation
 wk.add({
   { "<leader><tab>n", "<cmd>tabnew<cr>", desc = "New tab" },
   { "<leader><tab>]", "<cmd>tabnext<cr>", desc = "Next tab" },

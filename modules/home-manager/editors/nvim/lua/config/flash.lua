@@ -1,4 +1,3 @@
--- Fast navigation via flash.nvim (folke).
 require("flash").setup({
   search = { mode = "search" },
   jump = { autojump = true },

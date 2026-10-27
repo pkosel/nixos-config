@@ -1,5 +1,3 @@
--- My nvim config: core options
-
 vim.g.mapleader = " "
 
 vim.opt.clipboard = "unnamedplus"

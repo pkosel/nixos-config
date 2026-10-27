@@ -1,4 +1,4 @@
--- Harpoon: mark files 1-4 for global quick switching.
+-- Harpoon lists are scoped to the current working directory.
 local harpoon = require("harpoon")
 harpoon:setup({})
 

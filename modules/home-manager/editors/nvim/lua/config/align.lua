@@ -1,4 +1,3 @@
--- Text alignment via mini.align.
 require("mini.align").setup()
 
 local wk = require("which-key")

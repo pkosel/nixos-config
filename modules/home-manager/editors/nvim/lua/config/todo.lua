@@ -1,4 +1,3 @@
--- Highlight TODO, FIXME, HACK, NOTE, PERF, WARN in code.
 require("todo-comments").setup({
   signs = true,
   keywords = {

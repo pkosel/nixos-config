@@ -1,4 +1,3 @@
--- Modern UI for messages, cmdline, and search via noice.nvim.
 require("noice").setup({
   lsp = {
     override = {

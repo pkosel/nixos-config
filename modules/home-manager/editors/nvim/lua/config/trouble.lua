@@ -1,4 +1,3 @@
--- Diagnostics list via trouble.nvim (folke).
 require("trouble").setup({})
 
 local wk = require("which-key")

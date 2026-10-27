@@ -1,4 +1,3 @@
--- Indent guides via indent-blankline.nvim.
 require("ibl").setup({
   scope = {
     enabled = true,
