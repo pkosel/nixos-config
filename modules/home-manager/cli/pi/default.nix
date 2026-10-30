@@ -14,5 +14,5 @@
   };
 
   # provider/modelId, parsed by answer.ts.
-  home.sessionVariables.PI_ANSWER_MODEL = "openrouter/deepseek/deepseek-v4.1-flash";
+  home.sessionVariables.PI_ANSWER_MODEL = "openrouter/openai/gpt-6-luna";
 }
