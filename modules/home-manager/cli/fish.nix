@@ -20,11 +20,6 @@
       gsw = "git switch";
     };
 
-    functions = {
-      # Create a directory and enter it in one step.
-      mkcd = "mkdir -p $argv[1] && cd $argv[1]";
-    };
-
     interactiveShellInit = ''
       # bat as man pager: renders man pages with syntax highlighting.
       set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'";
