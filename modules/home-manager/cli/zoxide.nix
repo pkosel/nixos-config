@@ -3,8 +3,8 @@
 {
   programs.zoxide = {
     enable = true;
-    # Replace cd with z so every directory change feeds the database. The
-    # original cd stays available as __zoxide_cd or \cd.
+    # Use builtin cd to bypass zoxide queries; the PWD hook can still record
+    # directory changes.
     options = [ "--cmd cd" ];
   };
 }
