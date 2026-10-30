@@ -1,4 +1,4 @@
-{ theme, ... }:
+{ ... }:
 
 {
   programs.delta = {
@@ -7,8 +7,8 @@
     enableGitIntegration = true;
 
     options = {
-      # Same theme as bat, which shares delta's syntax highlighter.
-      syntax-theme = theme.bat.dark;
+      # ANSI colors follow the terminal palette in both light and dark modes.
+      syntax-theme = "ansi";
       line-numbers = true;
       navigate = true;
     };
