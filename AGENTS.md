@@ -7,20 +7,20 @@ NixOS flake for one host, `frieda` (x86_64-linux). Home Manager is a NixOS modul
 Run in order, stopping at the first failure:
 
 1. `nix fmt`: format Nix files (nixfmt-tree).
-2. `nix flake check`: evaluate all outputs; runs deadnix and statix.
+2. `nix flake check`: check flake outputs and run deadnix and statix.
 3. `nix eval .#nixosConfigurations.frieda.config.<option>`: confirm the option you changed evaluates as intended. Skip if you didn't change an option value.
 4. `nixos-rebuild build --flake .#frieda`: build without activating; leaves `result` in the current directory.
 5. `nvd diff /run/current-system result`: review what the build would actually change.
 
-There is no test suite. A change is correct when `frieda` builds.
+There is no test suite; a successful build does not verify runtime behavior.
 
 ## Structure
 
 - `flake.nix`: inputs, formatter, checks, `nixosConfigurations.frieda`.
 - `hosts/frieda/`: the host. Machine-specific settings go here, not in modules.
-- `home/philipp/`: the Home Manager user profile. It sets `_module.args.theme` from `modules/home-manager/theme.nix`.
+- `home/philipp/`: the Home Manager user profile and simple user packages. It sets `_module.args.theme` from `modules/home-manager/theme.nix`.
 - `modules/nixos/`, `modules/home-manager/`: modules. A module has no effect until imported, so check the import lists (`hosts/frieda/default.nix`, `home/philipp/default.nix`, and the `default.nix` files).
-- Per-user settings that need no root go in `modules/home-manager/` (Home Manager); system-level settings (boot, kernel, services, hardware, firewall, display manager) go in `modules/nixos/`. When in doubt, prefer `modules/home-manager/`.
+- Per-user settings that need no root go in Home Manager; system-wide settings (boot, kernel, system services, hardware, firewall, display manager) go in NixOS. When in doubt, prefer Home Manager.
 - Modules get `inputs` as an argument. Home Manager modules also get `theme`.
 
 ## Versions and pins
