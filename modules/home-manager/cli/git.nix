@@ -38,10 +38,8 @@ in
 
       push.autoSetupRemote = true;
       fetch.prune = true;
-      # Rebase on pull to keep history linear. Nobody else pushes here.
-      pull.rebase = true;
-      # Stash and unstash around rebase so dirty worktrees don't block it.
-      rebase.autoStash = true;
+      # Stop on divergence instead of merging or rewriting commits automatically.
+      pull.ff = "only";
       diff = {
         algorithm = "histogram";
         colorMoved = "default";
