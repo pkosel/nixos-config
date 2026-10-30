@@ -26,6 +26,11 @@ Modules stay optional: a module under `modules/nixos/` or `modules/home-manager/
 and does nothing until a host or user imports it. Anything machine-specific
 belongs in `hosts/`, not in a module.
 
+## Code quality
+
+See [Code quality](docs/code-quality.md) for the maintainability standard and
+review checklist used for existing-code audits and future changes.
+
 ## Installation
 
 Clone the configuration:

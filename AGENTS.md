@@ -2,6 +2,19 @@
 
 NixOS flake for one host, `frieda` (x86_64-linux). Home Manager is a NixOS module, so system and user environment build and activate together. Human-facing setup and workflows are in `README.md`.
 
+## Code quality
+
+Before auditing or changing repository files, read
+[docs/code-quality.md](docs/code-quality.md) in full. It is the authoritative
+repository standard for code quality, including comments and documentation; keep
+those criteria there rather than defining a parallel comment policy here. Follow
+its audit or change workflow and apply its checklist to the relevant area or
+complete diff, including new files.
+
+Raise material conflicts with the standard before implementing a change. Before
+declaring completion, report actual validation results, limitations, and any
+deliberate exceptions.
+
 ## Commands
 
 Run in order, stopping at the first failure:
@@ -27,7 +40,6 @@ There is no test suite; a successful build does not verify runtime behavior.
 
 - `stateVersion` values are fixed at the original install. Do not bump them with releases.
 - nixpkgs and home-manager track the same release branch and are bumped together.
-- Pins and workarounds carry a comment saying why and when they can go.
 
 ## Formatting Lua files
 
