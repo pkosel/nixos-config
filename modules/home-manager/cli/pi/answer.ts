@@ -1,9 +1,9 @@
 /**
  * Q&A extraction hook - extracts questions from assistant responses.
  *
- * Fork of extensions/answer.ts from mitsuhiko/agent-stuff. The only change is
- * that selectExtractionModel reads PI_ANSWER_MODEL (provider/modelId) instead
- * of the upstream hardcoded Codex/Anthropic chain.
+ * Fork of extensions/answer.ts from mitsuhiko/agent-stuff. Uses PI_ANSWER_MODEL
+ * (provider/modelId) instead of the upstream hardcoded Codex/Anthropic chain.
+ * Requests use Pi's model registry to preserve resolved authentication.
  *
  * Custom interactive TUI for answering questions.
  *
@@ -14,7 +14,7 @@
  * 4. Submits the compiled answers when done
  */
 
-import { complete, parseJsonWithRepair, type Model, type Api, type UserMessage } from "@earendil-works/pi-ai";
+import { parseJsonWithRepair, type Model, type Api, type UserMessage } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, ExtensionContext, ModelRegistry } from "@earendil-works/pi-coding-agent";
 import { BorderedLoader } from "@earendil-works/pi-coding-agent";
 import {
@@ -503,20 +503,16 @@ export default function (pi: ExtensionAPI) {
 				loader.onAbort = () => done({ status: "cancelled" });
 
 				const doExtract = async (): Promise<ExtractionOutcome> => {
-					const auth = await ctx.modelRegistry.getApiKeyAndHeaders(extractionModel);
-					if (auth.ok === false) {
-						return { status: "error", message: auth.error };
-					}
 					const userMessage: UserMessage = {
 						role: "user",
 						content: [{ type: "text", text: lastAssistantText! }],
 						timestamp: Date.now(),
 					};
 
-					const response = await complete(
+					const response = await ctx.modelRegistry.complete(
 						extractionModel,
 						{ systemPrompt: SYSTEM_PROMPT, messages: [userMessage] },
-						{ apiKey: auth.apiKey, headers: auth.headers, signal: loader.signal },
+						{ signal: loader.signal },
 					);
 
 					if (response.stopReason === "aborted") {
