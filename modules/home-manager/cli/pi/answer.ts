@@ -354,14 +354,20 @@ class QnAComponent implements Component {
 
 		const lines: string[] = [];
 		const boxWidth = Math.min(width - 4, 120); // Allow wider box
-		const contentWidth = boxWidth - 4; // 2 chars padding on each side
+		const contentWidth = boxWidth - 4;
+		const editorWidth = contentWidth - 4 - 3; // Extra padding + space for "A: "
+
+		// The editor needs two columns for a wide grapheme plus its reserved cursor column.
+		if (editorWidth < 3) {
+			return [truncateToWidth("Widen terminal to answer questions", width, "")];
+		}
 
 		// Helper to create horizontal lines (dim the whole thing at once)
 		const horizontalLine = (count: number) => "─".repeat(count);
 
 		// Helper to create a box line
 		const boxLine = (content: string, leftPad: number = 2): string => {
-			const paddedContent = " ".repeat(leftPad) + content;
+			const paddedContent = " ".repeat(leftPad) + truncateToWidth(content, boxWidth - leftPad - 2);
 			const contentLen = visibleWidth(paddedContent);
 			const rightPad = Math.max(0, boxWidth - contentLen - 2);
 			return this.dim("│") + paddedContent + " ".repeat(rightPad) + this.dim("│");
@@ -395,7 +401,9 @@ class QnAComponent implements Component {
 				progressParts.push(this.dim("○"));
 			}
 		}
-		lines.push(padToWidth(boxLine(progressParts.join(" "))));
+		for (const line of wrapTextWithAnsi(progressParts.join(" "), contentWidth)) {
+			lines.push(padToWidth(boxLine(line)));
+		}
 		lines.push(padToWidth(emptyBoxLine()));
 
 		// Current question
@@ -421,7 +429,6 @@ class QnAComponent implements Component {
 		// Render the editor component (multi-line input) with padding
 		// Skip the first and last lines (editor's own border lines)
 		const answerPrefix = this.bold("A: ");
-		const editorWidth = contentWidth - 4 - 3; // Extra padding + space for "A: "
 		const editorLines = this.editor.render(editorWidth);
 		for (let i = 1; i < editorLines.length - 1; i++) {
 			if (i === 1) {
