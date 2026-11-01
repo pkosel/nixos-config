@@ -3,6 +3,18 @@
 
 set -euo pipefail
 
+if (( EUID != 0 )); then
+  echo "Run this helper as root from a NixOS live installer." >&2
+  exit 1
+fi
+
+for required_command in parted mkfs.fat mkfs.ext4 mkswap mount mkdir swapon nixos-generate-config; do
+  if ! command -v "$required_command" >/dev/null 2>&1; then
+    echo "Required command not found in PATH: $required_command" >&2
+    exit 1
+  fi
+done
+
 read -p "Enter the name of the storage device to partition (e.g. /dev/nvme0n1): " -r
 drive=$REPLY
 
