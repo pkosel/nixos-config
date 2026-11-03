@@ -146,6 +146,9 @@ in
         // Firefox Sync carries bookmarks only. Passwords, payments, add-ons and
         // prefs are handled by Proton Pass and Nix, and syncing them would fight
         // the config.
+        user_pref("services.sync.engine.bookmarks", true);
+        user_pref("services.sync.engine.history", false);
+        user_pref("services.sync.engine.tabs", false);
         user_pref("services.sync.engine.addons", false);
         user_pref("services.sync.engine.passwords", false);
         user_pref("services.sync.engine.creditcards", false);
