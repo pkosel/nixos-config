@@ -96,6 +96,16 @@ unrelated mounts. If anything is wrong, stop and investigate before continuing.
 Write `hosts/<host>/default.nix` next to it, importing the modules the
 machine needs, and add a `nixosConfigurations.<host>` section in `flake.nix`.
 
+Before evaluating or installing, review and stage the new host files so the
+Git-backed flake can see them (replace `<host>` with the chosen host name):
+
+```sh
+git add -- hosts/<host>/default.nix hosts/<host>/hardware-configuration.nix
+```
+
+Staging is sufficient; no commit is required. Explicitly stage any other new
+files the configuration references, but do not stage unrelated files or secrets.
+
 Install, where `<host>` matches `nixosConfigurations.<host>`:
 
 ```sh
