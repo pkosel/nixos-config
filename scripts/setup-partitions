@@ -8,7 +8,7 @@ if (( EUID != 0 )); then
   exit 1
 fi
 
-for required_command in parted mkfs.fat mkfs.ext4 mkswap mount mkdir swapon nixos-generate-config; do
+for required_command in lsblk parted mkfs.fat mkfs.ext4 mkswap mount mkdir swapon nixos-generate-config; do
   if ! command -v "$required_command" >/dev/null 2>&1; then
     echo "Required command not found in PATH: $required_command" >&2
     exit 1
@@ -18,20 +18,47 @@ done
 read -p "Enter the name of the storage device to partition (e.g. /dev/nvme0n1): " -r
 drive=$REPLY
 
+if [[ ! $drive =~ ^/dev/(sd[a-z]+|vd[a-z]+|xvd[a-z]+|nvme[0-9]+n[0-9]+|mmcblk[0-9]+)$ ]] || [[ -L $drive ]]; then
+  echo "Use a canonical whole-disk path: /dev/sdX, /dev/vdX, /dev/xvdX, /dev/nvmeNnN or /dev/mmcblkN." >&2
+  echo "Partitions, aliases and other storage backends are not supported." >&2
+  exit 1
+fi
+
 if [[ ! -b $drive ]]; then
   echo "$drive is not a block device." >&2
   exit 1
 fi
 
-if [[ $drive =~ "nvme" ]]; then
-  boot="${drive}p1"
-  system="${drive}p2"
-  swap="${drive}p3"
-else
-  boot="${drive}1"
-  system="${drive}2"
-  swap="${drive}3"
+if ! disk_info=$(lsblk --all --nodeps --noheadings --raw --output KNAME,TYPE -- "$drive") ||
+  [[ $disk_info != "${drive##*/} disk" ]]; then
+  echo "$drive could not be verified as a canonical whole disk." >&2
+  exit 1
 fi
+
+partition_prefix=$drive
+if [[ $drive == *[0-9] ]]; then
+  partition_prefix+=p
+fi
+
+if ! device_state=$(lsblk --all --list --noheadings --raw --output KNAME,TYPE,RO,MOUNTPOINTS -- "$drive") ||
+  [[ -z $device_state ]]; then
+  echo "Could not inspect the devices using $drive." >&2
+  exit 1
+fi
+
+# Mapper partitions can report TYPE=part, so descendant names must also match.
+while read -r device_name device_type read_only mountpoints; do
+  if [[ $device_name != "${drive##*/}" && ! $device_name =~ ^${partition_prefix##*/}[0-9]+$ ]] ||
+    [[ $device_type != disk && $device_type != part ]] ||
+    [[ $read_only != 0 || -n $mountpoints ]]; then
+    echo "$drive or a descendant is read-only, in use, or unsupported." >&2
+    exit 1
+  fi
+done <<< "$device_state"
+
+boot="${partition_prefix}1"
+system="${partition_prefix}2"
+swap="${partition_prefix}3"
 
 echo
 echo "The following layout will be created:"
