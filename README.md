@@ -46,7 +46,7 @@ does not elevate privileges automatically.
 
 The helper's `nix-shell` header requests Bash and Parted. The installer's `PATH`
 must also provide `mkfs.fat` (dosfstools), `mkfs.ext4` (e2fsprogs), `mkswap`,
-`mount`, `swapon` and `lsblk` (util-linux), `mkdir` (coreutils), and
+`mount`, `swapon`, `lsblk` and `findmnt` (util-linux), `mkdir` (coreutils), and
 `nixos-generate-config` (NixOS installer tools). The helper rejects non-root
 execution or a missing command before asking for a disk or erasure confirmation.
 The shell header uses the installer's `<nixpkgs>` search path, not this flake's
@@ -66,8 +66,14 @@ and has enough capacity for the boot partition, 4 GiB of swap and a usable root
 filesystem. Ensure it has no active consumers, including in other mount
 namespaces, and keep its device/usage state unchanged while the helper runs.
 These checks are a snapshot, not an exclusive lock or a guarantee of safe disk
-selection. Ensure `/mnt` and `/mnt/boot` are unused; the helper does not check
-those mountpoints.
+selection. `/mnt` must be an existing, non-symlink directory. Before confirmation,
+the helper uses `findmnt` to reject existing mounts at `/mnt` or anywhere below
+it in the current mount namespace, including `/mnt/boot`. Keep these mountpoints
+unused until the helper mounts the target.
+
+The helper mounts the selected root and boot partitions directly, not through
+global `/dev/disk/by-label` aliases that could refer to another disk with the
+same labels. The filesystems retain the `nixos`, `boot` and `swap` labels.
 
 Partition the disk:
 

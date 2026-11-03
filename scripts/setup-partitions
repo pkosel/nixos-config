@@ -8,7 +8,7 @@ if (( EUID != 0 )); then
   exit 1
 fi
 
-for required_command in lsblk parted mkfs.fat mkfs.ext4 mkswap mount mkdir swapon nixos-generate-config; do
+for required_command in lsblk findmnt parted mkfs.fat mkfs.ext4 mkswap mount mkdir swapon nixos-generate-config; do
   if ! command -v "$required_command" >/dev/null 2>&1; then
     echo "Required command not found in PATH: $required_command" >&2
     exit 1
@@ -56,6 +56,25 @@ while read -r device_name device_type read_only mountpoints; do
   fi
 done <<< "$device_state"
 
+if [[ ! -d /mnt || -L /mnt ]]; then
+  echo "/mnt must be an existing, non-symlink directory." >&2
+  exit 1
+fi
+
+if ! mount_targets=$(findmnt --kernel --noheadings --raw --output TARGET) ||
+  [[ -z $mount_targets ]]; then
+  echo "Could not inspect existing mountpoints." >&2
+  exit 1
+fi
+
+# Mounting the new root would hide existing mounts anywhere below /mnt.
+while IFS= read -r mount_target; do
+  if [[ $mount_target == /mnt || $mount_target == /mnt/* ]]; then
+    echo "$mount_target is already mounted; /mnt and its descendants must be unused." >&2
+    exit 1
+  fi
+done <<< "$mount_targets"
+
 boot="${partition_prefix}1"
 system="${partition_prefix}2"
 swap="${partition_prefix}3"
@@ -92,10 +111,10 @@ mkfs.ext4 -L nixos "$system"
 parted "$drive" -- mkpart swap linux-swap -4GiB 100%
 mkswap -L swap "$swap"
 
-mount /dev/disk/by-label/nixos /mnt
+mount "$system" /mnt
 
 mkdir -p /mnt/boot
-mount /dev/disk/by-label/boot /mnt/boot
+mount "$boot" /mnt/boot
 
 swapon "$swap"
 
