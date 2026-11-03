@@ -65,8 +65,9 @@ brave.overrideAttrs (old: {
     runHook postInstall
   '';
 
-  # The wrapper is created in fixup, after install checks.
-  # Checking the unwrapped binary here would need the full rpath.
+  # The inherited check targets $out/opt/brave.com/brave/brave, absent in Origin,
+  # and bypasses wrappers. Origin's unwrapped binary has no rpath and needs
+  # the wrapper's LD_LIBRARY_PATH.
   doInstallCheck = false;
 
   passthru = { };
