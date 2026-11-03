@@ -5,7 +5,8 @@
     # defaultEditor is in hosts/frieda/default.nix.
     enable = true;
 
-    # 26.05 defaults both to false. Nothing in the lua config uses either.
+    # Home Manager defaults both to false for home.stateVersion >= 26.05,
+    # but to true at our fixed 25.11. Nothing in the Lua config uses either.
     withRuby = false;
     withPython3 = false;
 
