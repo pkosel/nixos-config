@@ -34,8 +34,8 @@
         description = "Brother HL-L2350DW";
         location = "Home";
         deviceUri = "ipp://192.168.2.30:631/ipp/print";
-        # IPP Everywhere queries the printer for capabilities at build time.
-        # The printer must be awake during nixos-rebuild.
+        # IPP Everywhere needs the printer reachable when ensure-printers runs,
+        # for example during initial activation or boot, not during the build.
         model = "everywhere";
       }
     ];
