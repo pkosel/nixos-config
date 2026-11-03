@@ -462,7 +462,7 @@ class QnAComponent implements Component {
 
 export default function (pi: ExtensionAPI) {
 	const answerHandler = async (ctx: ExtensionContext) => {
-			if (!ctx.hasUI) {
+			if (ctx.mode !== "tui") {
 				ctx.ui.notify("answer requires interactive mode", "error");
 				return;
 			}
