@@ -102,11 +102,25 @@ Install, where `<host>` matches `nixosConfigurations.<host>`:
 sudo nixos-install --flake '.#<host>'
 ```
 
-Afterwards set a password for the user:
+After `nixos-install` succeeds, set the normal user's password before rebooting.
+The installer's password prompt is for root; the invoking shell remains in the
+live installer. With the installed filesystems still mounted at `/mnt`, enter
+the installed system from the live installer's root shell:
+
+```sh
+nixos-enter --root /mnt
+```
+
+Only after entry succeeds, run this in the installed-system shell, replacing
+`<user>` with the configured username (`philipp` for `frieda`):
 
 ```sh
 passwd <user>
+exit
 ```
+
+`exit` returns to the live installer. Enter the password at the prompt; do not
+store passwords in the repository.
 
 ## Rebuilding
 
