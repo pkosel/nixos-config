@@ -158,7 +158,13 @@ in
         // Overrides
         user_pref("browser.startup.homepage", "https://ecosia.org/");
         user_pref("browser.startup.page", 3);
+
+        // Keep browsing and download history even when shutdown cleaning is on.
+        // Legacy inputs prevent migrations from re-enabling history clearing.
+        // The intermediate v2 input also retains form data during its migration.
         user_pref("privacy.clearOnShutdown.history", false);
+        user_pref("privacy.clearOnShutdown_v2.historyFormDataAndDownloads", false);
+        user_pref("privacy.clearOnShutdown_v2.browsingHistoryAndDownloads", false);
 
         // Content defaults to 3, "follow the browser theme", so the dark chrome
         // darkened every page. Setting 1 pins pages to light.
