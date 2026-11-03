@@ -21,8 +21,18 @@ local function lint_buffer(bufnr, stdin_only)
   end
 
   vim.api.nvim_buf_call(bufnr, function()
-    -- Disk-based linters cannot check edits that have not been saved.
-    lint.try_lint(nil, { filter = stdin_only and "stdin" or nil })
+    lint.try_lint(nil, {
+      filter = function(linter)
+        if not stdin_only then
+          return true
+        end
+        -- Keep existing-file ShellCheck on read/save/manual events for SCRIPTDIR.
+        return linter.stdin == true
+          and not (
+            linter.name == "shellcheck" and vim.fn.filereadable(name) == 1
+          )
+      end,
+    })
   end)
 end
 
