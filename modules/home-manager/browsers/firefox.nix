@@ -49,8 +49,8 @@ in
         user_pref("permissions.manager.defaultsUrl", "");
 
         // Security
-        // OCSP would leak every visited site to its CA; CRLite covers revocation
-        // instead.
+        // Disable OCSP lookups that remain alongside CRLite to avoid disclosing
+        // certificate checks to responders.
         user_pref("security.OCSP.enabled", 0);
         user_pref("security.ssl.treat_unsafe_negotiation_as_broken", true);
         user_pref("security.tls.enable_0rtt_data", false);
@@ -166,8 +166,8 @@ in
         user_pref("privacy.clearOnShutdown_v2.historyFormDataAndDownloads", false);
         user_pref("privacy.clearOnShutdown_v2.browsingHistoryAndDownloads", false);
 
-        // Content defaults to 3, "follow the browser theme", so the dark chrome
-        // darkened every page. Setting 1 pins pages to light.
+        // Prefer light web content even when the browser theme or system color
+        // scheme is dark.
         user_pref("layout.css.prefers-color-scheme.content-override", 1);
       '';
     };
