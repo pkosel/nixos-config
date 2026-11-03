@@ -21,6 +21,7 @@ import {
 	type Component,
 	Editor,
 	type EditorTheme,
+	type Focusable,
 	Key,
 	matchesKey,
 	truncateToWidth,
@@ -172,7 +173,7 @@ function parseExtractionResult(text: string): ExtractionResult | null {
 /**
  * Interactive Q&A component for answering extracted questions
  */
-class QnAComponent implements Component {
+class QnAComponent implements Component, Focusable {
 	private questions: ExtractedQuestion[];
 	private answers: string[];
 	private currentIndex: number = 0;
@@ -223,6 +224,17 @@ class QnAComponent implements Component {
 			this.invalidate();
 			this.tui.requestRender();
 		};
+	}
+
+	get focused(): boolean {
+		return this.editor.focused;
+	}
+
+	set focused(value: boolean) {
+		if (this.editor.focused === value) return;
+		this.editor.focused = value;
+		this.invalidate();
+		this.tui.requestRender();
 	}
 
 	private allQuestionsAnswered(): boolean {
