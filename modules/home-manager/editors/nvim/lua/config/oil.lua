@@ -7,7 +7,8 @@ require("oil").setup({
     ["-"] = "actions.parent",
     ["_"] = "actions.open_cwd",
     ["<c-p>"] = "actions.preview",
-    ["<c-s>"] = false, -- conflicts with save, disable
+    -- Match Oil's case-sensitive default key to preserve the global save mapping.
+    ["<C-s>"] = false,
   },
 })
 
