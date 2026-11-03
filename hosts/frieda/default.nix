@@ -23,7 +23,8 @@
       efi.canTouchEfiVariables = true;
     };
 
-    # /tmp lives on the root filesystem, so nothing clears it otherwise.
+    # Clear disk-backed /tmp at every boot so temporary files do not persist
+    # across reboots while waiting for systemd's age-based cleanup.
     tmp.cleanOnBoot = true;
   };
 
