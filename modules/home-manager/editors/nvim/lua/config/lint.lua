@@ -10,6 +10,13 @@ lint.linters_by_ft = {
 }
 
 local function lint_buffer(bufnr, stdin_only)
+  if
+    not vim.api.nvim_buf_is_valid(bufnr)
+    or not vim.api.nvim_buf_is_loaded(bufnr)
+  then
+    return
+  end
+
   local name = vim.api.nvim_buf_get_name(bufnr)
   if
     vim.bo[bufnr].buftype ~= ""
@@ -39,7 +46,14 @@ end
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
   group = vim.api.nvim_create_augroup("config_lint", { clear = true }),
   callback = function(args)
-    lint_buffer(args.buf, args.event == "InsertLeave")
+    if args.event == "BufReadPost" then
+      -- Filetype detection may run in a later BufReadPost callback.
+      vim.schedule(function()
+        lint_buffer(args.buf, false)
+      end)
+    else
+      lint_buffer(args.buf, args.event == "InsertLeave")
+    end
   end,
 })
 
