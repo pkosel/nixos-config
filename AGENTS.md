@@ -18,9 +18,9 @@ Run in order, stopping at the first failure:
 2. `nix flake check`: check flake outputs and run deadnix and statix.
 3. `nix eval .#nixosConfigurations.frieda.config.<option>`: confirm the option you changed evaluates as intended. Skip if you didn't change an option value.
 4. `nixos-rebuild build --flake .#frieda`: build without activating; leaves `result` in the current directory.
-5. `nvd diff /run/current-system result`: review what the build would actually change.
+5. `nvd diff /run/current-system result`: review package version and closure changes. A change that only alters configuration files appears as added and removed paths, not as a version change.
 
-There is no test suite; a successful build does not verify runtime behavior.
+There is no CI or test suite; a successful build does not verify runtime behavior.
 
 ## Structure
 
