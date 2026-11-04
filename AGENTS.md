@@ -5,10 +5,10 @@ NixOS flake for one host, `frieda` (x86_64-linux). Home Manager is a NixOS modul
 ## Code quality
 
 Before auditing or changing repository files, read
-[docs/code-quality.md](docs/code-quality.md) in full and follow its audit or
-change workflow. It is the authoritative standard for code, comments, and
-documentation, including what to report on completion; keep those criteria
-there rather than repeating them here.
+[docs/code-quality.md](docs/code-quality.md) in full and follow it. It is the
+authoritative standard for code, comments, and documentation; keep its rules
+there rather than repeating them here. Before finishing a change, review the
+complete diff against it and remove anything that breaks it.
 
 ## Commands
 
@@ -20,7 +20,7 @@ Run in order, stopping at the first failure:
 4. `nixos-rebuild build --flake .#frieda`: build without activating; leaves `result` in the current directory.
 5. `nvd diff /run/current-system result`: review package version and closure changes. A change that only alters configuration files appears as added and removed paths, not as a version change.
 
-There is no CI or test suite; a successful build does not verify runtime behavior.
+There is no CI or test suite; a successful build does not verify runtime behavior. Report the checks you ran, the ones you skipped and why, and what remains unverified.
 
 ## Structure
 
@@ -42,3 +42,5 @@ There is no CI or test suite; a successful build does not verify runtime behavio
 - Do not use `sudo`, run `scripts/setup-partitions`, update `flake.lock`, or commit unless asked.
 - Do not use `--impure`; it lets the build read untracked files and the host environment, breaking reproducibility.
 - Flakes see only git-tracked files. Run `git add` on new files before building.
+- Change only what the task needs; no unrelated cleanup.
+- Keep refactors behavior-preserving and separate from functional changes.

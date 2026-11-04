@@ -24,9 +24,9 @@ scripts/              installation helpers
 
 ## Code quality
 
-See [Code quality](docs/code-quality.md) for the maintainability standard and
-review checklist used for existing-code audits and future changes.
-[AGENTS.md](AGENTS.md) lists where settings belong and the validation steps.
+See [Code quality](docs/code-quality.md) for the rules for code, comments, and
+documentation. [AGENTS.md](AGENTS.md) lists where settings belong and the
+validation steps.
 
 ## Installation
 
