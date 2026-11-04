@@ -12,24 +12,21 @@ Hosts:
 ## Structure
 
 ```
-flake.nix            inputs and the nixosConfigurations
-hosts/<host>/        per-machine: default.nix + hardware-configuration.nix
-modules/nixos/       system modules, imported by a host
+flake.nix             inputs and the nixosConfigurations
+hosts/<host>/         per-machine: default.nix + hardware-configuration.nix
+modules/nixos/        system modules, imported by a host
 modules/home-manager/ Home Manager modules, imported by a user
-home/<user>/         per-user Home Manager profile
-pkgs/                packages that aren't in nixpkgs
-overlays/            wires those packages into nixpkgs, and patches some of its own
-scripts/             installation helpers
+home/<user>/          per-user Home Manager profile
+pkgs/                 packages missing from or outdated in nixpkgs
+overlays/             wires those packages into nixpkgs
+scripts/              installation helpers
 ```
-
-Modules stay optional: a module under `modules/nixos/` or `modules/home-manager/` configures one thing
-and does nothing until a host or user imports it. Anything machine-specific
-belongs in `hosts/`, not in a module.
 
 ## Code quality
 
 See [Code quality](docs/code-quality.md) for the maintainability standard and
 review checklist used for existing-code audits and future changes.
+[AGENTS.md](AGENTS.md) lists where settings belong and the validation steps.
 
 ## Installation
 
@@ -40,40 +37,31 @@ git clone https://github.com/pkosel/nixos-config.git ~/.nixos-config
 cd ~/.nixos-config
 ```
 
-On a new machine, use a NixOS live installer with working `nix-shell`. Enter a
-root shell and return to this checkout before running the partition helper; it
-does not elevate privileges automatically.
+On a new machine, use a NixOS live installer with working `nix-shell`, and run
+the following steps from a root shell in this checkout.
 
-The helper's `nix-shell` header requests Bash and Parted. The installer's `PATH`
-must also provide `mkfs.fat` (dosfstools), `mkfs.ext4` (e2fsprogs), `mkswap`,
-`mount`, `swapon`, `lsblk` and `findmnt` (util-linux), `mkdir` (coreutils), and
-`nixos-generate-config` (NixOS installer tools). The helper rejects non-root
-execution or a missing command before asking for a disk or erasure confirmation.
-The shell header uses the installer's `<nixpkgs>` search path, not this flake's
-lock file.
+`scripts/setup-partitions` erases the selected disk and creates a GPT layout
+with an EFI system partition in the first 512 MiB, an ext4 root filesystem, and
+4 GiB of swap at the end. It mounts the new filesystems at `/mnt` and
+`/mnt/boot`, enables the swap, and generates
+`/mnt/etc/nixos/hardware-configuration.nix`. Its `nix-shell` header provides
+Bash and Parted from the installer's `<nixpkgs>`, not from this flake's lock
+file.
 
-The helper accepts only canonical, non-symlink whole-disk paths: `/dev/sdX`,
-`/dev/vdX`, `/dev/xvdX` (where `X` is one or more lowercase letters),
-`/dev/nvmeNnN` or `/dev/mmcblkN` (where `N` is a decimal number). It rejects
-partition paths, `/dev/disk/by-*` aliases, mapper/RAID/loop devices and other
-backends. Use the canonical disk path instead of an alias. Before confirmation,
-`lsblk` must verify that the node's kernel name matches and its type is `disk`.
-The disk and its descendants must be writable, have no mounts or active swap
-visible to `lsblk`, and contain no stacked consumers such as LVM or encryption.
+The helper accepts only a canonical whole-disk path, such as `/dev/sda`,
+`/dev/vda`, `/dev/xvda`, `/dev/nvme0n1`, or `/dev/mmcblk0`. It rejects
+partitions, `/dev/disk/by-*` aliases, and mapper, RAID, loop, and other devices.
+Before asking for confirmation, it exits if it is not running as root, a
+required command is missing, the disk or one of its partitions is read-only,
+mounted, or used as swap, the disk has stacked consumers such as LVM or
+encryption, or `/mnt` is not an existing, non-symlink directory with nothing
+mounted at or below it.
 
-Before proceeding, back up needed data and verify that this is the intended disk
-and has enough capacity for the boot partition, 4 GiB of swap and a usable root
-filesystem. Ensure it has no active consumers, including in other mount
-namespaces, and keep its device/usage state unchanged while the helper runs.
-These checks are a snapshot, not an exclusive lock or a guarantee of safe disk
-selection. `/mnt` must be an existing, non-symlink directory. Before confirmation,
-the helper uses `findmnt` to reject existing mounts at `/mnt` or anywhere below
-it in the current mount namespace, including `/mnt/boot`. Keep these mountpoints
-unused until the helper mounts the target.
-
-The helper mounts the selected root and boot partitions directly, not through
-global `/dev/disk/by-label` aliases that could refer to another disk with the
-same labels. The filesystems retain the `nixos`, `boot` and `swap` labels.
+These checks are a snapshot in the current mount namespace, not a lock or a
+guarantee of safe disk selection. Before running the helper, back up needed
+data, verify that this is the intended disk and has room for a usable root
+filesystem, and make sure nothing uses it, including in other mount namespaces.
+Do not use the disk or mount anything at or below `/mnt` while the helper runs.
 
 Partition the disk:
 
@@ -81,8 +69,7 @@ Partition the disk:
 scripts/setup-partitions
 ```
 
-Copy the hardware configuration generated by the helper for the target root.
-With the installer's default generator output directory:
+Copy the generated hardware configuration into the host directory:
 
 ```sh
 mkdir -p hosts/<host>
@@ -96,8 +83,8 @@ unrelated mounts. If anything is wrong, stop and investigate before continuing.
 Write `hosts/<host>/default.nix` next to it, importing the modules the
 machine needs, and add a `nixosConfigurations.<host>` section in `flake.nix`.
 
-Before evaluating or installing, review and stage the new host files so the
-Git-backed flake can see them (replace `<host>` with the chosen host name):
+The flake sees only files that Git tracks. Before evaluating or installing,
+review and stage the new host files:
 
 ```sh
 git add -- hosts/<host>/default.nix hosts/<host>/hardware-configuration.nix
@@ -109,28 +96,18 @@ files the configuration references, but do not stage unrelated files or secrets.
 Install, where `<host>` matches `nixosConfigurations.<host>`:
 
 ```sh
-sudo nixos-install --flake '.#<host>'
+nixos-install --flake '.#<host>'
 ```
 
-After `nixos-install` succeeds, set the normal user's password before rebooting.
-The installer's password prompt is for root; the invoking shell remains in the
-live installer. With the installed filesystems still mounted at `/mnt`, enter
-the installed system from the live installer's root shell:
+`nixos-install` prompts only for the root password. Before rebooting, set the
+normal user's password in the installed system, replacing `<user>` with the
+configured username (`philipp` for `frieda`):
 
 ```sh
-nixos-enter --root /mnt
+nixos-enter --root /mnt -c 'passwd <user>'
 ```
 
-Only after entry succeeds, run this in the installed-system shell, replacing
-`<user>` with the configured username (`philipp` for `frieda`):
-
-```sh
-passwd <user>
-exit
-```
-
-`exit` returns to the live installer. Enter the password at the prompt; do not
-store passwords in the repository.
+Enter the password at the prompt; do not store passwords in the repository.
 
 ## Rebuilding
 

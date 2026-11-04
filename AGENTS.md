@@ -5,21 +5,16 @@ NixOS flake for one host, `frieda` (x86_64-linux). Home Manager is a NixOS modul
 ## Code quality
 
 Before auditing or changing repository files, read
-[docs/code-quality.md](docs/code-quality.md) in full. It is the authoritative
-repository standard for code quality, including comments and documentation; keep
-those criteria there rather than defining a parallel comment policy here. Follow
-its audit or change workflow and apply its checklist to the relevant area or
-complete diff, including new files.
-
-Raise material conflicts with the standard before implementing a change. Before
-declaring completion, report actual validation results, limitations, and any
-deliberate exceptions.
+[docs/code-quality.md](docs/code-quality.md) in full and follow its audit or
+change workflow. It is the authoritative standard for code, comments, and
+documentation, including what to report on completion; keep those criteria
+there rather than repeating them here.
 
 ## Commands
 
 Run in order, stopping at the first failure:
 
-1. `nix fmt`: format Nix files (nixfmt-tree).
+1. `nix fmt`: format Nix files (nixfmt-tree). If you changed Lua files, also run `nix run --inputs-from . nixpkgs#stylua -- modules/home-manager/editors/nvim/`; only Neovim's wrapper provides `stylua`, so it is not on the shell `PATH`.
 2. `nix flake check`: check flake outputs and run deadnix and statix.
 3. `nix eval .#nixosConfigurations.frieda.config.<option>`: confirm the option you changed evaluates as intended. Skip if you didn't change an option value.
 4. `nixos-rebuild build --flake .#frieda`: build without activating; leaves `result` in the current directory.
@@ -40,14 +35,6 @@ There is no test suite; a successful build does not verify runtime behavior.
 
 - `stateVersion` values are fixed at the original install. Do not bump them with releases.
 - nixpkgs and home-manager track the same release branch and are bumped together.
-
-## Formatting Lua files
-
-Run `stylua` on Lua files in the nvim config before committing:
-
-```
-stylua modules/home-manager/editors/nvim/
-```
 
 ## Rules
 
