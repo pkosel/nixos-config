@@ -24,9 +24,8 @@ scripts/              installation helpers
 
 ## Code quality
 
-See [Code quality](docs/code-quality.md) for the rules for code, comments, and
-documentation. [AGENTS.md](AGENTS.md) lists where settings belong and the
-validation steps.
+See [AGENTS.md](AGENTS.md) for code, comment, and documentation rules,
+configuration ownership, and validation steps.
 
 ## Installation
 
