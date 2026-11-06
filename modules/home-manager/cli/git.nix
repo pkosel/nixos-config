@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  email = "p.kosel@tuta.io";
+  email = "170943+pkosel@users.noreply.github.com";
 
   # Public half of the key gcr-ssh-agent already holds, so signing needs no
   # private material and no passphrase prompt.
