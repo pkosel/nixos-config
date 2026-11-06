@@ -1,6 +1,8 @@
 { inputs, ... }:
 
 {
+  imports = [ inputs.brave.nixosModules.default ];
+
   nixpkgs = {
     config.allowUnfree = true;
 

@@ -11,6 +11,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    brave = {
+      url = "git+https://codeberg.org/buckley310/brave-browser-nix?ref=main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Both overlays below build with this flake's nixpkgs, so the trees
     # these inputs lock are never used. Following keeps them out of flake.lock.
     claude-code = {
