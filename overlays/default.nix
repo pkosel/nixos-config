@@ -1,5 +1,22 @@
 # Packages missing from nixpkgs or needing patches. Wired in by
 # modules/nixos/nixpkgs.nix.
-final: _: {
+final: prev: {
   mdcat = final.callPackage ../pkgs/mdcat.nix { };
+
+  # The pinned builder targets the obsolete @vscode/ripgrep path. Remove
+  # this override once it includes upstream's ripgrep-universal handling.
+  # https://github.com/NixOS/nixpkgs/commit/08a2d5fff737305a13c39a47a49cf8590567220d
+  vscode = prev.vscode.overrideAttrs (
+    old:
+    let
+      ripgrepPath = "@vscode/ripgrep-universal/bin/linux-x64/rg";
+    in
+    {
+      postPatch = final.lib.replaceStrings [ "@vscode/ripgrep/bin/rg" ] [ ripgrepPath ] old.postPatch + ''
+        # Search also resolves the helper through the unpacked ASAR tree.
+        rm resources/app/node_modules.asar.unpacked/${ripgrepPath}
+        ln -s ${final.ripgrep}/bin/rg resources/app/node_modules.asar.unpacked/${ripgrepPath}
+      '';
+    }
+  );
 }
