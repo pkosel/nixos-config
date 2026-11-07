@@ -24,7 +24,7 @@
     };
 
     # nixpkgs' pi-coding-agent lags upstream. Drop this input and its
-    # overlay in modules/nixos/nixpkgs.nix once nixpkgs catches up with stable.
+    # overlay in modules/system/nixpkgs.nix once nixpkgs catches up with stable.
     pi = {
       url = "github:earendil-works/pi/stable";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -77,7 +77,7 @@
               useGlobalPkgs = true;
               # Manage user packages through the NixOS per-user profile.
               useUserPackages = true;
-              users.philipp = import ./home/philipp/default.nix;
+              users.philipp = import ./users/philipp/default.nix;
               # Home Manager modules get inputs; firefox uses firefox-addons.
               extraSpecialArgs = { inherit inputs; };
             };

@@ -127,24 +127,24 @@ text with its code; rewrite errors rather than appending corrections.
 .
 ├── flake.nix                 # Inputs, outputs, formatter, and checks
 ├── hosts/frieda/             # Host-specific system and hardware configuration
-├── home/philipp/             # Home Manager profile and user package list
+├── users/philipp/            # Home Manager profile and user package list
 ├── modules/
-│   ├── nixos/                # System configuration
-│   └── home-manager/         # User configuration, including Neovim Lua
+│   ├── system/               # System configuration
+│   └── home/                 # User configuration, including Neovim Lua
 ├── pkgs/                     # Local package definitions
 ├── overlays/                 # Add or override packages in nixpkgs
 └── scripts/                  # Installation helpers
 ```
 
 - Follow imports from `flake.nix` through `hosts/frieda/default.nix` or
-  `home/philipp/default.nix` to find a setting's owner. A module has no effect
+  `users/philipp/default.nix` to find a setting's owner. A module has no effect
   until imported; check the relevant `default.nix`.
 - Put machine-specific settings in `hosts/frieda/`. User settings needing no
   root belong in Home Manager. Boot, hardware, system services, networking,
   firewall, and the display manager belong in NixOS. When in doubt, prefer
   Home Manager.
-- Both layers receive `inputs`. `home/philipp/default.nix` provides `theme`
-  to Home Manager modules from `modules/home-manager/theme.nix`.
+- Both layers receive `inputs`. `users/philipp/default.nix` provides `theme`
+  to Home Manager modules from `modules/home/theme.nix`.
 
 ## Versions and pins
 
@@ -189,7 +189,7 @@ failure:
    provides `stylua`; it is not on the shell `PATH`:
 
    ```sh
-   nix run --inputs-from . nixpkgs#stylua -- modules/home-manager/editors/nvim/
+   nix run --inputs-from . nixpkgs#stylua -- modules/home/editors/nvim/
    ```
 
 2. Check flake outputs, deadnix, and statix:

@@ -3,14 +3,14 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/nixos/nix.nix
-    ../../modules/nixos/nixpkgs.nix
-    ../../modules/nixos/audio.nix
-    ../../modules/nixos/desktop
-    ../../modules/nixos/virtualization/docker.nix
-    ../../modules/nixos/vpn.nix
-    ../../modules/nixos/printing.nix
-    ../../modules/nixos/fonts.nix
+    ../../modules/system/nix.nix
+    ../../modules/system/nixpkgs.nix
+    ../../modules/system/audio.nix
+    ../../modules/system/desktop
+    ../../modules/system/virtualization/docker.nix
+    ../../modules/system/vpn.nix
+    ../../modules/system/printing.nix
+    ../../modules/system/fonts.nix
   ];
 
   boot = {

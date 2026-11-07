@@ -72,7 +72,7 @@ cp /mnt/etc/nixos/hardware-configuration.nix hosts/frieda/hardware-configuration
 Check that `/` and `/boot` identify the intended devices and that the file
 contains no live-installer root or unrelated mounts. Review
 [host settings](hosts/frieda/default.nix) and the
-[user profile](home/philipp/default.nix) before installing.
+[user profile](users/philipp/default.nix) before installing.
 
 Git-backed flakes ignore untracked files. Stage any new files the
 configuration references; staging does not require a commit. Do not stage

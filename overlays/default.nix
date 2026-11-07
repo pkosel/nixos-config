@@ -1,5 +1,5 @@
 # Packages missing from nixpkgs or needing patches. Wired in by
-# modules/nixos/nixpkgs.nix.
+# modules/system/nixpkgs.nix.
 final: prev: {
   mdcat = final.callPackage ../pkgs/mdcat.nix { };
 
