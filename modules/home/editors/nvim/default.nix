@@ -3,6 +3,7 @@
 {
   programs.neovim = {
     enable = true;
+    defaultEditor = true;
 
     # Home Manager defaults both to false for home.stateVersion >= 26.05,
     # but to true at our fixed 25.11. Nothing in the Lua config uses either.

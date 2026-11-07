@@ -57,27 +57,14 @@
     thermald.enable = true;
   };
 
-  programs = {
-    fish.enable = true;
-    vim = {
-      enable = true;
-      defaultEditor = true;
-    };
-  };
+  programs.fish.enable = true;
 
   environment.systemPackages = with pkgs; [
-    git
+    # Keep curl available independently of NixOS's core package defaults.
     curl
-    dnsutils
+    git
+    vim
     wget
-    unzip
-    zip
-    file
-    htop
-    lsof
-    ncdu
-    pciutils
-    usbutils
   ];
 
   system.stateVersion = "25.11";

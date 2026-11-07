@@ -48,7 +48,7 @@
         "org.gnome.DiskUtility.desktop"
         "org.gnome.Extensions.desktop"
         "org.gnome.font-viewer.desktop"
-        "htop.desktop"
+        "btop.desktop"
         "org.gnome.Logs.desktop"
         "cups.desktop"
         "org.gnome.seahorse.Application.desktop"

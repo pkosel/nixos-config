@@ -13,11 +13,20 @@
 
   home.packages = with pkgs; [
     # Command-line tools
+    btop
+    dnsutils
     fd
+    file
     gh
     jq
+    lsof
+    ncdu
     nvd
+    pciutils
     sd
+    unzip
+    usbutils
+    zip
 
     # Applications
     anki

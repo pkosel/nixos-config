@@ -6,8 +6,6 @@
     ./vscode.nix
   ];
 
-  home.sessionVariables.EDITOR = "nvim";
-
   home.file.".editorconfig".text = ''
     [*]
     charset = utf-8
