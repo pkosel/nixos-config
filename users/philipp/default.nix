@@ -15,7 +15,6 @@
   # User packages. Anything with its own configuration lives under modules/home/.
   home.packages = with pkgs; [
     # Development
-    claude-code
     pi
 
     # uv provides uvx, which pi uses to run the mcp-nixos server.

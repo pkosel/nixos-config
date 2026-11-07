@@ -16,15 +16,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Both overlays below build with this flake's nixpkgs, so the trees
-    # these inputs lock are never used. Following keeps them out of flake.lock.
-    claude-code = {
-      url = "github:sadjow/claude-code-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # nixpkgs' pi-coding-agent lags upstream. Drop this input and its
     # overlay in modules/system/nixpkgs.nix once nixpkgs catches up with stable.
+    # The overlay uses this flake's nixpkgs on every platform; both follows
+    # below keep unused nixpkgs trees out of flake.lock.
     pi = {
       url = "github:earendil-works/pi/stable";
       inputs.nixpkgs.follows = "nixpkgs";

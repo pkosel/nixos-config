@@ -81,7 +81,6 @@ in
         # below is force-managed and would drop them otherwise.
         "x-scheme-handler/sgnl" = [ "signal.desktop" ];
         "x-scheme-handler/signalcaptcha" = [ "signal.desktop" ];
-        "x-scheme-handler/claude-cli" = [ "claude-code-url-handler.desktop" ];
         "x-scheme-handler/obsidian" = [ "obsidian.desktop" ];
         "x-scheme-handler/zotero" = [ "zotero.desktop" ];
       };

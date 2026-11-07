@@ -24,8 +24,6 @@ in
       signByDefault = true;
     };
 
-    ignores = [ "**/.claude/settings.local.json" ];
-
     settings = {
       user = {
         name = "Philipp Kosel";
