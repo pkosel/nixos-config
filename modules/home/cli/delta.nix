@@ -7,7 +7,7 @@
     enableGitIntegration = true;
 
     options = {
-      # ANSI colors follow the terminal palette in both light and dark modes.
+      # ANSI colors follow the terminal palette.
       syntax-theme = "ansi";
       line-numbers = true;
       navigate = true;

@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./bat
     ./delta.nix
     ./direnv.nix
     ./eza.nix
@@ -19,4 +18,6 @@
     ./tmux.nix
     ./zoxide.nix
   ];
+
+  programs.bat.enable = true;
 }

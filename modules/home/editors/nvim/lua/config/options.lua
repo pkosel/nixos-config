@@ -20,5 +20,3 @@ vim.opt.timeoutlen = 300
 vim.opt.undofile = true
 vim.opt.updatetime = 200
 vim.opt.wrap = false
-
-vim.cmd("colorscheme night-owl")

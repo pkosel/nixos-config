@@ -9,6 +9,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    stylix = {
+      url = "github:nix-community/stylix/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # nixpkgs' pi-coding-agent trails stable; remove this input and its
     # overlay in modules/system/nixpkgs.nix once it catches up.
     pi = {

@@ -1,9 +1,12 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+
+    # Home Manager emits plugin configuration at order 1500; load setups afterward.
+    initLua = lib.mkOrder 1600 (builtins.readFile ./init.lua);
 
     # Home Manager defaults both to false for home.stateVersion >= 26.05,
     # but to true at our fixed 25.11. Nothing in the Lua config uses either.
@@ -43,7 +46,6 @@
       # ui
       flash-nvim
       lualine-nvim
-      night-owl-nvim
       noice-nvim
       nvim-web-devicons
       which-key-nvim
@@ -110,8 +112,6 @@
       cfgDir = "nvim";
     in
     {
-      "${cfgDir}/init.lua".text = builtins.readFile ./init.lua;
-
       "${cfgDir}/lua/config/options.lua".text = builtins.readFile ./lua/config/options.lua;
       "${cfgDir}/lua/config/keymaps.lua".text = builtins.readFile ./lua/config/keymaps.lua;
       "${cfgDir}/lua/config/plugin_setups.lua".text = builtins.readFile ./lua/config/plugin_setups.lua;

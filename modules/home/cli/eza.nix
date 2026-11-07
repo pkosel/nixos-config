@@ -1,9 +1,8 @@
 { ... }:
 
 let
-  # ANSI names, so the colours come from Ghostty's active theme and follow the
-  # dark/light switch. eza only knows these spellings: anything else, such as
-  # BrightRed, is silently ignored.
+  # ANSI names use the terminal palette. eza only knows these spellings:
+  # anything else, such as BrightRed, is silently ignored.
   palette = {
     fg = "Default";
     fg2 = "Default";

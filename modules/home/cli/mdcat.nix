@@ -8,7 +8,7 @@ in
 
   # mdcat has no home-manager module. A config file reaches every shell
   # and keeps theme detection on. No Night Owl theme, so elements are
-  # overridden with ANSI names that Ghostty maps to its active theme.
+  # overridden with ANSI names from the terminal palette.
   xdg.configFile."mdcat/config.toml".source = toml.generate "mdcat-config.toml" {
     theme = {
       rule = "bright-black";

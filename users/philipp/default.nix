@@ -1,14 +1,13 @@
 { pkgs, ... }:
 
 {
-  _module.args.theme = import ../../modules/home/theme.nix;
-
   imports = [
     ../../modules/home/browsers
     ../../modules/home/cli
     ../../modules/home/desktop
     ../../modules/home/editors
     ../../modules/home/obsidian.nix
+    ../../modules/home/theme.nix
   ];
 
   home.packages = with pkgs; [

@@ -8,25 +8,6 @@
 
     # Preserve the walker's default exclusions and avoid scanning flake build outputs.
     defaultOptions = [ "--walker-skip=.git,node_modules,result" ];
-
-    # ANSI names, so the colours come from Ghostty's active theme and follow the
-    # dark/light switch. Without them fzf's own palette is unreadable on one of
-    # the two.
-    colors = {
-      bg = "-1";
-      "bg+" = "bright-black";
-      fg = "-1";
-      "fg+" = "-1";
-      gutter = "-1";
-      "hl+" = "yellow";
-      hl = "yellow";
-      header = "bright-black";
-      info = "blue";
-      marker = "green";
-      pointer = "red";
-      prompt = "cyan";
-      spinner = "magenta";
-    };
   };
 
   # Home Manager loads session variables only once per login. Refresh these options
