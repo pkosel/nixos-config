@@ -4,26 +4,23 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
-    # Must track the same release as nixpkgs; a mismatched pair is the usual way
-    # home-manager breaks.
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # nixpkgs' pi-coding-agent trails stable; remove this input and its
+    # overlay in modules/system/nixpkgs.nix once it catches up.
+    pi = {
+      url = "github:earendil-works/pi/stable";
+      # The overlay uses the root nixpkgs; follow both inputs to avoid unused trees.
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-darwin-x64.follows = "nixpkgs";
+    };
+
     brave = {
       url = "git+https://codeberg.org/buckley310/brave-browser-nix?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # nixpkgs' pi-coding-agent lags upstream. Drop this input and its
-    # overlay in modules/system/nixpkgs.nix once nixpkgs catches up with stable.
-    # The overlay uses this flake's nixpkgs on every platform; both follows
-    # below keep unused nixpkgs trees out of flake.lock.
-    pi = {
-      url = "github:earendil-works/pi/stable";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-darwin-x64.follows = "nixpkgs";
     };
 
     firefox-addons = {
@@ -41,16 +38,14 @@
     {
       formatter.${system} = pkgs.nixfmt-tree;
 
-      # Run by `nix flake check`.
       checks.${system} = {
-        # hardware-configuration.nix is generated and stays excluded.
+        # Generated hardware configuration is not linted.
         deadnix = pkgs.runCommand "deadnix" { nativeBuildInputs = [ pkgs.deadnix ]; } ''
           cd ${./.}
           deadnix --fail . --exclude hosts/frieda/hardware-configuration.nix
           touch $out
         '';
 
-        # Disabled rules and ignored paths are set in statix.toml.
         statix = pkgs.runCommand "statix" { nativeBuildInputs = [ pkgs.statix ]; } ''
           cd ${./.}
           statix check .
@@ -60,8 +55,6 @@
 
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
         inherit system;
-        # NixOS modules reach flake inputs through this, for the nixpkgs overlays
-        # and the flake registry pin.
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/frieda/default.nix
@@ -70,10 +63,8 @@
           {
             home-manager = {
               useGlobalPkgs = true;
-              # Manage user packages through the NixOS per-user profile.
               useUserPackages = true;
               users.philipp = import ./users/philipp/default.nix;
-              # Home Manager modules get inputs; firefox uses firefox-addons.
               extraSpecialArgs = { inherit inputs; };
             };
           }

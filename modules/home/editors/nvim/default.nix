@@ -2,7 +2,6 @@
 
 {
   programs.neovim = {
-    # defaultEditor is in hosts/frieda/default.nix.
     enable = true;
 
     # Home Manager defaults both to false for home.stateVersion >= 26.05,
