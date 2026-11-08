@@ -1,17 +1,8 @@
 /**
- * Q&A extraction hook - extracts questions from assistant responses.
- *
- * Fork of extensions/answer.ts from mitsuhiko/agent-stuff. Uses PI_ANSWER_MODEL
- * (provider/modelId) instead of the upstream hardcoded Codex/Anthropic chain.
- * Requests use Pi's model registry to preserve resolved authentication.
- *
- * Custom interactive TUI for answering questions.
- *
- * Demonstrates the "prompt generator" pattern with custom TUI:
- * 1. /answer command gets the last assistant message
- * 2. Shows a spinner while extracting questions as structured JSON
- * 3. Presents an interactive TUI to navigate and answer questions
- * 4. Submits the compiled answers when done
+ * Adapted from mitsuhiko/agent-stuff's extensions/answer.ts.
+ * https://github.com/mitsuhiko/agent-stuff/blob/main/extensions/answer.ts
+ * Modified for this configuration.
+ * Upstream: Apache-2.0; local modifications: MIT. See answer.LICENSE.
  */
 
 import { parseJsonWithRepair, type Model, type Api, type UserMessage } from "@earendil-works/pi-ai";

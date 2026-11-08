@@ -18,6 +18,7 @@
       # Remove extensions/answer.ts from the agent-stuff package entry
       # in ~/.pi/agent/settings.json so it does not register twice.
       ".pi/agent/extensions/answer.ts".source = ./answer.ts;
+      ".pi/agent/extensions/answer.LICENSE".source = ./answer.LICENSE;
     };
 
     # provider/modelId, parsed by answer.ts.
