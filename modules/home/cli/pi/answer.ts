@@ -5,8 +5,17 @@
  * Upstream: Apache-2.0; local modifications: MIT. See answer.LICENSE.
  */
 
-import { parseJsonWithRepair, type Model, type Api, type UserMessage } from "@earendil-works/pi-ai";
-import type { ExtensionAPI, ExtensionContext, ModelRegistry } from "@earendil-works/pi-coding-agent";
+import {
+	parseJsonWithRepair,
+	type Model,
+	type Api,
+	type UserMessage,
+} from "@earendil-works/pi-ai";
+import type {
+	ExtensionAPI,
+	ExtensionContext,
+	ModelRegistry,
+} from "@earendil-works/pi-coding-agent";
 import { BorderedLoader } from "@earendil-works/pi-coding-agent";
 import {
 	type Component,
@@ -103,10 +112,16 @@ function toExtractedQuestion(value: unknown): ExtractedQuestion | null {
 	if (typeof question !== "string") {
 		return null;
 	}
-	if (context !== undefined && context !== null && typeof context !== "string") {
+	if (
+		context !== undefined &&
+		context !== null &&
+		typeof context !== "string"
+	) {
 		return null;
 	}
-	return typeof context === "string" && context.length > 0 ? { question, context } : { question };
+	return typeof context === "string" && context.length > 0
+		? { question, context }
+		: { question };
 }
 
 function toExtractionResult(value: unknown): ExtractionResult | null {
@@ -149,7 +164,9 @@ function parseExtractionResult(text: string): ExtractionResult | null {
 
 	for (const candidate of candidates) {
 		try {
-			const result = toExtractionResult(parseJsonWithRepair<unknown>(candidate));
+			const result = toExtractionResult(
+				parseJsonWithRepair<unknown>(candidate),
+			);
 			if (result) {
 				return result;
 			}
@@ -275,7 +292,11 @@ class QnAComponent implements Component, Focusable {
 				this.submit();
 				return;
 			}
-			if (matchesKey(data, Key.escape) || matchesKey(data, Key.ctrl("c")) || data.toLowerCase() === "n") {
+			if (
+				matchesKey(data, Key.escape) ||
+				matchesKey(data, Key.ctrl("c")) ||
+				data.toLowerCase() === "n"
+			) {
 				this.showingConfirmation = false;
 				this.invalidate();
 				this.tui.requestRender();
@@ -365,10 +386,13 @@ class QnAComponent implements Component, Focusable {
 
 		// Helper to create a box line
 		const boxLine = (content: string, leftPad: number = 2): string => {
-			const paddedContent = " ".repeat(leftPad) + truncateToWidth(content, boxWidth - leftPad - 2);
+			const paddedContent =
+				" ".repeat(leftPad) + truncateToWidth(content, boxWidth - leftPad - 2);
 			const contentLen = visibleWidth(paddedContent);
 			const rightPad = Math.max(0, boxWidth - contentLen - 2);
-			return this.dim("│") + paddedContent + " ".repeat(rightPad) + this.dim("│");
+			return (
+				this.dim("│") + paddedContent + " ".repeat(rightPad) + this.dim("│")
+			);
 		};
 
 		const emptyBoxLine = (): string => {
@@ -399,7 +423,10 @@ class QnAComponent implements Component, Focusable {
 				progressParts.push(this.dim("○"));
 			}
 		}
-		for (const line of wrapTextWithAnsi(progressParts.join(" "), contentWidth)) {
+		for (const line of wrapTextWithAnsi(
+			progressParts.join(" "),
+			contentWidth,
+		)) {
 			lines.push(padToWidth(boxLine(line)));
 		}
 		lines.push(padToWidth(emptyBoxLine()));
@@ -442,11 +469,17 @@ class QnAComponent implements Component, Focusable {
 
 		// Confirmation dialog or footer with controls
 		if (this.showingConfirmation) {
-			lines.push(padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")));
+			lines.push(
+				padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")),
+			);
 			const confirmMsg = `${this.yellow("Submit all answers?")} ${this.dim("(Enter/y to confirm, Esc/n to cancel)")}`;
-			lines.push(padToWidth(boxLine(truncateToWidth(confirmMsg, contentWidth))));
+			lines.push(
+				padToWidth(boxLine(truncateToWidth(confirmMsg, contentWidth))),
+			);
 		} else {
-			lines.push(padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")));
+			lines.push(
+				padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")),
+			);
 			const controls = `${this.dim("Tab/Enter")} next · ${this.dim("Shift+Tab")} prev · ${this.dim("Shift+Enter")} newline · ${this.dim("Esc")} cancel`;
 			lines.push(padToWidth(boxLine(truncateToWidth(controls, contentWidth))));
 		}
@@ -460,51 +493,64 @@ class QnAComponent implements Component, Focusable {
 
 export default function (pi: ExtensionAPI) {
 	const answerHandler = async (ctx: ExtensionContext) => {
-			if (ctx.mode !== "tui") {
-				ctx.ui.notify("answer requires interactive mode", "error");
-				return;
-			}
+		if (ctx.mode !== "tui") {
+			ctx.ui.notify("answer requires interactive mode", "error");
+			return;
+		}
 
-			if (!ctx.model) {
-				ctx.ui.notify("No model selected", "error");
-				return;
-			}
+		if (!ctx.model) {
+			ctx.ui.notify("No model selected", "error");
+			return;
+		}
 
-			// Find the last assistant message on the current branch
-			const branch = ctx.sessionManager.getBranch();
-			let lastAssistantText: string | undefined;
+		// Find the last assistant message on the current branch
+		const branch = ctx.sessionManager.getBranch();
+		let lastAssistantText: string | undefined;
 
-			for (let i = branch.length - 1; i >= 0; i--) {
-				const entry = branch[i];
-				if (entry.type === "message") {
-					const msg = entry.message;
-					if ("role" in msg && msg.role === "assistant") {
-						if (msg.stopReason !== "stop") {
-							ctx.ui.notify(`Last assistant message incomplete (${msg.stopReason})`, "error");
-							return;
-						}
-						const textParts = msg.content
-							.filter((c): c is { type: "text"; text: string } => c.type === "text")
-							.map((c) => c.text);
-						if (textParts.length > 0) {
-							lastAssistantText = textParts.join("\n");
-							break;
-						}
+		for (let i = branch.length - 1; i >= 0; i--) {
+			const entry = branch[i];
+			if (entry.type === "message") {
+				const msg = entry.message;
+				if ("role" in msg && msg.role === "assistant") {
+					if (msg.stopReason !== "stop") {
+						ctx.ui.notify(
+							`Last assistant message incomplete (${msg.stopReason})`,
+							"error",
+						);
+						return;
+					}
+					const textParts = msg.content
+						.filter(
+							(c): c is { type: "text"; text: string } => c.type === "text",
+						)
+						.map((c) => c.text);
+					if (textParts.length > 0) {
+						lastAssistantText = textParts.join("\n");
+						break;
 					}
 				}
 			}
+		}
 
-			if (!lastAssistantText) {
-				ctx.ui.notify("No assistant messages found", "error");
-				return;
-			}
+		if (!lastAssistantText) {
+			ctx.ui.notify("No assistant messages found", "error");
+			return;
+		}
 
-			// Select the best model for extraction.
-			const extractionModel = await selectExtractionModel(ctx.model, ctx.modelRegistry);
+		// Select the best model for extraction.
+		const extractionModel = await selectExtractionModel(
+			ctx.model,
+			ctx.modelRegistry,
+		);
 
-			// Run extraction with loader UI
-			const extractionOutcome = await ctx.ui.custom<ExtractionOutcome>((tui, theme, _kb, done) => {
-				const loader = new BorderedLoader(tui, theme, `Extracting questions using ${extractionModel.id}...`);
+		// Run extraction with loader UI
+		const extractionOutcome = await ctx.ui.custom<ExtractionOutcome>(
+			(tui, theme, _kb, done) => {
+				const loader = new BorderedLoader(
+					tui,
+					theme,
+					`Extracting questions using ${extractionModel.id}...`,
+				);
 				loader.onAbort = () => done({ status: "cancelled" });
 
 				const doExtract = async (): Promise<ExtractionOutcome> => {
@@ -524,16 +570,24 @@ export default function (pi: ExtensionAPI) {
 						return { status: "cancelled" };
 					}
 					if (response.stopReason === "error") {
-						return { status: "error", message: response.errorMessage ?? "question extraction failed" };
+						return {
+							status: "error",
+							message: response.errorMessage ?? "question extraction failed",
+						};
 					}
 
 					const responseText = response.content
-						.filter((c): c is { type: "text"; text: string } => c.type === "text")
+						.filter(
+							(c): c is { type: "text"; text: string } => c.type === "text",
+						)
 						.map((c) => c.text)
 						.join("\n");
 					const result = parseExtractionResult(responseText);
 					if (!result) {
-						return { status: "error", message: "question extraction returned invalid JSON" };
+						return {
+							status: "error",
+							message: "question extraction returned invalid JSON",
+						};
 					}
 
 					return { status: "ok", result };
@@ -542,51 +596,60 @@ export default function (pi: ExtensionAPI) {
 				doExtract()
 					.then(done)
 					.catch((error: unknown) => {
-						const message = error instanceof Error ? error.message : String(error);
+						const message =
+							error instanceof Error ? error.message : String(error);
 						done({ status: "error", message });
 					});
 
 				return loader;
-			});
+			},
+		);
 
-			if (extractionOutcome.status === "cancelled") {
-				ctx.ui.notify("Cancelled", "info");
-				return;
-			}
-			if (extractionOutcome.status === "error") {
-				ctx.ui.notify(`Question extraction failed: ${extractionOutcome.message}`, "error");
-				return;
-			}
-
-			const extractionResult = extractionOutcome.result;
-			if (extractionResult.questions.length === 0) {
-				ctx.ui.notify("No questions found in the last message", "info");
-				return;
-			}
-
-			// Show the Q&A component
-			const answersResult = await ctx.ui.custom<string | null>((tui, _theme, _kb, done) => {
-				return new QnAComponent(extractionResult.questions, tui, done);
-			});
-
-			if (answersResult === null) {
-				ctx.ui.notify("Cancelled", "info");
-				return;
-			}
-
-			// Send the answers directly as a message and trigger a turn
-			pi.sendMessage(
-				{
-					customType: "answers",
-					content: "I answered your questions in the following way:\n\n" + answersResult,
-					display: true,
-				},
-				{ triggerTurn: true },
+		if (extractionOutcome.status === "cancelled") {
+			ctx.ui.notify("Cancelled", "info");
+			return;
+		}
+		if (extractionOutcome.status === "error") {
+			ctx.ui.notify(
+				`Question extraction failed: ${extractionOutcome.message}`,
+				"error",
 			);
+			return;
+		}
+
+		const extractionResult = extractionOutcome.result;
+		if (extractionResult.questions.length === 0) {
+			ctx.ui.notify("No questions found in the last message", "info");
+			return;
+		}
+
+		// Show the Q&A component
+		const answersResult = await ctx.ui.custom<string | null>(
+			(tui, _theme, _kb, done) => {
+				return new QnAComponent(extractionResult.questions, tui, done);
+			},
+		);
+
+		if (answersResult === null) {
+			ctx.ui.notify("Cancelled", "info");
+			return;
+		}
+
+		// Send the answers directly as a message and trigger a turn
+		pi.sendMessage(
+			{
+				customType: "answers",
+				content:
+					"I answered your questions in the following way:\n\n" + answersResult,
+				display: true,
+			},
+			{ triggerTurn: true },
+		);
 	};
 
 	pi.registerCommand("answer", {
-		description: "Extract questions from last assistant message into interactive Q&A",
+		description:
+			"Extract questions from last assistant message into interactive Q&A",
 		handler: (_args, ctx) => answerHandler(ctx),
 	});
 

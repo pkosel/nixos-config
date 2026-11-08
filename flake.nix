@@ -49,14 +49,25 @@
             "flake.lock"
           ];
 
-          formatter.nixfmt = {
-            command = "${pkgs.nixfmt}/bin/nixfmt";
-            includes = [ "*.nix" ];
-          };
+          formatter = {
+            nixfmt = {
+              command = "${pkgs.nixfmt}/bin/nixfmt";
+              includes = [ "*.nix" ];
+            };
 
-          formatter.stylua = {
-            command = "${pkgs.stylua}/bin/stylua";
-            includes = [ "*.lua" ];
+            stylua = {
+              command = "${pkgs.stylua}/bin/stylua";
+              includes = [ "*.lua" ];
+            };
+
+            biome = {
+              command = "${pkgs.biome}/bin/biome";
+              options = [
+                "format"
+                "--write"
+              ];
+              includes = [ "*.ts" ];
+            };
           };
         };
       };

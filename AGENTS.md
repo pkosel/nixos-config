@@ -179,7 +179,7 @@ git diff --check
 For code or configuration changes, run these in order; stop at the first
 failure:
 
-1. Format Nix and Lua with treefmt:
+1. Format Nix, Lua, and TypeScript with treefmt:
 
    ```sh
    nix fmt

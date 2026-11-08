@@ -155,7 +155,7 @@ aligned; see [Versions and pins](AGENTS.md#versions-and-pins).
 
 ### Format and check
 
-Format Nix and Lua with treefmt, then run the existing checks:
+Format Nix, Lua, and TypeScript with treefmt, then run the checks:
 
 ```sh
 nix fmt && nix flake check
