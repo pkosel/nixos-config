@@ -41,7 +41,6 @@
       bat.enable = true;
       fish.enable = true;
       fzf.enable = true;
-      ghostty.enable = true;
       starship.enable = true;
       tmux.enable = true;
     };
