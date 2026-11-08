@@ -16,6 +16,7 @@ import {
 	type ExtensionAPI,
 	type ExtensionContext,
 	type ModelRegistry,
+	type Theme,
 } from "@earendil-works/pi-coding-agent";
 import {
 	type Component,
@@ -251,54 +252,44 @@ async function extractQuestions(
 	return { status: "ok", result };
 }
 
-class QnAComponent implements Component, Focusable {
-	private questions: ExtractedQuestion[];
-	private answers: string[];
-	private currentIndex: number = 0;
-	private editor: Editor;
-	private tui: TUI;
-	private onDone: (result: string | null) => void;
-	private showingConfirmation: boolean = false;
-
+class AnswerComponent implements Component, Focusable {
+	private readonly questions: ExtractedQuestion[];
+	private readonly answers: string[];
+	private currentIndex = 0;
+	private readonly editor: Editor;
+	private readonly tui: TUI;
+	private readonly theme: Theme;
+	private readonly onDone: (result: string | null) => void;
+	private isConfirming = false;
 	private cachedWidth?: number;
 	private cachedLines?: string[];
-
-	private dim = (s: string) => `\x1b[2m${s}\x1b[0m`;
-	private bold = (s: string) => `\x1b[1m${s}\x1b[0m`;
-	private cyan = (s: string) => `\x1b[36m${s}\x1b[0m`;
-	private green = (s: string) => `\x1b[32m${s}\x1b[0m`;
-	private yellow = (s: string) => `\x1b[33m${s}\x1b[0m`;
-	private gray = (s: string) => `\x1b[90m${s}\x1b[0m`;
 
 	constructor(
 		questions: ExtractedQuestion[],
 		tui: TUI,
+		theme: Theme,
 		onDone: (result: string | null) => void,
 	) {
 		this.questions = questions;
 		this.answers = questions.map(() => "");
 		this.tui = tui;
+		this.theme = theme;
 		this.onDone = onDone;
-
 		const editorTheme: EditorTheme = {
-			borderColor: this.dim,
+			borderColor: (text) => theme.fg("borderMuted", text),
 			selectList: {
-				selectedPrefix: this.cyan,
-				selectedText: (s: string) => `\x1b[44m${s}\x1b[0m`,
-				description: this.gray,
-				scrollInfo: this.dim,
-				noMatch: this.yellow,
+				selectedPrefix: (text) => theme.fg("accent", text),
+				selectedText: (text) =>
+					theme.style(text, { fg: "accent", bg: "selectedBg" }),
+				description: (text) => theme.fg("muted", text),
+				scrollInfo: (text) => theme.fg("dim", text),
+				noMatch: (text) => theme.fg("warning", text),
 			},
 		};
-
 		this.editor = new Editor(tui, editorTheme);
-		// Disable the editor's built-in submit (which clears the editor)
-		// We'll handle Enter ourselves to preserve the text
+		// Preserve the text when Enter advances to another question.
 		this.editor.disableSubmit = true;
-		this.editor.onChange = () => {
-			this.invalidate();
-			this.tui.requestRender();
-		};
+		this.editor.onChange = () => this.refresh();
 	}
 
 	get focused(): boolean {
@@ -308,6 +299,10 @@ class QnAComponent implements Component, Focusable {
 	set focused(value: boolean) {
 		if (this.editor.focused === value) return;
 		this.editor.focused = value;
+		this.refresh();
+	}
+
+	private refresh(): void {
 		this.invalidate();
 		this.tui.requestRender();
 	}
@@ -320,219 +315,186 @@ class QnAComponent implements Component, Focusable {
 		if (index < 0 || index >= this.questions.length) return;
 		this.saveCurrentAnswer();
 		this.currentIndex = index;
-		this.editor.setText(this.answers[index] || "");
-		this.invalidate();
+		this.editor.setText(this.answers[index]);
+		this.refresh();
 	}
 
 	private submit(): void {
 		this.saveCurrentAnswer();
-
 		const parts: string[] = [];
 		for (let i = 0; i < this.questions.length; i++) {
-			const q = this.questions[i];
-			const a = this.answers[i]?.trim() || "(no answer)";
-			parts.push(`Q: ${q.question}`);
-			if (q.context) {
-				parts.push(`> ${q.context}`);
-			}
-			parts.push(`A: ${a}`);
-			parts.push("");
+			const question = this.questions[i];
+			const answer = this.answers[i].trim() || "(no answer)";
+			parts.push(`Q: ${question.question}`);
+			if (question.context) parts.push(`> ${question.context}`);
+			parts.push(`A: ${answer}`, "");
 		}
-
 		this.onDone(parts.join("\n").trim());
-	}
-
-	private cancel(): void {
-		this.onDone(null);
 	}
 
 	invalidate(): void {
 		this.cachedWidth = undefined;
 		this.cachedLines = undefined;
+		this.editor.invalidate();
 	}
 
 	handleInput(data: string): void {
-		if (this.showingConfirmation) {
+		if (this.isConfirming) {
 			if (matchesKey(data, Key.enter) || data.toLowerCase() === "y") {
 				this.submit();
-				return;
-			}
-			if (
+			} else if (
 				matchesKey(data, Key.escape) ||
 				matchesKey(data, Key.ctrl("c")) ||
 				data.toLowerCase() === "n"
 			) {
-				this.showingConfirmation = false;
-				this.invalidate();
-				this.tui.requestRender();
-				return;
+				this.isConfirming = false;
+				this.refresh();
 			}
 			return;
 		}
-
 		if (matchesKey(data, Key.escape) || matchesKey(data, Key.ctrl("c"))) {
-			this.cancel();
+			this.onDone(null);
 			return;
 		}
-
 		if (matchesKey(data, Key.tab)) {
-			if (this.currentIndex < this.questions.length - 1) {
-				this.navigateTo(this.currentIndex + 1);
-				this.tui.requestRender();
-			}
+			this.navigateTo(this.currentIndex + 1);
 			return;
 		}
 		if (matchesKey(data, Key.shift("tab"))) {
-			if (this.currentIndex > 0) {
-				this.navigateTo(this.currentIndex - 1);
-				this.tui.requestRender();
-			}
+			this.navigateTo(this.currentIndex - 1);
 			return;
 		}
-
-		if (matchesKey(data, Key.up) && this.editor.getText() === "") {
-			if (this.currentIndex > 0) {
-				this.navigateTo(this.currentIndex - 1);
-				this.tui.requestRender();
-				return;
-			}
+		if (
+			matchesKey(data, Key.up) &&
+			this.editor.getText() === "" &&
+			this.currentIndex > 0
+		) {
+			this.navigateTo(this.currentIndex - 1);
+			return;
 		}
-		if (matchesKey(data, Key.down) && this.editor.getText() === "") {
-			if (this.currentIndex < this.questions.length - 1) {
-				this.navigateTo(this.currentIndex + 1);
-				this.tui.requestRender();
-				return;
-			}
+		if (
+			matchesKey(data, Key.down) &&
+			this.editor.getText() === "" &&
+			this.currentIndex < this.questions.length - 1
+		) {
+			this.navigateTo(this.currentIndex + 1);
+			return;
 		}
-
 		if (matchesKey(data, Key.enter) && !matchesKey(data, Key.shift("enter"))) {
-			this.saveCurrentAnswer();
 			if (this.currentIndex < this.questions.length - 1) {
 				this.navigateTo(this.currentIndex + 1);
 			} else {
-				this.showingConfirmation = true;
+				this.saveCurrentAnswer();
+				this.isConfirming = true;
+				this.refresh();
 			}
-			this.invalidate();
-			this.tui.requestRender();
 			return;
 		}
-
 		this.editor.handleInput(data);
-		this.invalidate();
-		this.tui.requestRender();
+		this.refresh();
 	}
 
 	render(width: number): string[] {
-		if (this.cachedLines && this.cachedWidth === width) {
-			return this.cachedLines;
-		}
-
-		const lines: string[] = [];
-		const boxWidth = Math.min(width - 4, 120); // Allow wider box
-		const contentWidth = boxWidth - 4;
-		const editorWidth = contentWidth - 4 - 3; // Extra padding + space for "A: "
-
+		if (this.cachedLines && this.cachedWidth === width) return this.cachedLines;
+		const maximumPanelWidth = 120;
+		const outerMargin = 4;
+		const panelWidth = Math.min(width - outerMargin, maximumPanelWidth);
+		const borderWidth = 2;
+		const leftPadding = 2;
+		const contentWidth = panelWidth - borderWidth - leftPadding;
+		const answerPrefix = "A: ";
+		const answerRightPadding = 4;
+		const editorWidth =
+			contentWidth - visibleWidth(answerPrefix) - answerRightPadding;
 		// The editor needs two columns for a wide grapheme plus its reserved cursor column.
 		if (editorWidth < 3) {
 			return [truncateToWidth("Widen terminal to answer questions", width, "")];
 		}
-
-		const horizontalLine = (count: number) => "─".repeat(count);
-
-		const boxLine = (content: string, leftPad: number = 2): string => {
+		const border = (left: string, right: string) =>
+			this.theme.fg(
+				"borderMuted",
+				left + "─".repeat(panelWidth - borderWidth) + right,
+			);
+		const boxLine = (content: string): string => {
 			const paddedContent =
-				" ".repeat(leftPad) + truncateToWidth(content, boxWidth - leftPad - 2);
-			const contentLen = visibleWidth(paddedContent);
-			const rightPad = Math.max(0, boxWidth - contentLen - 2);
+				" ".repeat(leftPadding) + truncateToWidth(content, contentWidth);
+			const rightPadding =
+				panelWidth - visibleWidth(paddedContent) - borderWidth;
 			return (
-				this.dim("│") + paddedContent + " ".repeat(rightPad) + this.dim("│")
+				this.theme.fg("borderMuted", "│") +
+				paddedContent +
+				" ".repeat(rightPadding) +
+				this.theme.fg("borderMuted", "│")
 			);
 		};
-
-		const emptyBoxLine = (): string => {
-			return this.dim("│") + " ".repeat(boxWidth - 2) + this.dim("│");
-		};
-
-		const padToWidth = (line: string): string => {
-			const len = visibleWidth(line);
-			return line + " ".repeat(Math.max(0, width - len));
-		};
-
-		lines.push(padToWidth(this.dim("╭" + horizontalLine(boxWidth - 2) + "╮")));
-		const title = `${this.bold(this.cyan("Questions"))} ${this.dim(`(${this.currentIndex + 1}/${this.questions.length})`)}`;
-		lines.push(padToWidth(boxLine(title)));
-		lines.push(padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")));
-
-		const progressParts: string[] = [];
-		for (let i = 0; i < this.questions.length; i++) {
-			const answered = (this.answers[i]?.trim() || "").length > 0;
-			const current = i === this.currentIndex;
-			if (current) {
-				progressParts.push(this.cyan("●"));
-			} else if (answered) {
-				progressParts.push(this.green("●"));
-			} else {
-				progressParts.push(this.dim("○"));
+		const title = this.theme.style("Questions", { fg: "accent", bold: true });
+		const position = this.theme.fg(
+			"dim",
+			`(${this.currentIndex + 1}/${this.questions.length})`,
+		);
+		const lines = [
+			border("╭", "╮"),
+			boxLine(`${title} ${position}`),
+			border("├", "┤"),
+		];
+		const progress = this.questions.map((_, index) => {
+			if (index === this.currentIndex) return this.theme.fg("accent", "●");
+			return this.answers[index].trim()
+				? this.theme.fg("success", "●")
+				: this.theme.fg("dim", "○");
+		});
+		for (const line of wrapTextWithAnsi(progress.join(" "), contentWidth)) {
+			lines.push(boxLine(line));
+		}
+		lines.push(boxLine(""));
+		const question = this.questions[this.currentIndex];
+		const questionText = `${this.theme.bold("Q:")} ${question.question}`;
+		for (const line of wrapTextWithAnsi(questionText, contentWidth)) {
+			lines.push(boxLine(line));
+		}
+		if (question.context) {
+			lines.push(boxLine(""));
+			const contextText = this.theme.fg("muted", `> ${question.context}`);
+			for (const line of wrapTextWithAnsi(
+				contextText,
+				contentWidth - leftPadding,
+			)) {
+				lines.push(boxLine(line));
 			}
 		}
-		for (const line of wrapTextWithAnsi(
-			progressParts.join(" "),
-			contentWidth,
-		)) {
-			lines.push(padToWidth(boxLine(line)));
-		}
-		lines.push(padToWidth(emptyBoxLine()));
-
-		const q = this.questions[this.currentIndex];
-		const questionText = `${this.bold("Q:")} ${q.question}`;
-		const wrappedQuestion = wrapTextWithAnsi(questionText, contentWidth);
-		for (const line of wrappedQuestion) {
-			lines.push(padToWidth(boxLine(line)));
-		}
-
-		if (q.context) {
-			lines.push(padToWidth(emptyBoxLine()));
-			const contextText = this.gray(`> ${q.context}`);
-			const wrappedContext = wrapTextWithAnsi(contextText, contentWidth - 2);
-			for (const line of wrappedContext) {
-				lines.push(padToWidth(boxLine(line)));
-			}
-		}
-
-		lines.push(padToWidth(emptyBoxLine()));
-
-		const answerPrefix = this.bold("A: ");
+		lines.push(boxLine(""));
 		const editorLines = this.editor.render(editorWidth);
+		// Omit the editor's own borders inside the surrounding panel.
 		for (let i = 1; i < editorLines.length - 1; i++) {
-			if (i === 1) {
-				lines.push(padToWidth(boxLine(answerPrefix + editorLines[i])));
-			} else {
-				lines.push(padToWidth(boxLine("   " + editorLines[i])));
-			}
+			const prefix =
+				i === 1
+					? this.theme.bold(answerPrefix)
+					: " ".repeat(visibleWidth(answerPrefix));
+			lines.push(boxLine(prefix + editorLines[i]));
 		}
-
-		lines.push(padToWidth(emptyBoxLine()));
-
-		if (this.showingConfirmation) {
-			lines.push(
-				padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")),
+		lines.push(boxLine(""), border("├", "┤"));
+		if (this.isConfirming) {
+			const message = this.theme.fg("warning", "Submit all answers?");
+			const controls = this.theme.fg(
+				"dim",
+				"(Enter/y to confirm, Esc/n to cancel)",
 			);
-			const confirmMsg = `${this.yellow("Submit all answers?")} ${this.dim("(Enter/y to confirm, Esc/n to cancel)")}`;
-			lines.push(
-				padToWidth(boxLine(truncateToWidth(confirmMsg, contentWidth))),
-			);
+			lines.push(boxLine(`${message} ${controls}`));
 		} else {
-			lines.push(
-				padToWidth(this.dim("├" + horizontalLine(boxWidth - 2) + "┤")),
-			);
-			const controls = `${this.dim("Tab/Enter")} next · ${this.dim("Shift+Tab")} prev · ${this.dim("Shift+Enter")} newline · ${this.dim("Esc")} cancel`;
-			lines.push(padToWidth(boxLine(truncateToWidth(controls, contentWidth))));
+			const controls = [
+				`${this.theme.fg("dim", "Tab/Enter")} next`,
+				`${this.theme.fg("dim", "Shift+Tab")} prev`,
+				`${this.theme.fg("dim", "Shift+Enter")} newline`,
+				`${this.theme.fg("dim", "Esc")} cancel`,
+			].join(" · ");
+			lines.push(boxLine(controls));
 		}
-		lines.push(padToWidth(this.dim("╰" + horizontalLine(boxWidth - 2) + "╯")));
-
+		lines.push(border("╰", "╯"));
 		this.cachedWidth = width;
-		this.cachedLines = lines;
-		return lines;
+		this.cachedLines = lines.map(
+			(line) => line + " ".repeat(Math.max(0, width - visibleWidth(line))),
+		);
+		return this.cachedLines;
 	}
 }
 
@@ -598,8 +560,8 @@ export default function (pi: ExtensionAPI) {
 			return;
 		}
 		const answers = await ctx.ui.custom<string | null>(
-			(tui, _theme, _keybindings, done) =>
-				new QnAComponent(outcome.result.questions, tui, done),
+			(tui, theme, _keybindings, done) =>
+				new AnswerComponent(outcome.result.questions, tui, theme, done),
 		);
 		if (answers === null) {
 			ctx.ui.notify("Cancelled", "info");
