@@ -43,7 +43,11 @@
 
       links = {
         normal.foreground = "Cyan";
-        multi_link_file.foreground = "Yellow";
+        # The default yellow background would hide the yellow count.
+        multi_link_file = {
+          foreground = "Yellow";
+          background = "Default";
+        };
       };
 
       git = {
