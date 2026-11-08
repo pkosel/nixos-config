@@ -42,7 +42,6 @@
       fish.enable = true;
       fzf.enable = true;
       ghostty.enable = true;
-      neovim.enable = true;
       starship.enable = true;
       tmux.enable = true;
     };
