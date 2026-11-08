@@ -37,9 +37,9 @@
       package = pkgs.fira-code;
     };
 
+    # The Fish target would overwrite Ghostty's palette and background.
     targets = {
       bat.enable = true;
-      fish.enable = true;
       fzf.enable = true;
       starship.enable = true;
       tmux.enable = true;
