@@ -129,6 +129,9 @@ After a successful build, review package and closure changes:
 nvd diff /run/current-system result
 ```
 
+In Pi's `/settings`, select the `system` theme before applying this
+configuration. Pi's settings file remains user-managed.
+
 Apply the configuration when ready:
 
 ```sh
