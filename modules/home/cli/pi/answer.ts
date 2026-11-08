@@ -7,16 +7,16 @@
 
 import {
 	parseJsonWithRepair,
-	type Model,
 	type Api,
+	type Model,
 	type UserMessage,
 } from "@earendil-works/pi-ai";
-import type {
-	ExtensionAPI,
-	ExtensionContext,
-	ModelRegistry,
+import {
+	BorderedLoader,
+	type ExtensionAPI,
+	type ExtensionContext,
+	type ModelRegistry,
 } from "@earendil-works/pi-coding-agent";
-import { BorderedLoader } from "@earendil-works/pi-coding-agent";
 import {
 	type Component,
 	Editor,
@@ -76,29 +76,36 @@ Example output:
   ]
 }`;
 
-/**
- * Extract questions with the model named by PI_ANSWER_MODEL, in provider/modelId
- * form. Fall back to the current session model when the variable is unset or
- * the named model is unknown or has no credentials.
- */
-async function selectExtractionModel(
+function selectExtractionModel(
 	currentModel: Model<Api>,
 	modelRegistry: ModelRegistry,
-): Promise<Model<Api>> {
-	const ref = process.env.PI_ANSWER_MODEL;
-	if (ref) {
-		const slash = ref.indexOf("/");
-		if (slash > 0 && slash < ref.length - 1) {
-			const provider = ref.slice(0, slash);
-			const modelId = ref.slice(slash + 1);
-			const model = modelRegistry.find(provider, modelId);
-			if (model && modelRegistry.hasConfiguredAuth(model)) {
-				return model;
-			}
-		}
+): Model<Api> {
+	const modelReference = process.env.PI_ANSWER_MODEL;
+	if (modelReference === undefined) {
+		return currentModel;
 	}
 
-	return currentModel;
+	const separatorIndex = modelReference.indexOf("/");
+	if (
+		separatorIndex < 1 ||
+		separatorIndex === modelReference.length - 1 ||
+		/\s/.test(modelReference)
+	) {
+		throw new Error("PI_ANSWER_MODEL must use provider/modelId.");
+	}
+
+	const provider = modelReference.slice(0, separatorIndex);
+	const modelId = modelReference.slice(separatorIndex + 1);
+	const model = modelRegistry.find(provider, modelId);
+	if (!model) {
+		throw new Error(`Unknown PI_ANSWER_MODEL: ${modelReference}`);
+	}
+	if (!modelRegistry.hasConfiguredAuth(model)) {
+		throw new Error(
+			`No authentication configured for PI_ANSWER_MODEL: ${modelReference}`,
+		);
+	}
+	return model;
 }
 
 function toExtractedQuestion(value: unknown): ExtractedQuestion | null {
@@ -106,21 +113,20 @@ function toExtractedQuestion(value: unknown): ExtractedQuestion | null {
 		return null;
 	}
 	const record = value as Record<string, unknown>;
-	const question = record.question;
-	const context = record.context;
-	if (typeof question !== "string") {
+	if (typeof record.question !== "string" || record.question.trim() === "") {
 		return null;
 	}
 	if (
-		context !== undefined &&
-		context !== null &&
-		typeof context !== "string"
+		record.context !== undefined &&
+		record.context !== null &&
+		typeof record.context !== "string"
 	) {
 		return null;
 	}
-	return typeof context === "string" && context.length > 0
-		? { question, context }
-		: { question };
+	const question = record.question.trim();
+	const context =
+		typeof record.context === "string" ? record.context.trim() : "";
+	return context ? { question, context } : { question };
 }
 
 function toExtractionResult(value: unknown): ExtractionResult | null {
@@ -132,29 +138,24 @@ function toExtractionResult(value: unknown): ExtractionResult | null {
 		return null;
 	}
 	const questions: ExtractedQuestion[] = [];
-	for (const question of record.questions) {
-		const extractedQuestion = toExtractedQuestion(question);
-		if (!extractedQuestion) {
+	for (const questionValue of record.questions) {
+		const question = toExtractedQuestion(questionValue);
+		if (!question) {
 			return null;
 		}
-		questions.push(extractedQuestion);
+		questions.push(question);
 	}
 	return { questions };
 }
 
-/**
- * Parse the JSON response from the LLM.
- */
 function parseExtractionResult(text: string): ExtractionResult | null {
 	const candidates: string[] = [];
-	const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-	if (jsonMatch) {
-		candidates.push(jsonMatch[1].trim());
+	const fencedJson = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+	if (fencedJson) {
+		candidates.push(fencedJson[1].trim());
 	}
-
 	const trimmed = text.trim();
 	candidates.push(trimmed);
-
 	const firstBrace = trimmed.indexOf("{");
 	const lastBrace = trimmed.lastIndexOf("}");
 	if (firstBrace !== -1 && lastBrace > firstBrace) {
@@ -170,16 +171,86 @@ function parseExtractionResult(text: string): ExtractionResult | null {
 				return result;
 			}
 		} catch {
-			// Try the next candidate.
+			// A later candidate may contain the complete JSON object.
 		}
 	}
-
 	return null;
 }
 
-/**
- * Interactive Q&A component for answering extracted questions
- */
+function getLastAssistantText(ctx: ExtensionContext): string {
+	const branch = ctx.sessionManager.getBranch();
+	for (let i = branch.length - 1; i >= 0; i--) {
+		const entry = branch[i];
+		if (entry.type !== "message") continue;
+		const message = entry.message;
+		if (message.role !== "assistant") continue;
+		if (message.stopReason !== "stop") {
+			throw new Error(
+				`Last assistant message incomplete (${message.stopReason})`,
+			);
+		}
+		const text = message.content
+			.filter(
+				(part): part is { type: "text"; text: string } => part.type === "text",
+			)
+			.map((part) => part.text)
+			.join("\n");
+		if (text.trim()) return text;
+	}
+	throw new Error("No assistant messages found");
+}
+
+function getErrorMessage(error: unknown): string {
+	return error instanceof Error ? error.message : String(error);
+}
+
+async function extractQuestions(
+	modelRegistry: ModelRegistry,
+	model: Model<Api>,
+	assistantText: string,
+	signal: AbortSignal,
+): Promise<ExtractionOutcome> {
+	const userMessage: UserMessage = {
+		role: "user",
+		content: [{ type: "text", text: assistantText }],
+		timestamp: Date.now(),
+	};
+	const response = await modelRegistry.complete(
+		model,
+		{ systemPrompt: SYSTEM_PROMPT, messages: [userMessage] },
+		{ signal },
+	);
+	if (response.stopReason === "aborted") {
+		return { status: "cancelled" };
+	}
+	if (response.stopReason === "error") {
+		return {
+			status: "error",
+			message: response.errorMessage ?? "question extraction failed",
+		};
+	}
+	if (response.stopReason !== "stop") {
+		return {
+			status: "error",
+			message: `question extraction incomplete (${response.stopReason})`,
+		};
+	}
+	const responseText = response.content
+		.filter(
+			(part): part is { type: "text"; text: string } => part.type === "text",
+		)
+		.map((part) => part.text)
+		.join("\n");
+	const result = parseExtractionResult(responseText);
+	if (!result) {
+		return {
+			status: "error",
+			message: "question extraction returned invalid questions",
+		};
+	}
+	return { status: "ok", result };
+}
+
 class QnAComponent implements Component, Focusable {
 	private questions: ExtractedQuestion[];
 	private answers: string[];
@@ -471,157 +542,83 @@ export default function (pi: ExtensionAPI) {
 			ctx.ui.notify("answer requires interactive mode", "error");
 			return;
 		}
-
 		if (!ctx.model) {
 			ctx.ui.notify("No model selected", "error");
 			return;
 		}
-
-		const branch = ctx.sessionManager.getBranch();
-		let lastAssistantText: string | undefined;
-
-		for (let i = branch.length - 1; i >= 0; i--) {
-			const entry = branch[i];
-			if (entry.type === "message") {
-				const msg = entry.message;
-				if ("role" in msg && msg.role === "assistant") {
-					if (msg.stopReason !== "stop") {
-						ctx.ui.notify(
-							`Last assistant message incomplete (${msg.stopReason})`,
-							"error",
-						);
-						return;
-					}
-					const textParts = msg.content
-						.filter(
-							(c): c is { type: "text"; text: string } => c.type === "text",
-						)
-						.map((c) => c.text);
-					if (textParts.length > 0) {
-						lastAssistantText = textParts.join("\n");
-						break;
-					}
-				}
-			}
-		}
-
-		if (!lastAssistantText) {
-			ctx.ui.notify("No assistant messages found", "error");
+		let assistantText: string;
+		let extractionModel: Model<Api>;
+		try {
+			assistantText = getLastAssistantText(ctx);
+			extractionModel = selectExtractionModel(ctx.model, ctx.modelRegistry);
+		} catch (error) {
+			ctx.ui.notify(getErrorMessage(error), "error");
 			return;
 		}
 
-		const extractionModel = await selectExtractionModel(
-			ctx.model,
-			ctx.modelRegistry,
-		);
-
-		const extractionOutcome = await ctx.ui.custom<ExtractionOutcome>(
-			(tui, theme, _kb, done) => {
+		const outcome = await ctx.ui.custom<ExtractionOutcome>(
+			(tui, theme, _keybindings, done) => {
 				const loader = new BorderedLoader(
 					tui,
 					theme,
 					`Extracting questions using ${extractionModel.id}...`,
 				);
-				loader.onAbort = () => done({ status: "cancelled" });
-
-				const doExtract = async (): Promise<ExtractionOutcome> => {
-					const userMessage: UserMessage = {
-						role: "user",
-						content: [{ type: "text", text: lastAssistantText! }],
-						timestamp: Date.now(),
-					};
-
-					const response = await ctx.modelRegistry.complete(
-						extractionModel,
-						{ systemPrompt: SYSTEM_PROMPT, messages: [userMessage] },
-						{ signal: loader.signal },
-					);
-
-					if (response.stopReason === "aborted") {
-						return { status: "cancelled" };
-					}
-					if (response.stopReason === "error") {
-						return {
-							status: "error",
-							message: response.errorMessage ?? "question extraction failed",
-						};
-					}
-
-					const responseText = response.content
-						.filter(
-							(c): c is { type: "text"; text: string } => c.type === "text",
-						)
-						.map((c) => c.text)
-						.join("\n");
-					const result = parseExtractionResult(responseText);
-					if (!result) {
-						return {
-							status: "error",
-							message: "question extraction returned invalid JSON",
-						};
-					}
-
-					return { status: "ok", result };
+				let hasFinished = false;
+				const finishExtraction = (result: ExtractionOutcome) => {
+					if (hasFinished) return;
+					hasFinished = true;
+					done(result);
 				};
-
-				doExtract()
-					.then(done)
-					.catch((error: unknown) => {
-						const message =
-							error instanceof Error ? error.message : String(error);
-						done({ status: "error", message });
-					});
-
+				loader.onAbort = () => finishExtraction({ status: "cancelled" });
+				extractQuestions(
+					ctx.modelRegistry,
+					extractionModel,
+					assistantText,
+					loader.signal,
+				).then(finishExtraction, (error: unknown) =>
+					finishExtraction(
+						loader.signal.aborted
+							? { status: "cancelled" }
+							: { status: "error", message: getErrorMessage(error) },
+					),
+				);
 				return loader;
 			},
 		);
-
-		if (extractionOutcome.status === "cancelled") {
+		if (outcome.status === "cancelled") {
 			ctx.ui.notify("Cancelled", "info");
 			return;
 		}
-		if (extractionOutcome.status === "error") {
-			ctx.ui.notify(
-				`Question extraction failed: ${extractionOutcome.message}`,
-				"error",
-			);
+		if (outcome.status === "error") {
+			ctx.ui.notify(`Question extraction failed: ${outcome.message}`, "error");
 			return;
 		}
-
-		const extractionResult = extractionOutcome.result;
-		if (extractionResult.questions.length === 0) {
+		if (outcome.result.questions.length === 0) {
 			ctx.ui.notify("No questions found in the last message", "info");
 			return;
 		}
-
-		const answersResult = await ctx.ui.custom<string | null>(
-			(tui, _theme, _kb, done) => {
-				return new QnAComponent(extractionResult.questions, tui, done);
-			},
+		const answers = await ctx.ui.custom<string | null>(
+			(tui, _theme, _keybindings, done) =>
+				new QnAComponent(outcome.result.questions, tui, done),
 		);
-
-		if (answersResult === null) {
+		if (answers === null) {
 			ctx.ui.notify("Cancelled", "info");
 			return;
 		}
-
 		pi.sendMessage(
 			{
 				customType: "answers",
-				content:
-					"I answered your questions in the following way:\n\n" + answersResult,
+				content: `I answered your questions in the following way:\n\n${answers}`,
 				display: true,
 			},
 			{ triggerTurn: true },
 		);
 	};
-
 	pi.registerCommand("answer", {
 		description:
 			"Extract questions from last assistant message into interactive Q&A",
 		handler: (_args, ctx) => answerHandler(ctx),
 	});
-
 	pi.registerShortcut("ctrl+.", {
 		description: "Extract and answer questions",
 		handler: answerHandler,
