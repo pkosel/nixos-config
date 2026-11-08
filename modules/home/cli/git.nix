@@ -3,14 +3,12 @@
 let
   email = "170943+pkosel@users.noreply.github.com";
 
-  # Public half of the key gcr-ssh-agent already holds, so signing needs no
-  # private material and no passphrase prompt.
-  signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHgPnFNx3Xh/s2AaPlfND+jpypNf4h1mD8BZyGiK0dAF";
+  # Signing requires the matching private key in GNOME's SSH agent.
+  signingPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHgPnFNx3Xh/s2AaPlfND+jpypNf4h1mD8BZyGiK0dAF";
 
-  # Who git will trust when verifying. Without it signing still works but
-  # `git log --show-signature` cannot check anything.
-  allowedSigners = pkgs.writeText "allowed_signers" ''
-    ${email} namespaces="git" ${signingKey}
+  # SSH verification requires an explicit allowlist of trusted signing keys.
+  allowedSignersFile = pkgs.writeText "allowed_signers" ''
+    ${email} namespaces="git" ${signingPublicKey}
   '';
 in
 {
@@ -19,8 +17,7 @@ in
 
     signing = {
       format = "ssh";
-      # key:: takes the key inline, so nothing depends on a path outside the store.
-      key = "key::${signingKey}";
+      key = "key::${signingPublicKey}";
       signByDefault = true;
     };
 
@@ -32,11 +29,10 @@ in
       init = {
         defaultBranch = "main";
       };
-      gpg.ssh.allowedSignersFile = toString allowedSigners;
+      gpg.ssh.allowedSignersFile = toString allowedSignersFile;
 
       push.autoSetupRemote = true;
       fetch.prune = true;
-      # Stop on divergence instead of merging or rewriting commits automatically.
       pull.ff = "only";
       diff = {
         algorithm = "histogram";
@@ -46,7 +42,6 @@ in
         conflictStyle = "zdiff3";
         tool = "nvimdiff";
       };
-      # Diff in the commit editor, so the message describes what is staged.
       commit.verbose = true;
       column.ui = "auto";
       branch.sort = "-committerdate";

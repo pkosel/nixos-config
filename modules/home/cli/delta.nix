@@ -3,7 +3,6 @@
 {
   programs.delta = {
     enable = true;
-    # Explicit since 26.05; home-manager deprecated inferring it from git.enable.
     enableGitIntegration = true;
 
     options = {
