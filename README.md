@@ -155,13 +155,15 @@ aligned; see [Versions and pins](AGENTS.md#versions-and-pins).
 
 ### Format and check
 
+Format Nix and Lua with treefmt, then run the existing checks:
+
 ```sh
 nix fmt && nix flake check
 ```
 
-For conditional Lua formatting and the complete validation workflow, see
-[Validation](AGENTS.md#validation). A successful build does not establish that
-runtime behavior is correct.
+Generated hardware configuration and `flake.lock` are excluded from formatting.
+See [Validation](AGENTS.md#validation) for the complete validation workflow.
+A successful build does not establish that runtime behavior is correct.
 
 ## AI disclaimer
 

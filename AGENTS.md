@@ -179,18 +179,13 @@ git diff --check
 For code or configuration changes, run these in order; stop at the first
 failure:
 
-1. Format Nix:
+1. Format Nix and Lua with treefmt:
 
    ```sh
    nix fmt
    ```
 
-   If Lua changed, also format Neovim's configuration. Only its wrapper
-   provides `stylua`; it is not on the shell `PATH`:
-
-   ```sh
-   nix run --inputs-from . nixpkgs#stylua -- modules/home/editors/nvim/
-   ```
+   Generated hardware configuration and `flake.lock` are excluded.
 
 2. Check flake outputs, deadnix, and statix:
 

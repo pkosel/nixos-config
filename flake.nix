@@ -41,7 +41,25 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in
     {
-      formatter.${system} = pkgs.nixfmt-tree;
+      formatter.${system} = pkgs.treefmt.withConfig {
+        settings = {
+          tree-root-file = "flake.nix";
+          excludes = [
+            "hosts/*/hardware-configuration.nix"
+            "flake.lock"
+          ];
+
+          formatter.nixfmt = {
+            command = "${pkgs.nixfmt}/bin/nixfmt";
+            includes = [ "*.nix" ];
+          };
+
+          formatter.stylua = {
+            command = "${pkgs.stylua}/bin/stylua";
+            includes = [ "*.lua" ];
+          };
+        };
+      };
 
       checks.${system} = {
         # Generated hardware configuration is not linted.
