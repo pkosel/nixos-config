@@ -14,10 +14,12 @@
     ./ripgrep.nix
     ./ssh.nix
     ./starship.nix
-    ./tealdeer.nix
     ./tmux.nix
     ./zoxide.nix
   ];
 
-  programs.bat.enable = true;
+  programs = {
+    bat.enable = true;
+    tealdeer.enable = true;
+  };
 }
