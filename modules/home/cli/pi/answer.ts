@@ -308,7 +308,7 @@ class AnswerComponent implements Component, Focusable {
 	}
 
 	private saveCurrentAnswer(): void {
-		this.answers[this.currentIndex] = this.editor.getText();
+		this.answers[this.currentIndex] = this.editor.getExpandedText();
 	}
 
 	private navigateTo(index: number): void {
