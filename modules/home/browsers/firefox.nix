@@ -33,16 +33,12 @@ in
         "browser.contentblocking.category" = "strict";
         "privacy.globalprivacycontrol.enabled" = true;
         "privacy.antitracking.isolateContentScriptResources" = true;
-        "security.csp.reporting.enabled" = false;
         "network.http.referer.XOriginTrimmingPolicy" = 2;
         "permissions.default.desktop-notification" = 2;
         "permissions.default.geo" = 2;
         "permissions.manager.defaultsUrl" = "";
 
         # Security
-        # Avoid OCSP responder requests at the cost of revocation checks not
-        # covered by CRLite.
-        "security.OCSP.enabled" = 0;
         "security.ssl.treat_unsafe_negotiation_as_broken" = true;
         "security.tls.enable_0rtt_data" = false;
         "dom.security.https_only_mode" = true;
@@ -50,9 +46,14 @@ in
         # Expose Unicode lookalike domains as ASCII.
         "network.IDN_show_punycode" = true;
         "pdfjs.enableScripting" = false;
-        "browser.safebrowsing.downloads.remote.enabled" = false;
         "network.auth.subresource-http-auth-allow" = 1;
-        "browser.xul.error_pages.expert_bad_cert" = true;
+
+        # Reset persisted protection opt-outs and the certificate-error UI override.
+        # Remove after the existing profile has loaded these values.
+        "security.OCSP.enabled" = 1;
+        "security.csp.reporting.enabled" = true;
+        "browser.safebrowsing.downloads.remote.enabled" = true;
+        "browser.xul.error_pages.expert_bad_cert" = false;
 
         # Speculative connections
         "network.dns.disablePrefetch" = true;
@@ -95,6 +96,7 @@ in
         "browser.aboutConfig.showWarning" = false;
         "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
         "browser.newtabpage.activity-stream.showSponsored" = false;
+        "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
         "browser.newtabpage.activity-stream.showSponsoredCheckboxes" = false;
         "browser.newtabpage.activity-stream.default.sites" = "";
         # Pin off independently of regional defaults and rollouts.
