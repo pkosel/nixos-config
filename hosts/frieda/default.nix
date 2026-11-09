@@ -6,6 +6,7 @@
 
     ../../modules/system/audio.nix
     ../../modules/system/ausweisapp.nix
+    ../../modules/system/brave.nix
     ../../modules/system/desktop
     ../../modules/system/fonts.nix
     ../../modules/system/nix-ld.nix
