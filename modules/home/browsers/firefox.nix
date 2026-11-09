@@ -15,6 +15,7 @@ in
         ublock-origin
         proton-pass
         zotero-connector
+        dictionary-german
       ];
 
       search = {
@@ -29,6 +30,10 @@ in
       };
 
       settings = {
+        # This also auto-enables sideloaded add-ons outside the declared list.
+        "extensions.autoDisableScopes" = 0;
+        "spellchecker.dictionary" = "en-US,de-DE";
+
         # Tracking and privacy
         "browser.contentblocking.category" = "strict";
         "privacy.globalprivacycontrol.enabled" = true;
