@@ -1,24 +1,20 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    morewaita-icon-theme
-    gnomeExtensions.blur-my-shell
-    gnomeExtensions.dash-to-dock
-    gnomeExtensions.tiling-shell
-  ];
+  programs.gnome-shell = {
+    enable = true;
+    extensions = [
+      { package = pkgs.gnomeExtensions.blur-my-shell; }
+      { package = pkgs.gnomeExtensions.dash-to-dock; }
+      { package = pkgs.gnomeExtensions.tiling-shell; }
+    ];
+  };
 
   dconf.settings = {
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";
     };
     "org/gnome/shell" = {
-      disable-user-extensions = false;
-      enabled-extensions = [
-        "blur-my-shell@aunetx"
-        "dash-to-dock@micxgx.gmail.com"
-        "tilingshell@ferrarodomenico.com"
-      ];
       favorite-apps = [
         "org.gnome.Nautilus.desktop"
         "firefox.desktop"
