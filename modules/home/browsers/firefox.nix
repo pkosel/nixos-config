@@ -52,17 +52,6 @@ in
         "pdfjs.enableScripting" = false;
         "network.auth.subresource-http-auth-allow" = 1;
 
-        # Reset stored overrides to Firefox defaults. Remove after this profile
-        # has loaded them; deleting user.js entries leaves prefs.js unchanged.
-        "security.OCSP.enabled" = 1;
-        "security.csp.reporting.enabled" = true;
-        "browser.safebrowsing.downloads.remote.enabled" = true;
-        "browser.xul.error_pages.expert_bad_cert" = false;
-        "breakpad.reportURL" = "https://crash-stats.mozilla.org/report/index/";
-        "permissions.manager.defaultsUrl" = "resource://app/defaults/permissions";
-        "toolkit.telemetry.server" = "https://incoming.telemetry.mozilla.org";
-        "app.normandy.api_url" = "https://normandy.cdn.mozilla.net/api/v1";
-
         # Speculative connections
         "network.dns.disablePrefetch" = true;
         "network.prefetch-next" = false;
