@@ -117,7 +117,7 @@ cd ~/.nixos-config
 
 ### Build and apply
 
-Build without changing the running system:
+Build without activating the configuration:
 
 ```sh
 nixos-rebuild build --flake .#frieda
