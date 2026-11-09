@@ -20,7 +20,7 @@ environment. Both are composed in [flake.nix](flake.nix) and built and
 activated together. There is no separate Home Manager activation step.
 
 Flake inputs are public and pinned in [flake.lock](flake.lock). They provide
-nixpkgs, Home Manager, Stylix, coding-agent packages, and Firefox extensions; local
+nixpkgs, Home Manager, coding-agent packages, and Firefox extensions; local
 package definitions live in [pkgs/](pkgs/).
 
 See [Structure](AGENTS.md#structure) for layout and configuration ownership,

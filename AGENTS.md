@@ -143,9 +143,8 @@ text with its code; rewrite errors rather than appending corrections.
   root belong in Home Manager. Boot, hardware, system services, networking,
   firewall, and the display manager belong in NixOS. When in doubt, prefer
   Home Manager.
-- Both layers receive `inputs`. Stylix configuration and target opt-ins are
-  owned by `modules/home/theme.nix`. Programs using native themes keep those
-  settings in their own modules.
+- Both layers receive `inputs`. Keep program themes and color settings in
+  their respective program modules.
 
 ## Versions and pins
 
