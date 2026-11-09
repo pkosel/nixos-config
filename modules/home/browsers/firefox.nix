@@ -145,6 +145,9 @@ in
         "browser.startup.homepage" = "https://ecosia.org/";
         "browser.startup.page" = 3;
 
+        # Preserve sessions and site logins regardless of upstream shutdown defaults.
+        "privacy.sanitize.sanitizeOnShutdown" = false;
+
         # Legacy migration inputs prevent re-enabling history clearing and
         # preserve form data while Firefox migrates shutdown preferences.
         "privacy.clearOnShutdown.history" = false;
