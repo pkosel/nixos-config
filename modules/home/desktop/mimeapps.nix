@@ -1,59 +1,64 @@
 { lib, ... }:
 
 let
-  apps = {
-    # Firefox first so it stays the default; Brave Origin as alternative.
-    browser = [
-      "firefox.desktop"
-      "brave-origin.desktop"
-    ];
-    plaintext = [ "org.gnome.TextEditor.desktop" ];
-    pdf = [ "org.gnome.Papers.desktop" ];
-    ebook = [ "com.github.johnfactotum.Foliate.desktop" ];
-    office = [ "writer.desktop" ];
+  applicationGroups = {
+    browser = {
+      applications = [
+        "firefox.desktop"
+        "brave-origin.desktop"
+      ];
+      mimeTypes = [
+        "text/html"
+        "application/xhtml+xml"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+        "x-scheme-handler/about"
+        "x-scheme-handler/unknown"
+      ];
+    };
+    textEditor = {
+      applications = [ "org.gnome.TextEditor.desktop" ];
+      mimeTypes = [
+        "text/plain"
+        "text/markdown"
+        "text/x-markdown"
+        "application/json"
+      ];
+    };
+    documentViewer = {
+      applications = [ "org.gnome.Papers.desktop" ];
+      mimeTypes = [
+        "application/pdf"
+        "image/vnd.djvu"
+      ];
+    };
+    ebookReader = {
+      applications = [ "com.github.johnfactotum.Foliate.desktop" ];
+      mimeTypes = [
+        "application/epub+zip"
+        "application/x-mobipocket-ebook"
+        "application/vnd.amazon.mobi8-ebook"
+      ];
+    };
+    wordProcessor = {
+      applications = [ "writer.desktop" ];
+      mimeTypes = [
+        "application/vnd.oasis.opendocument.text"
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        "application/msword"
+        "application/rtf"
+        "text/rtf"
+      ];
+    };
   };
 
-  # Only contested or unclaimed types. The rest have one candidate already.
-  types = {
-    # epiphany claims these, so links from outside a browser open in GNOME Web.
-    browser = [
-      "text/html"
-      "application/xhtml+xml"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-      "x-scheme-handler/about"
-      "x-scheme-handler/unknown"
-    ];
-    plaintext = [
-      "text/plain"
-      "text/markdown"
-      "text/x-markdown"
-      "application/json"
-    ];
-    pdf = [
-      "application/pdf"
-      "image/vnd.djvu"
-    ];
-    ebook = [
-      "application/epub+zip"
-      "application/x-mobipocket-ebook"
-      "application/vnd.amazon.mobi8-ebook"
-    ];
-    office = [
-      "application/vnd.oasis.opendocument.text"
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      "application/msword"
-      "application/rtf"
-      "text/rtf"
-    ];
-  };
+  defaultApplications = lib.concatMapAttrs (
+    _: group: lib.genAttrs group.mimeTypes (_: group.applications)
+  ) applicationGroups;
 
-  defaults = lib.concatMapAttrs (category: mimes: lib.genAttrs mimes (_: apps.${category})) types;
-
-  # calibre claims every document format it can convert, so .docx would open
-  # in the ebook editor. Removing them as candidates keeps them out of
-  # "Open With". Epub, mobi, comics and djvu are left alone.
-  calibreClaims =
+  # Calibre's conversion inputs should not clutter "Open With" for ordinary
+  # documents; keep its ebook associations.
+  removedCalibreAssociations =
     lib.genAttrs
       [
         "application/pdf"
@@ -75,10 +80,8 @@ in
   xdg = {
     mimeApps = {
       enable = true;
-      associations.removed = calibreClaims;
-      defaultApplications = defaults // {
-        # Registered by the applications; declared here because the file
-        # below is force-managed and would drop them otherwise.
+      associations.removed = removedCalibreAssociations;
+      defaultApplications = defaultApplications // {
         "x-scheme-handler/sgnl" = [ "signal.desktop" ];
         "x-scheme-handler/signalcaptcha" = [ "signal.desktop" ];
         "x-scheme-handler/obsidian" = [ "obsidian.desktop" ];
@@ -86,9 +89,8 @@ in
       };
     };
 
-    # GNOME and applications write mimeapps.list directly, so Home Manager
-    # refuses to replace it unless forced. Two copies: the real file, and
-    # the deprecated pre-spec location some applications still read.
+    # Reclaim both Home Manager MIME files if applications replace them.
+    # This discards MIME preferences changed outside this configuration.
     configFile."mimeapps.list".force = true;
     dataFile."applications/mimeapps.list".force = true;
   };
