@@ -4,7 +4,6 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.cursorline = true
 vim.opt.expandtab = true
 vim.opt.ignorecase = true
-vim.opt.inccommand = "nosplit"
 vim.opt.mouse = "a"
 vim.opt.number = true
 vim.opt.relativenumber = true

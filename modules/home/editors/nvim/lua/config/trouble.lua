@@ -1,7 +1,7 @@
 require("trouble").setup({})
 
-local wk = require("which-key")
-wk.add({
+local which_key = require("which-key")
+which_key.add({
   {
     "<leader>xx",
     "<cmd>Trouble diagnostics toggle<cr>",

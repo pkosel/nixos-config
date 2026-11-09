@@ -9,7 +9,7 @@ lint.linters_by_ft = {
   sh = { "shellcheck" },
 }
 
-local function lint_buffer(bufnr, stdin_only)
+local function lint_buffer(bufnr, event)
   if
     not vim.api.nvim_buf_is_valid(bufnr)
     or not vim.api.nvim_buf_is_loaded(bufnr)
@@ -17,12 +17,12 @@ local function lint_buffer(bufnr, stdin_only)
     return
   end
 
-  local name = vim.api.nvim_buf_get_name(bufnr)
+  local filename = vim.api.nvim_buf_get_name(bufnr)
   if
     vim.bo[bufnr].buftype ~= ""
-    or name == ""
-    or name:match("^%a[%w+.-]*://")
-    or vim.fn.isdirectory(name) == 1
+    or filename == ""
+    or filename:match("^%a[%w+.-]*://")
+    or vim.fn.isdirectory(filename) == 1
   then
     return
   end
@@ -30,39 +30,45 @@ local function lint_buffer(bufnr, stdin_only)
   vim.api.nvim_buf_call(bufnr, function()
     lint.try_lint(nil, {
       filter = function(linter)
-        if not stdin_only then
+        if event ~= "InsertLeave" then
           return true
         end
-        -- Keep existing-file ShellCheck on read/save/manual events for SCRIPTDIR.
-        return linter.stdin == true
-          and not (
-            linter.name == "shellcheck" and vim.fn.filereadable(name) == 1
-          )
+        if linter.stdin ~= true then
+          return false
+        end
+
+        -- ShellCheck reads existing files from disk for SCRIPTDIR. Keep this
+        -- exception until --stdin-filename is supported:
+        -- https://github.com/koalaman/shellcheck/issues/2735
+        if linter.name == "shellcheck" then
+          return vim.fn.filereadable(filename) == 0
+        end
+        return true
       end,
     })
   end)
 end
 
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
-  group = vim.api.nvim_create_augroup("config_lint", { clear = true }),
+  group = vim.api.nvim_create_augroup("config.lint", { clear = true }),
   callback = function(args)
     if args.event == "BufReadPost" then
       -- Filetype detection may run in a later BufReadPost callback.
       vim.schedule(function()
-        lint_buffer(args.buf, false)
+        lint_buffer(args.buf, args.event)
       end)
-    else
-      lint_buffer(args.buf, args.event == "InsertLeave")
+      return
     end
+    lint_buffer(args.buf, args.event)
   end,
 })
 
-local wk = require("which-key")
-wk.add({
+local which_key = require("which-key")
+which_key.add({
   {
     "<leader>cl",
     function()
-      lint_buffer(vim.api.nvim_get_current_buf(), false)
+      lint_buffer(vim.api.nvim_get_current_buf())
     end,
     desc = "Lint file",
   },

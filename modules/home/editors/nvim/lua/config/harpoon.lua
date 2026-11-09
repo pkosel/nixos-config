@@ -1,9 +1,8 @@
--- Harpoon lists are scoped to the current working directory.
 local harpoon = require("harpoon")
 harpoon:setup({})
 
-local wk = require("which-key")
-wk.add({
+local which_key = require("which-key")
+which_key.add({
   {
     "<leader>ha",
     function()

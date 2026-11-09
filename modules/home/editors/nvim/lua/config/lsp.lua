@@ -7,9 +7,6 @@ vim.lsp.config("*", {
   ),
 })
 
--- nvim-lspconfig ships the server defaults (cmd, filetypes, root markers) in its
--- lsp/ directory, which nvim picks up off the runtimepath; vim.lsp.config only
--- layers our overrides on top of those.
 vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
@@ -37,23 +34,23 @@ vim.lsp.config("bashls", {
 
 -- Neovim supplies rust-analyzer, but the project shell supplies the toolchain
 -- so Cargo, rustc, Clippy, and rust-src match the project rather than a global version.
-local rust_root_dir = vim.lsp.config.rust_analyzer.root_dir
+local resolve_rust_root_dir = vim.lsp.config.rust_analyzer.root_dir
 local has_clippy = vim.fn.executable("cargo-clippy") == 1
   and vim.fn.executable("clippy-driver") == 1
 
 vim.lsp.config("rust_analyzer", {
   root_dir = function(bufnr, on_dir)
-    local missing = {}
+    local missing_tools = {}
     for _, tool in ipairs({ "cargo", "rustc" }) do
       if vim.fn.executable(tool) == 0 then
-        table.insert(missing, tool)
+        table.insert(missing_tools, tool)
       end
     end
-    if #missing > 0 then
+    if #missing_tools > 0 then
       -- The upstream root resolver invokes both rustc and cargo before starting the server.
       vim.notify_once(
         "Rust LSP disabled: missing "
-          .. table.concat(missing, ", ")
+          .. table.concat(missing_tools, ", ")
           .. ". Restart Neovim from the project's development shell.",
         vim.log.levels.WARN
       )
@@ -66,8 +63,7 @@ vim.lsp.config("rust_analyzer", {
       )
     end
 
-    -- Preserve upstream Cargo workspace discovery rather than using Neovim's cwd.
-    rust_root_dir(bufnr, on_dir)
+    resolve_rust_root_dir(bufnr, on_dir)
   end,
   settings = {
     ["rust-analyzer"] = {
@@ -91,9 +87,6 @@ vim.lsp.enable({
   "yamlls",
 })
 
--- Underline the other uses of whatever the cursor is resting on, and drop them
--- again as soon as it moves. Gated on the capability so buffers whose server
--- cannot answer do not carry the autocmds.
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local client = vim.lsp.get_client_by_id(args.data.client_id)

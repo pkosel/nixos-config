@@ -17,8 +17,8 @@ conform.setup({
   format_on_save = {},
 })
 
-local wk = require("which-key")
-wk.add({
+local which_key = require("which-key")
+which_key.add({
   {
     "<leader>cf",
     function()

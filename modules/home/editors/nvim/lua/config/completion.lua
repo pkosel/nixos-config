@@ -6,20 +6,21 @@ require("luasnip.loaders.from_vscode").lazy_load()
 vim.opt.completeopt = "menu,menuone,noinsert"
 vim.opt.shortmess:append("c")
 
-local has_words_before = function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0
-    and vim.api
-        .nvim_buf_get_lines(0, line - 1, line, true)[1]
-        :sub(col, col)
-        :match("%s")
-      == nil
+local function has_words_before()
+  local column = vim.api.nvim_win_get_cursor(0)[2]
+  if column == 0 then
+    return false
+  end
+
+  local line = vim.api.nvim_get_current_line()
+  local previous_character = line:sub(column, column)
+  return previous_character:match("%s") == nil
 end
 
 cmp.setup({
   snippet = {
     expand = function(args)
-      require("luasnip").lsp_expand(args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
   mapping = cmp.mapping.preset.insert({

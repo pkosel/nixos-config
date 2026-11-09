@@ -1,16 +1,10 @@
--- Directory editing as a flat buffer (edit/create/move/rename files like text).
 require("oil").setup({
   default_file_explorer = false,
   keymaps = {
-    ["g?"] = "actions.show_help",
-    ["<cr>"] = "actions.select",
-    ["-"] = "actions.parent",
-    ["_"] = "actions.open_cwd",
-    ["<c-p>"] = "actions.preview",
-    -- Match Oil's case-sensitive default key to preserve the global save mapping.
+    -- Match Oil's case-sensitive key so its split action cannot override saving.
     ["<C-s>"] = false,
   },
 })
 
-local wk = require("which-key")
-wk.add({ { "-", "<cmd>Oil<cr>", desc = "Open oil (directory)" } })
+local which_key = require("which-key")
+which_key.add({ { "-", "<cmd>Oil<cr>", desc = "Open oil (directory)" } })

@@ -2,9 +2,9 @@ require("telescope").setup()
 require("telescope").load_extension("fzy_native")
 
 local builtin = require("telescope.builtin")
-local wk = require("which-key")
+local which_key = require("which-key")
 
-wk.add({
+which_key.add({
   { "<leader>t", group = "Telescope" },
   { "<leader>ta", builtin.autocommands, desc = "Autocommands" },
   { "<leader>tb", builtin.current_buffer_fuzzy_find, desc = "Current buffer" },

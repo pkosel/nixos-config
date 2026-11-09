@@ -1,68 +1,18 @@
-local wk = require("which-key")
+local which_key = require("which-key")
 
-wk.setup({
-  preset = "helix",
-  spec = {
-    -- Leader groups
-    { mode = { "n", "x" }, { "<leader>b", group = "buffer" } },
-    { mode = { "n", "x" }, { "<leader>c", group = "code" } },
-    { mode = { "n", "x" }, { "<leader>f", group = "file/find" } },
-    { mode = { "n", "x" }, { "<leader>g", group = "git" } },
-    { mode = { "n", "x" }, { "<leader>s", group = "search" } },
-    { mode = { "n", "x" }, { "<leader>u", group = "ui/toggle" } },
-    { mode = { "n", "x" }, { "<leader>x", group = "diagnostics/quickfix" } },
-    { mode = { "n", "x" }, { "<leader>h", group = "harpoon" } },
-    -- Proxy: <leader>w shows all <c-w> window commands automatically
-    {
-      mode = { "n", "x" },
-      {
-        "<leader>w",
-        group = "windows",
-        proxy = "<c-w>",
-        expand = function()
-          return require("which-key.extras").expand.win()
-        end,
-      },
-    },
-    -- [ and ] are prev/next for many things
-    { mode = { "n", "x" }, { "[", group = "prev" } },
-    { mode = { "n", "x" }, { "]", group = "next" } },
-    -- Native group labels
-    { mode = { "n", "x" }, { "g", group = "goto" } },
-    { mode = { "n", "x" }, { "s", group = "surround" } },
-    { mode = { "n", "x" }, { "z", group = "fold" } },
-    { mode = { "n" }, { "<leader><tab>", group = "tabs" } },
-    { mode = { "n", "x" }, { "gx", desc = "Open with system app" } },
-  },
-})
-
-wk.add({
-  {
-    "<leader>?",
-    function()
-      require("which-key").show({ global = false })
-    end,
-    desc = "Buffer keymaps",
-  },
-})
-
-wk.add({
+which_key.add({
   { "<C-h>", "<C-w>h", desc = "Go to left window" },
   { "<C-j>", "<C-w>j", desc = "Go to lower window" },
   { "<C-k>", "<C-w>k", desc = "Go to upper window" },
   { "<C-l>", "<C-w>l", desc = "Go to right window" },
+  { "<S-h>", "<cmd>bprevious<cr>", desc = "Prev buffer" },
+  { "<S-l>", "<cmd>bnext<cr>", desc = "Next buffer" },
 })
 
 vim.keymap.set("n", "<leader>-", "<C-w>s", { desc = "Split below" })
 vim.keymap.set("n", "<leader>|", "<C-w>v", { desc = "Split right" })
 
-wk.add({
-  { "<S-h>", "<cmd>bprevious<cr>", desc = "Prev buffer" },
-  { "<S-l>", "<cmd>bnext<cr>", desc = "Next buffer" },
-})
-
--- Diagnostic navigation (built-in, no plugin needed)
-wk.add({
+which_key.add({
   {
     "[d",
     function()
@@ -124,51 +74,61 @@ wk.add({
   { "<leader>cd", vim.diagnostic.open_float, desc = "Line diagnostics" },
 })
 
-local function move_lines(direction, visual)
+local function create_line_move_mapping(direction, is_visual)
   return function()
-    local first, last = vim.fn.line("."), vim.fn.line(".")
-    if visual then
-      first, last =
-        math.min(first, vim.fn.line("v")), math.max(last, vim.fn.line("v"))
+    local first_line = vim.fn.line(".")
+    local last_line = first_line
+    if is_visual then
+      local selection_start = vim.fn.line("v")
+      first_line = math.min(first_line, selection_start)
+      last_line = math.max(last_line, selection_start)
     end
+
     if
-      (direction < 0 and first == 1)
-      or (direction > 0 and last == vim.fn.line("$"))
+      (direction < 0 and first_line == 1)
+      or (direction > 0 and last_line == vim.fn.line("$"))
     then
       return ""
     end
-    local destination = direction < 0 and first - 2 or last + 1
-    local move = ("<Cmd>%d,%dmove %d<CR>"):format(first, last, destination)
-    return visual and "<Esc>" .. move .. "gv=gv" or move .. "=="
+
+    local destination = direction < 0 and first_line - 2 or last_line + 1
+    local command = ("<Cmd>%d,%dmove %d<CR>"):format(
+      first_line,
+      last_line,
+      destination
+    )
+    if is_visual then
+      return "<Esc>" .. command .. "gv=gv"
+    end
+    return command .. "=="
   end
 end
 
--- Editing quality-of-life
-wk.add({
+which_key.add({
   {
     "<A-j>",
-    move_lines(1, false),
+    create_line_move_mapping(1, false),
     mode = "n",
     expr = true,
     desc = "Move line down",
   },
   {
     "<A-k>",
-    move_lines(-1, false),
+    create_line_move_mapping(-1, false),
     mode = "n",
     expr = true,
     desc = "Move line up",
   },
   {
     "<A-j>",
-    move_lines(1, true),
+    create_line_move_mapping(1, true),
     mode = "x",
     expr = true,
     desc = "Move selection down",
   },
   {
     "<A-k>",
-    move_lines(-1, true),
+    create_line_move_mapping(-1, true),
     mode = "x",
     expr = true,
     desc = "Move selection up",
@@ -189,28 +149,13 @@ wk.add({
   },
   { "<", "<gv", mode = "x", desc = "Indent left" },
   { ">", ">gv", mode = "x", desc = "Indent right" },
-})
-
--- Undo break-points (undo stops at each punctuation)
-vim.keymap.set("i", ",", ",<c-g>u")
-vim.keymap.set("i", ".", ".<c-g>u")
-vim.keymap.set("i", ";", ";<c-g>u")
-
-wk.add({
   { "<C-s>", "<cmd>w<cr><esc>", mode = { "i", "x", "n", "s" }, desc = "Save" },
-})
-
-wk.add({
   {
     "<esc>",
     "<cmd>noh<cr><esc>",
     mode = { "i", "n" },
     desc = "Escape and clear hlsearch",
   },
-})
-
--- Misc
-wk.add({
   {
     "<leader>ur",
     "<cmd>nohlsearch<bar>diffupdate<bar>normal! <C-L><cr>",
@@ -218,15 +163,12 @@ wk.add({
   },
   { "<leader>fn", "<cmd>enew<cr>", desc = "New file" },
   { "<leader>qq", "<cmd>qa<cr>", desc = "Quit all" },
-})
-
-wk.add({
-  { "<C-p>", require("nvim-tree.api").tree.toggle, desc = "Toggle file tree" },
-})
-
-wk.add({
   { "<leader><tab>n", "<cmd>tabnew<cr>", desc = "New tab" },
   { "<leader><tab>]", "<cmd>tabnext<cr>", desc = "Next tab" },
   { "<leader><tab>[", "<cmd>tabprevious<cr>", desc = "Prev tab" },
   { "<leader><tab>d", "<cmd>tabclose<cr>", desc = "Close tab" },
 })
+
+vim.keymap.set("i", ",", ",<c-g>u")
+vim.keymap.set("i", ".", ".<c-g>u")
+vim.keymap.set("i", ";", ";<c-g>u")
