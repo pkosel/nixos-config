@@ -1,5 +1,8 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
+let
+  nixdSettings = import ./nixd.nix { inherit inputs pkgs; };
+in
 {
   programs.vscode = {
     enable = true;
@@ -28,6 +31,17 @@
 
         github.github-vscode-theme
       ];
+
+      userSettings = {
+        "nix.enableLanguageServer" = true;
+        "nix.serverPath" = "${pkgs.nixd}/bin/nixd";
+        "nix.serverSettings".nixd = nixdSettings;
+
+        "[nix]" = {
+          "editor.defaultFormatter" = "jnoortheen.nix-ide";
+          "editor.formatOnSave" = true;
+        };
+      };
     };
   };
 }

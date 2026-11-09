@@ -79,7 +79,7 @@ vim.lsp.enable({
   "dockerls",
   "lua_ls",
   "marksman",
-  "nil_ls",
+  "nixd",
   "rust_analyzer",
   "sqls",
   "taplo",

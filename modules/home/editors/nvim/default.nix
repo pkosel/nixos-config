@@ -1,11 +1,22 @@
-{ pkgs, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
+let
+  nixdSettings = import ../nixd.nix { inherit inputs pkgs; };
+in
 {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
 
-    initLua = builtins.readFile ./init.lua;
+    initLua = ''
+      vim.lsp.config("nixd", ${lib.generators.toLua { } { settings.nixd = nixdSettings; }})
+      ${builtins.readFile ./init.lua}
+    '';
 
     # Home Manager defaults both to false for home.stateVersion >= 26.05,
     # but to true at our fixed 25.11. Nothing in the Lua config uses either.
@@ -22,7 +33,7 @@
       dockerfile-language-server
       lua-language-server
       marksman
-      nil
+      nixd
       pyright
       rust-analyzer
       sqls
