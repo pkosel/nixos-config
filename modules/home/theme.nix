@@ -39,7 +39,6 @@
 
     # The Fish target would overwrite Ghostty's palette and background.
     targets = {
-      bat.enable = true;
       fzf.enable = true;
       starship.enable = true;
       tmux.enable = true;

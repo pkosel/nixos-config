@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   programs.delta = {
@@ -6,8 +6,8 @@
     enableGitIntegration = true;
 
     options = {
-      # ANSI colors follow the terminal palette.
-      syntax-theme = "ansi";
+      # Delta reads the same theme cache as bat.
+      syntax-theme = config.programs.bat.config.theme;
       line-numbers = true;
       navigate = true;
     };

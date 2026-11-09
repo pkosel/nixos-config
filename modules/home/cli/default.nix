@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./bat.nix
     ./delta.nix
     ./direnv.nix
     ./eza.nix
@@ -18,8 +19,5 @@
     ./zoxide.nix
   ];
 
-  programs = {
-    bat.enable = true;
-    tealdeer.enable = true;
-  };
+  programs.tealdeer.enable = true;
 }
