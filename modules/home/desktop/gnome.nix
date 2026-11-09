@@ -22,6 +22,7 @@
       favorite-apps = [
         "org.gnome.Nautilus.desktop"
         "firefox.desktop"
+        "brave-origin.desktop"
         "code.desktop"
         "com.mitchellh.ghostty.desktop"
         "todoist.desktop"
