@@ -91,7 +91,48 @@ in
       luasnip
       nvim-cmp
       nvim-lspconfig
-      nvim-treesitter.withAllGrammars
+      (nvim-treesitter.withPlugins (
+        parsers: with parsers; [
+          bash
+          comment
+          css
+          diff
+          dockerfile
+          editorconfig
+          fish
+          git_config
+          git_rebase
+          gitattributes
+          gitcommit
+          gitignore
+          go
+          hcl
+          html
+          ini
+          javascript
+          jsdoc
+          json
+          lua
+          luadoc
+          luap
+          make
+          markdown
+          markdown_inline
+          nix
+          python
+          query
+          regex
+          rust
+          sql
+          terraform
+          toml
+          tsx
+          typescript
+          vim
+          vimdoc
+          yaml
+        ]
+      ))
       nvim-treesitter-context
     ];
     viAlias = true;
