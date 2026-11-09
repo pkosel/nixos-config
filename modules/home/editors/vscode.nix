@@ -11,8 +11,8 @@ in
 {
   programs.vscode = {
     enable = true;
-    # FHS variant, for extensions that fetch prebuilt binaries NixOS can't run.
-    package = pkgs.vscode.fhs;
+    # FHS supports prebuilt extension binaries; the Terraform extension also needs its CLI.
+    package = pkgs.vscode.fhsWithPackages (pkgs: [ pkgs.terraform ]);
     mutableExtensionsDir = false;
 
     profiles.default = {
@@ -32,6 +32,11 @@ in
         rust-lang.rust-analyzer
         tamasfe.even-better-toml
 
+        biomejs.biome
+        esbenp.prettier-vscode
+        docker.docker
+        hashicorp.terraform
+
         sdras.night-owl
       ];
 
@@ -43,6 +48,11 @@ in
         "nix.serverPath" = "${pkgs.nixd}/bin/nixd";
         "nix.serverSettings".nixd = nixdSettings;
         "python.analysis.typeCheckingMode" = "basic";
+        "markdown.validate.enabled" = true;
+        "markdown.updateLinksOnFileMove.enabled" = "prompt";
+        "terraform.languageServer.path" = "${pkgs.terraform-ls}/bin/terraform-ls";
+        "docker.lsp.telemetry" = "off";
+        "docker.lsp.experimental.vulnerabilityScanning" = false;
 
         "[nix]" = {
           "editor.defaultFormatter" = "jnoortheen.nix-ide";
@@ -71,6 +81,18 @@ in
       }
       // lib.genAttrs [ "[json]" "[jsonc]" ] (_: {
         "editor.defaultFormatter" = "vscode.json-language-features";
+        "editor.formatOnSave" = true;
+      })
+      // lib.genAttrs [ "[markdown]" "[yaml]" ] (_: {
+        "editor.defaultFormatter" = "esbenp.prettier-vscode";
+        "editor.formatOnSave" = true;
+      })
+      // lib.genAttrs [ "[javascript]" "[javascriptreact]" "[typescript]" "[typescriptreact]" ] (_: {
+        "editor.defaultFormatter" = "biomejs.biome";
+        "editor.formatOnSave" = true;
+      })
+      // lib.genAttrs [ "[terraform]" "[terraform-vars]" ] (_: {
+        "editor.defaultFormatter" = "hashicorp.terraform";
         "editor.formatOnSave" = true;
       });
     };
