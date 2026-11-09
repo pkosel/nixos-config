@@ -24,7 +24,6 @@ in
         default = "ecosia";
         engines = {
           "google".metaData.hidden = true;
-          "Amazon.de".metaData.hidden = true;
           "bing".metaData.hidden = true;
         };
       };
@@ -67,7 +66,6 @@ in
         "datareporting.healthreport.uploadEnabled" = false;
         "datareporting.usage.uploadEnabled" = false;
         "toolkit.telemetry.unified" = false;
-        "toolkit.telemetry.enabled" = false;
         "toolkit.telemetry.server" = "data:,";
         "toolkit.telemetry.archive.enabled" = false;
         "toolkit.telemetry.newProfilePing.enabled" = false;
@@ -75,9 +73,6 @@ in
         "toolkit.telemetry.updatePing.enabled" = false;
         "toolkit.telemetry.bhrPing.enabled" = false;
         "toolkit.telemetry.firstShutdownPing.enabled" = false;
-        "toolkit.telemetry.coverage.opt-out" = true;
-        "toolkit.coverage.opt-out" = true;
-        "toolkit.coverage.endpoint.base" = "";
         "browser.newtabpage.activity-stream.feeds.telemetry" = false;
         "browser.newtabpage.activity-stream.telemetry" = false;
         "app.shield.optoutstudies.enabled" = false;
@@ -86,7 +81,6 @@ in
         "nimbus.rollouts.enabled" = false;
         "breakpad.reportURL" = "";
         "browser.tabs.crashReporting.sendReport" = false;
-        "browser.crashReports.unsubmittedCheck.enabled" = false;
 
         # Prompts and promotions
         "browser.shell.checkDefaultBrowser" = false;
@@ -103,6 +97,7 @@ in
         "browser.newtabpage.activity-stream.showSponsored" = false;
         "browser.newtabpage.activity-stream.showSponsoredCheckboxes" = false;
         "browser.newtabpage.activity-stream.default.sites" = "";
+        # Pin off independently of regional defaults and rollouts.
         "browser.urlbar.quicksuggest.enabled" = false;
         "browser.urlbar.trending.featureGate" = false;
         "browser.download.manager.addToRecentDocs" = false;
