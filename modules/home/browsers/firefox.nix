@@ -126,10 +126,6 @@ in
         "browser.ml.linkPreview.enabled" = false;
         "browser.tabs.groups.smart.enabled" = false;
 
-        # Reset persisted bookmark-import requests to prevent re-importing the
-        # local file alongside Sync-managed bookmarks.
-        "browser.places.importBookmarksHTML" = false;
-
         # Pin Sync to bookmarks only; Proton Pass and Nix own credentials and
         # settings.
         "services.sync.engine.bookmarks" = true;
