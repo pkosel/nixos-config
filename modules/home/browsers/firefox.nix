@@ -41,7 +41,6 @@ in
         "network.http.referer.XOriginTrimmingPolicy" = 2;
         "permissions.default.desktop-notification" = 2;
         "permissions.default.geo" = 2;
-        "permissions.manager.defaultsUrl" = "";
 
         # Security
         "security.ssl.treat_unsafe_negotiation_as_broken" = true;
@@ -53,12 +52,14 @@ in
         "pdfjs.enableScripting" = false;
         "network.auth.subresource-http-auth-allow" = 1;
 
-        # Reset persisted protection opt-outs and the certificate-error UI override.
-        # Remove after the existing profile has loaded these values.
+        # Reset stored overrides to Firefox defaults. Remove after this profile
+        # has loaded them; deleting user.js entries leaves prefs.js unchanged.
         "security.OCSP.enabled" = 1;
         "security.csp.reporting.enabled" = true;
         "browser.safebrowsing.downloads.remote.enabled" = true;
         "browser.xul.error_pages.expert_bad_cert" = false;
+        "breakpad.reportURL" = "https://crash-stats.mozilla.org/report/index/";
+        "permissions.manager.defaultsUrl" = "resource://app/defaults/permissions";
 
         # Speculative connections
         "network.dns.disablePrefetch" = true;
@@ -85,7 +86,6 @@ in
         "app.normandy.enabled" = false;
         "app.normandy.api_url" = "";
         "nimbus.rollouts.enabled" = false;
-        "breakpad.reportURL" = "";
         "browser.tabs.crashReporting.sendReport" = false;
 
         # Prompts and promotions
