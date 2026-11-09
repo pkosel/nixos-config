@@ -30,8 +30,8 @@ in
       };
 
       settings = {
-        # This also auto-enables sideloaded add-ons outside the declared list.
-        "extensions.autoDisableScopes" = 0;
+        # Retain approval for foreign add-ons installed outside this profile.
+        "extensions.autoDisableScopes" = 14;
         "spellchecker.dictionary" = "en-US,de-DE";
 
         # Tracking and privacy
