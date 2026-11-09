@@ -60,6 +60,8 @@ in
         "browser.xul.error_pages.expert_bad_cert" = false;
         "breakpad.reportURL" = "https://crash-stats.mozilla.org/report/index/";
         "permissions.manager.defaultsUrl" = "resource://app/defaults/permissions";
+        "toolkit.telemetry.server" = "https://incoming.telemetry.mozilla.org";
+        "app.normandy.api_url" = "https://normandy.cdn.mozilla.net/api/v1";
 
         # Speculative connections
         "network.dns.disablePrefetch" = true;
@@ -73,18 +75,15 @@ in
         "datareporting.healthreport.uploadEnabled" = false;
         "datareporting.usage.uploadEnabled" = false;
         "toolkit.telemetry.unified" = false;
-        "toolkit.telemetry.server" = "data:,";
         "toolkit.telemetry.archive.enabled" = false;
         "toolkit.telemetry.newProfilePing.enabled" = false;
         "toolkit.telemetry.shutdownPingSender.enabled" = false;
-        "toolkit.telemetry.updatePing.enabled" = false;
         "toolkit.telemetry.bhrPing.enabled" = false;
         "toolkit.telemetry.firstShutdownPing.enabled" = false;
         "browser.newtabpage.activity-stream.feeds.telemetry" = false;
         "browser.newtabpage.activity-stream.telemetry" = false;
         "app.shield.optoutstudies.enabled" = false;
         "app.normandy.enabled" = false;
-        "app.normandy.api_url" = "";
         "nimbus.rollouts.enabled" = false;
         "browser.tabs.crashReporting.sendReport" = false;
 
