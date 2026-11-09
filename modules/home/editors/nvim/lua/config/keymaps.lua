@@ -16,14 +16,14 @@ which_key.add({
   {
     "[d",
     function()
-      vim.diagnostic.jump({ count = -1, float = true })
+      vim.diagnostic.jump({ count = -vim.v.count1, float = true })
     end,
     desc = "Prev diagnostic",
   },
   {
     "]d",
     function()
-      vim.diagnostic.jump({ count = 1, float = true })
+      vim.diagnostic.jump({ count = vim.v.count1, float = true })
     end,
     desc = "Next diagnostic",
   },
@@ -31,7 +31,7 @@ which_key.add({
     "[e",
     function()
       vim.diagnostic.jump({
-        count = -1,
+        count = -vim.v.count1,
         severity = vim.diagnostic.severity.ERROR,
         float = true,
       })
@@ -42,7 +42,7 @@ which_key.add({
     "]e",
     function()
       vim.diagnostic.jump({
-        count = 1,
+        count = vim.v.count1,
         severity = vim.diagnostic.severity.ERROR,
         float = true,
       })
@@ -53,7 +53,7 @@ which_key.add({
     "[w",
     function()
       vim.diagnostic.jump({
-        count = -1,
+        count = -vim.v.count1,
         severity = vim.diagnostic.severity.WARN,
         float = true,
       })
@@ -64,7 +64,7 @@ which_key.add({
     "]w",
     function()
       vim.diagnostic.jump({
-        count = 1,
+        count = vim.v.count1,
         severity = vim.diagnostic.severity.WARN,
         float = true,
       })

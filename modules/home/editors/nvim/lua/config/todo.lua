@@ -1,16 +1,4 @@
-require("todo-comments").setup({
-  signs = true,
-  keywords = {
-    FIXME = {},
-    TODO = {},
-    HACK = {},
-    NOTE = {},
-    PERF = {},
-    WARN = {},
-  },
-  highlight = { pattern = [[.*<(KEYWORDS)\s*:]] },
-  search = { pattern = [[\b(KEYWORDS)\b]] },
-})
+require("todo-comments").setup()
 
 local which_key = require("which-key")
 which_key.add({

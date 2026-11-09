@@ -87,29 +87,54 @@ vim.lsp.enable({
   "yamlls",
 })
 
+local document_highlight_group =
+  vim.api.nvim_create_augroup("config.document_highlight", { clear = true })
+
 vim.api.nvim_create_autocmd("LspAttach", {
+  group = document_highlight_group,
   callback = function(args)
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     if
-      not client or not client:supports_method("textDocument/documentHighlight")
+      not client
+      or not client:supports_method("textDocument/documentHighlight", args.buf)
     then
       return
     end
 
-    local group = vim.api.nvim_create_augroup(
-      "lsp_document_highlight_" .. args.buf,
-      { clear = true }
-    )
-
+    vim.api.nvim_clear_autocmds({
+      group = document_highlight_group,
+      buffer = args.buf,
+    })
     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-      group = group,
+      group = document_highlight_group,
       buffer = args.buf,
       callback = vim.lsp.buf.document_highlight,
     })
     vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-      group = group,
+      group = document_highlight_group,
       buffer = args.buf,
       callback = vim.lsp.buf.clear_references,
+    })
+  end,
+})
+
+vim.api.nvim_create_autocmd("LspDetach", {
+  group = document_highlight_group,
+  callback = function(args)
+    local clients = vim.lsp.get_clients({
+      bufnr = args.buf,
+      method = "textDocument/documentHighlight",
+    })
+    for _, client in ipairs(clients) do
+      if client.id ~= args.data.client_id then
+        return
+      end
+    end
+
+    vim.api.nvim_buf_call(args.buf, vim.lsp.buf.clear_references)
+    vim.api.nvim_clear_autocmds({
+      group = document_highlight_group,
+      buffer = args.buf,
     })
   end,
 })

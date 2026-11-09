@@ -8,11 +8,6 @@ which_key.add({
     desc = "Toggle diagnostics",
   },
   {
-    "<leader>xw",
-    "<cmd>Trouble diagnostics toggle<cr>",
-    desc = "All-buffer diagnostics",
-  },
-  {
     "<leader>xd",
     "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
     desc = "Buffer diagnostics",
