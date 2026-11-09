@@ -16,6 +16,7 @@
     fd
     gh
     jq
+    mdcat
     nvd
     sd
     unzip
