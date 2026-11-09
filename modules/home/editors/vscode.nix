@@ -9,6 +9,7 @@
       enableUpdateCheck = false;
       enableExtensionUpdateCheck = false;
       extensions = with pkgs.vscode-extensions; [
+        editorconfig.editorconfig
         vscodevim.vim
 
         mkhl.direnv
