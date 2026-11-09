@@ -39,18 +39,23 @@ in
       sqls
       taplo
       terraform-ls
+      typescript-language-server
+      vscode-langservers-extracted
       yaml-language-server
 
       # Formatters and linters
+      biome
       hadolint
       markdownlint-cli
       nixfmt
+      prettier
       ruff
       rustfmt
       shellcheck
       shfmt
       statix
       stylua
+      terraform
     ];
     plugins = with pkgs.vimPlugins; [
       # Interface

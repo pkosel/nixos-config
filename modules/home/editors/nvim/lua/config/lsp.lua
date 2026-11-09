@@ -77,6 +77,7 @@ vim.lsp.enable({
   "bashls",
   "pyright",
   "dockerls",
+  "jsonls",
   "lua_ls",
   "marksman",
   "nixd",
@@ -84,6 +85,7 @@ vim.lsp.enable({
   "sqls",
   "taplo",
   "terraformls",
+  "ts_ls",
   "yamlls",
 })
 

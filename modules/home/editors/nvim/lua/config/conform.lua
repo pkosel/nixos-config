@@ -2,12 +2,28 @@ local conform = require("conform")
 
 conform.setup({
   formatters_by_ft = {
+    javascript = { "biome" },
+    javascriptreact = { "biome" },
+    json = { "prettier" },
+    jsonc = { "prettier" },
     lua = { "stylua" },
+    markdown = { "prettier" },
     nix = { "nixfmt" },
     python = { "ruff_format" },
     rust = { "rustfmt" },
     sh = { "shfmt" },
+    terraform = { "terraform_fmt" },
+    ["terraform-vars"] = { "terraform_fmt" },
     toml = { "taplo" },
+    typescript = { "biome" },
+    typescriptreact = { "biome" },
+    yaml = { "prettier" },
+  },
+  formatters = {
+    biome = {
+      -- Match nix fmt instead of inferring indentation from the current buffer.
+      args = { "format", "--stdin-file-path", "$FILENAME" },
+    },
   },
   default_format_opts = {
     lsp_format = "fallback",
