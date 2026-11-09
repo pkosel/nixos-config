@@ -2,28 +2,24 @@
 
 let
   addons = inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system};
-
-  extensions = with addons; [
-    ublock-origin
-    proton-pass
-    zotero-connector
-  ];
 in
 {
   programs.firefox = {
     enable = true;
 
-    # The default is under XDG from home.stateVersion 26.05. This pins the legacy
-    # path because the profile is large and only moves by hand. Replace the pin
-    # after moving ~/.mozilla/firefox to $XDG_CONFIG_HOME/mozilla/firefox; native
-    # messaging hosts are not moved by the option and need moving too.
+    # Keep the existing profile path until a manual XDG migration; native
+    # messaging hosts must be migrated separately.
     configPath = ".mozilla/firefox";
     profiles.philipp = {
-      extensions.packages = extensions;
+      extensions.packages = with addons; [
+        ublock-origin
+        proton-pass
+        zotero-connector
+      ];
 
       search = {
-        # Firefox writes search.json.mozlz4 itself, so Home Manager refuses to
-        # replace it unless told to. Without this the activation aborts.
+        # Firefox replaces the search symlink on launch; without forcing
+        # replacement, subsequent Home Manager activations can fail.
         force = true;
         default = "ecosia";
         engines = {
@@ -33,143 +29,129 @@ in
         };
       };
 
-      # Hand-written replacement for the Betterfox user.js. It covers tracking
-      # protection, security hardening, and the prompts and promotions that
-      # Firefox shows by default. Prefs that are not listed keep the Firefox
-      # default.
-      extraConfig = ''
-        // Tracking and privacy
-        user_pref("browser.contentblocking.category", "strict");
-        user_pref("privacy.globalprivacycontrol.enabled", true);
-        user_pref("privacy.antitracking.isolateContentScriptResources", true);
-        user_pref("security.csp.reporting.enabled", false);
-        user_pref("network.http.referer.XOriginTrimmingPolicy", 2);
-        user_pref("permissions.default.desktop-notification", 2);
-        user_pref("permissions.default.geo", 2);
-        user_pref("permissions.manager.defaultsUrl", "");
+      settings = {
+        # Tracking and privacy
+        "browser.contentblocking.category" = "strict";
+        "privacy.globalprivacycontrol.enabled" = true;
+        "privacy.antitracking.isolateContentScriptResources" = true;
+        "security.csp.reporting.enabled" = false;
+        "network.http.referer.XOriginTrimmingPolicy" = 2;
+        "permissions.default.desktop-notification" = 2;
+        "permissions.default.geo" = 2;
+        "permissions.manager.defaultsUrl" = "";
 
-        // Security
-        // Disable OCSP lookups that remain alongside CRLite to avoid disclosing
-        // certificate checks to responders.
-        user_pref("security.OCSP.enabled", 0);
-        user_pref("security.ssl.treat_unsafe_negotiation_as_broken", true);
-        user_pref("security.tls.enable_0rtt_data", false);
-        user_pref("dom.security.https_only_mode", true);
-        user_pref("dom.security.https_only_mode_error_page_user_suggestions", true);
-        // Show the punycode form of IDN host names, so lookalike domains are
-        // visible instead of hidden behind non-ASCII characters.
-        user_pref("network.IDN_show_punycode", true);
-        user_pref("pdfjs.enableScripting", false);
-        user_pref("browser.safebrowsing.downloads.remote.enabled", false);
-        user_pref("network.auth.subresource-http-auth-allow", 1);
-        user_pref("browser.xul.error_pages.expert_bad_cert", true);
+        # Security
+        # Avoid OCSP responder requests at the cost of revocation checks not
+        # covered by CRLite.
+        "security.OCSP.enabled" = 0;
+        "security.ssl.treat_unsafe_negotiation_as_broken" = true;
+        "security.tls.enable_0rtt_data" = false;
+        "dom.security.https_only_mode" = true;
+        "dom.security.https_only_mode_error_page_user_suggestions" = true;
+        # Expose Unicode lookalike domains as ASCII.
+        "network.IDN_show_punycode" = true;
+        "pdfjs.enableScripting" = false;
+        "browser.safebrowsing.downloads.remote.enabled" = false;
+        "network.auth.subresource-http-auth-allow" = 1;
+        "browser.xul.error_pages.expert_bad_cert" = true;
 
-        // Speculative loading off
-        user_pref("network.dns.disablePrefetch", true);
-        user_pref("network.prefetch-next", false);
-        user_pref("browser.urlbar.speculativeConnect.enabled", false);
-        user_pref("browser.places.speculativeConnect.enabled", false);
-        user_pref("network.http.speculative-parallel-limit", 0);
+        # Speculative connections
+        "network.dns.disablePrefetch" = true;
+        "network.prefetch-next" = false;
+        "browser.urlbar.speculativeConnect.enabled" = false;
+        "browser.places.speculativeConnect.enabled" = false;
+        "network.http.speculative-parallel-limit" = 0;
 
-        // Telemetry and studies off
-        user_pref("datareporting.policy.dataSubmissionEnabled", false);
-        user_pref("datareporting.healthreport.uploadEnabled", false);
-        user_pref("datareporting.usage.uploadEnabled", false);
-        user_pref("toolkit.telemetry.unified", false);
-        user_pref("toolkit.telemetry.enabled", false);
-        user_pref("toolkit.telemetry.server", "data:,");
-        user_pref("toolkit.telemetry.archive.enabled", false);
-        user_pref("toolkit.telemetry.newProfilePing.enabled", false);
-        user_pref("toolkit.telemetry.shutdownPingSender.enabled", false);
-        user_pref("toolkit.telemetry.updatePing.enabled", false);
-        user_pref("toolkit.telemetry.bhrPing.enabled", false);
-        user_pref("toolkit.telemetry.firstShutdownPing.enabled", false);
-        user_pref("toolkit.telemetry.coverage.opt-out", true);
-        user_pref("toolkit.coverage.opt-out", true);
-        user_pref("toolkit.coverage.endpoint.base", "");
-        user_pref("browser.newtabpage.activity-stream.feeds.telemetry", false);
-        user_pref("browser.newtabpage.activity-stream.telemetry", false);
-        user_pref("app.shield.optoutstudies.enabled", false);
-        user_pref("app.normandy.enabled", false);
-        user_pref("app.normandy.api_url", "");
-        user_pref("nimbus.rollouts.enabled", false);
-        user_pref("breakpad.reportURL", "");
-        user_pref("browser.tabs.crashReporting.sendReport", false);
-        user_pref("browser.crashReports.unsubmittedCheck.enabled", false);
+        # Telemetry and studies
+        "datareporting.policy.dataSubmissionEnabled" = false;
+        "datareporting.healthreport.uploadEnabled" = false;
+        "datareporting.usage.uploadEnabled" = false;
+        "toolkit.telemetry.unified" = false;
+        "toolkit.telemetry.enabled" = false;
+        "toolkit.telemetry.server" = "data:,";
+        "toolkit.telemetry.archive.enabled" = false;
+        "toolkit.telemetry.newProfilePing.enabled" = false;
+        "toolkit.telemetry.shutdownPingSender.enabled" = false;
+        "toolkit.telemetry.updatePing.enabled" = false;
+        "toolkit.telemetry.bhrPing.enabled" = false;
+        "toolkit.telemetry.firstShutdownPing.enabled" = false;
+        "toolkit.telemetry.coverage.opt-out" = true;
+        "toolkit.coverage.opt-out" = true;
+        "toolkit.coverage.endpoint.base" = "";
+        "browser.newtabpage.activity-stream.feeds.telemetry" = false;
+        "browser.newtabpage.activity-stream.telemetry" = false;
+        "app.shield.optoutstudies.enabled" = false;
+        "app.normandy.enabled" = false;
+        "app.normandy.api_url" = "";
+        "nimbus.rollouts.enabled" = false;
+        "breakpad.reportURL" = "";
+        "browser.tabs.crashReporting.sendReport" = false;
+        "browser.crashReports.unsubmittedCheck.enabled" = false;
 
-        // Prompts, promotions and ads off
-        user_pref("browser.shell.checkDefaultBrowser", false);
-        user_pref("browser.aboutwelcome.enabled", false);
-        user_pref("browser.startup.homepage_override.mstone", "ignore");
-        user_pref("browser.discovery.enabled", false);
-        user_pref("extensions.getAddons.showPane", false);
-        user_pref("extensions.htmlaboutaddons.recommendations.enabled", false);
-        user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
-        user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", false);
-        user_pref("browser.preferences.moreFromMozilla", false);
-        user_pref("browser.aboutConfig.showWarning", false);
-        user_pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
-        user_pref("browser.newtabpage.activity-stream.showSponsored", false);
-        user_pref("browser.newtabpage.activity-stream.showSponsoredCheckboxes", false);
-        user_pref("browser.newtabpage.activity-stream.default.sites", "");
-        user_pref("browser.urlbar.quicksuggest.enabled", false);
-        user_pref("browser.urlbar.trending.featureGate", false);
-        user_pref("browser.download.manager.addToRecentDocs", false);
+        # Prompts and promotions
+        "browser.shell.checkDefaultBrowser" = false;
+        "browser.aboutwelcome.enabled" = false;
+        "browser.startup.homepage_override.mstone" = "ignore";
+        "browser.discovery.enabled" = false;
+        "extensions.getAddons.showPane" = false;
+        "extensions.htmlaboutaddons.recommendations.enabled" = false;
+        "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
+        "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
+        "browser.preferences.moreFromMozilla" = false;
+        "browser.aboutConfig.showWarning" = false;
+        "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
+        "browser.newtabpage.activity-stream.showSponsored" = false;
+        "browser.newtabpage.activity-stream.showSponsoredCheckboxes" = false;
+        "browser.newtabpage.activity-stream.default.sites" = "";
+        "browser.urlbar.quicksuggest.enabled" = false;
+        "browser.urlbar.trending.featureGate" = false;
+        "browser.download.manager.addToRecentDocs" = false;
+        "browser.search.suggest.enabled" = false;
+        "browser.translations.automaticallyPopup" = false;
 
-        // No search suggestions while typing.
-        user_pref("browser.search.suggest.enabled", false);
+        # Proton Pass replaces Firefox's password manager and autofill.
+        "browser.formfill.enable" = false;
+        "extensions.formautofill.addresses.enabled" = false;
+        "extensions.formautofill.creditCards.enabled" = false;
+        "signon.rememberSignons" = false;
+        "signon.autofillForms" = false;
 
-        // Keep the translate button, stop the automatic popup.
-        user_pref("browser.translations.automaticallyPopup", false);
+        # AI
+        "browser.ai.control.default" = "blocked";
+        "browser.ml.enable" = false;
+        "browser.ml.chat.enabled" = false;
+        "browser.ml.chat.menu" = false;
+        "browser.ml.linkPreview.enabled" = false;
+        "browser.tabs.groups.smart.enabled" = false;
 
-        // Proton Pass is the password manager, so Firefox's own manager, autofill
-        // and form history stay off.
-        user_pref("browser.formfill.enable", false);
-        user_pref("extensions.formautofill.addresses.enabled", false);
-        user_pref("extensions.formautofill.creditCards.enabled", false);
-        user_pref("signon.rememberSignons", false);
-        user_pref("signon.autofillForms", false);
+        # Reset persisted bookmark-import requests to prevent re-importing the
+        # local file alongside Sync-managed bookmarks.
+        "browser.places.importBookmarksHTML" = false;
 
-        // AI features off.
-        user_pref("browser.ai.control.default", "blocked");
-        user_pref("browser.ml.enable", false);
-        user_pref("browser.ml.chat.enabled", false);
-        user_pref("browser.ml.chat.menu", false);
-        user_pref("browser.ml.linkPreview.enabled", false);
-        user_pref("browser.tabs.groups.smart.enabled", false);
+        # Pin Sync to bookmarks only; Proton Pass and Nix own credentials and
+        # settings.
+        "services.sync.engine.bookmarks" = true;
+        "services.sync.engine.history" = false;
+        "services.sync.engine.tabs" = false;
+        "services.sync.engine.addons" = false;
+        "services.sync.engine.passwords" = false;
+        "services.sync.engine.creditcards" = false;
+        "services.sync.engine.addresses" = false;
+        "services.sync.engine.prefs" = false;
 
-        // The removed declarative bookmarks block set this to true. Removing it
-        // from user.js does not clear the value already in the profile, so force
-        // it off to stop a re-import of the old bookmarks file.
-        user_pref("browser.places.importBookmarksHTML", false);
+        # Startup
+        "browser.startup.homepage" = "https://ecosia.org/";
+        "browser.startup.page" = 3;
 
-        // Firefox Sync carries bookmarks only. Passwords, payments, add-ons and
-        // prefs are handled by Proton Pass and Nix, and syncing them would fight
-        // the config.
-        user_pref("services.sync.engine.bookmarks", true);
-        user_pref("services.sync.engine.history", false);
-        user_pref("services.sync.engine.tabs", false);
-        user_pref("services.sync.engine.addons", false);
-        user_pref("services.sync.engine.passwords", false);
-        user_pref("services.sync.engine.creditcards", false);
-        user_pref("services.sync.engine.addresses", false);
-        user_pref("services.sync.engine.prefs", false);
+        # Legacy migration inputs prevent re-enabling history clearing and
+        # preserve form data while Firefox migrates shutdown preferences.
+        "privacy.clearOnShutdown.history" = false;
+        "privacy.clearOnShutdown_v2.historyFormDataAndDownloads" = false;
+        "privacy.clearOnShutdown_v2.browsingHistoryAndDownloads" = false;
 
-        // Overrides
-        user_pref("browser.startup.homepage", "https://ecosia.org/");
-        user_pref("browser.startup.page", 3);
-
-        // Keep browsing and download history even when shutdown cleaning is on.
-        // Legacy inputs prevent migrations from re-enabling history clearing.
-        // The intermediate v2 input also retains form data during its migration.
-        user_pref("privacy.clearOnShutdown.history", false);
-        user_pref("privacy.clearOnShutdown_v2.historyFormDataAndDownloads", false);
-        user_pref("privacy.clearOnShutdown_v2.browsingHistoryAndDownloads", false);
-
-        // Prefer light web content even when the browser theme or system color
-        // scheme is dark.
-        user_pref("layout.css.prefers-color-scheme.content-override", 1);
-      '';
+        # Value 1 keeps web content light independently of the dark browser theme.
+        "layout.css.prefers-color-scheme.content-override" = 1;
+      };
     };
   };
 }
