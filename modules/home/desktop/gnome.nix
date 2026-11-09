@@ -37,7 +37,6 @@
     };
     "org/gnome/desktop/app-folders/folders/Utilities" = {
       name = "Utilities";
-      translate = true;
       apps = [
         "org.gnome.Characters.desktop"
         "org.gnome.Console.desktop"
@@ -57,7 +56,6 @@
     };
     "org/gnome/desktop/app-folders/folders/LibreOffice" = {
       name = "LibreOffice";
-      translate = true;
       apps = [
         "startcenter.desktop"
         "writer.desktop"
@@ -70,7 +68,6 @@
     };
     "org/gnome/desktop/app-folders/folders/Calibre" = {
       name = "Calibre";
-      translate = true;
       apps = [
         "calibre-gui.desktop"
         "calibre-ebook-edit.desktop"
