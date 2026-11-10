@@ -2,7 +2,7 @@
 
 {
   # Leave the theme and color scheme to GNOME's appearance switch. Its dark
-  # default is set in modules/system/desktop/gnome.nix.
+  # default is set in modules/system/gnome.nix.
   gtk = {
     enable = true;
     iconTheme = {

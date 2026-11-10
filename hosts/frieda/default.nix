@@ -8,9 +8,9 @@
 
     ../../modules/system/ausweisapp.nix
     ../../modules/system/brave.nix
-    ../../modules/system/desktop
     ../../modules/system/docker.nix
     ../../modules/system/fonts.nix
+    ../../modules/system/gnome.nix
     ../../modules/system/nix-ld.nix
     ../../modules/system/nix.nix
     ../../modules/system/nixpkgs.nix
