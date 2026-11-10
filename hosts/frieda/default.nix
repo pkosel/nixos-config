@@ -6,7 +6,6 @@
     ./printing.nix
     ./webdav.nix
 
-    ../../modules/system/audio.nix
     ../../modules/system/ausweisapp.nix
     ../../modules/system/brave.nix
     ../../modules/system/desktop
