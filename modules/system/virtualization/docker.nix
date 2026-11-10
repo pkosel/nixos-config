@@ -6,11 +6,12 @@
   virtualisation.docker = {
     enable = true;
 
-    # docker.socket still starts the daemon on the first command.
-    # The trade is that restart=always does not survive a reboot.
+    # Socket activation still works, but restart policies only take effect once
+    # the daemon starts after reboot.
     enableOnBoot = false;
 
-    # --all collects unreferenced images, where the space goes.
+    # Pruning starts the daemon and removes stopped containers with their writable
+    # layers. Volumes are retained.
     autoPrune = {
       enable = true;
       dates = "weekly";

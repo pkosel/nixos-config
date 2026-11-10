@@ -3,7 +3,6 @@
 {
   environment.systemPackages = with pkgs; [ wl-clipboard ];
 
-  # Electron defaults to XWayland. This forces Wayland directly,
-  # dropping a translation layer and keeping scaling correct.
+  # Prefer native Wayland for applications whose wrappers honor this variable.
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 }

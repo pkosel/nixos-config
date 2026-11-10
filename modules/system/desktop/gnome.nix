@@ -20,8 +20,6 @@
     };
   };
 
-  # epiphany claims http/https handlers, so links from outside a browser
-  # would open in GNOME Web. yelp and gnome-tour are kept on purpose.
   environment.gnome.excludePackages = with pkgs; [
     epiphany
     gnome-calendar

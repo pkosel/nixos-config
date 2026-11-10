@@ -3,6 +3,7 @@
 {
   services.printing = {
     enable = true;
+    # A static queue avoids failures when mDNS discovery loses the printer.
     browsed.enable = false;
   };
 

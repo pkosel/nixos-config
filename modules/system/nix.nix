@@ -5,8 +5,7 @@
     gc = {
       automatic = true;
       dates = "weekly";
-      # Without this, the collector only drops unreachable paths, and every
-      # generation is a GC root, so nothing is ever freed.
+      # Expire old generations so they no longer retain their store closures.
       options = "--delete-older-than 30d";
     };
 
