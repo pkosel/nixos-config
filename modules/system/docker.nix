@@ -1,8 +1,6 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
-  environment.systemPackages = [ pkgs.docker-compose ];
-
   virtualisation.docker = {
     enable = true;
 
@@ -14,7 +12,6 @@
     # layers. Volumes are retained.
     autoPrune = {
       enable = true;
-      dates = "weekly";
       flags = [ "--all" ];
     };
   };
