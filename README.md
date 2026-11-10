@@ -107,6 +107,13 @@ nixos-enter --root /mnt -c 'chown -R philipp:users /home/philipp/.nixos-config'
 
 After booting the installed system, the checkout is at `~/.nixos-config`.
 
+Before first access to `/mnt/webdav`, provision `/etc/davfs2/secrets` on the
+installed system as root, owned by `root:root` with mode `0600`. Use the
+mount-point credential format from `man mount.davfs`; the system automount
+does not consult Philipp's `~/.davfs2/secrets`. Keep credentials outside Git
+and the Nix store. Missing credentials or an untrusted server certificate
+make the non-interactive mount fail.
+
 ## Commands
 
 Run these from the checkout on the installed system:
