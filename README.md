@@ -4,38 +4,21 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Personal NixOS configuration for my laptop, with GNOME, Fish, and Neovim.
-
-## Hosts
-
-| Host                    | Machine | Architecture | Desktop |
-| ----------------------- | ------- | ------------ | ------- |
-| [frieda](hosts/frieda/) | Laptop  | x86_64-linux | GNOME   |
-
-## Nix stack
-
-[NixOS](https://nixos.org/) manages the system;
-[Home Manager](https://github.com/nix-community/home-manager) manages the user
-environment. Both are composed in [flake.nix](flake.nix) and built and
-activated together. There is no separate Home Manager activation step.
-
-Flake inputs are public and pinned in [flake.lock](flake.lock). They provide
-nixpkgs, Home Manager, coding-agent packages, and Firefox extensions; local
-package definitions live in [pkgs/](pkgs/).
-
-See [Structure](AGENTS.md#structure) for layout and configuration ownership,
-and [Code quality](AGENTS.md#code-quality) for editing conventions.
+Personal NixOS flake for [frieda](hosts/frieda/), my x86_64-linux laptop,
+with GNOME, Fish, and Neovim.
+[Home Manager](https://github.com/nix-community/home-manager) manages user
+`philipp` as a NixOS module; system and user configurations build and activate
+together.
 
 ## Installation
 
-These steps install the `frieda` configuration and user `philipp`. Before
-reusing it elsewhere, adapt the host and user settings, including personal
-identity, mounts, and network devices. Use the
-[NixOS installation manual](https://nixos.org/manual/nixos/stable/#ch-installation)
-for layouts beyond the helper's UEFI/GPT setup.
+Before installing on another machine, adapt the
+[host settings](hosts/frieda/default.nix) and
+[user profile](users/philipp/default.nix), including hardware, personal
+identity, mounts, and network devices.
 
-Boot a NixOS live installer with network access, Git, and working `nix-shell`.
-Run this section from a root shell. Stop if any command fails.
+Boot a NixOS live installer in UEFI mode with network access, Git, and working
+`nix-shell`. Run these steps from a root shell. Stop if any command fails.
 
 ### 1. Clone
 
@@ -47,11 +30,10 @@ cd /tmp/nixos-config
 ### 2. Partition
 
 **The partition helper erases the selected disk. Back up its data first.**
-Use an unused, canonical whole-disk path, such as `/dev/nvme0n1`, not a
-partition or `/dev/disk/by-*` alias. Verify its identity and available capacity
-before confirming. Nothing may be mounted at or below `/mnt`. The checks are
-not a lock: do not use the disk or change mounts from another process while
-the helper runs.
+Use an unused, canonical whole-disk path such as `/dev/nvme0n1`, not a
+partition or `/dev/disk/by-*` alias. Verify its identity and capacity, and
+ensure nothing is mounted at or below `/mnt`. Do not use the disk or change
+mounts from another process while the helper runs.
 
 ```sh
 scripts/setup-partitions
@@ -59,7 +41,8 @@ scripts/setup-partitions
 
 The helper creates a GPT layout with an EFI partition, ext4 root, and 4 GiB
 swap, mounts the filesystems under `/mnt`, and generates hardware configuration.
-Its Bash and Parted come from the installer's `<nixpkgs>`, not this flake's pin.
+For other layouts, follow the
+[NixOS installation manual](https://nixos.org/manual/nixos/stable/#ch-installation).
 
 ### 3. Review and install
 
@@ -69,39 +52,32 @@ Copy the generated hardware configuration into the host:
 cp /mnt/etc/nixos/hardware-configuration.nix hosts/frieda/hardware-configuration.nix
 ```
 
-Check that `/` and `/boot` identify the intended devices and that the file
-contains no live-installer root or unrelated mounts. Review
-[host settings](hosts/frieda/default.nix) and the
-[user profile](users/philipp/default.nix) before installing.
+Verify that `/` and `/boot` identify the intended devices and that no
+live-installer root or unrelated mounts are included.
 
-Git-backed flakes ignore untracked files. Stage any new files the
-configuration references; staging does not require a commit. Do not stage
-unrelated files or credentials.
+Git-backed flakes ignore untracked files. Stage the hardware configuration
+and any new files referenced by the flake, then install. Never stage
+credentials or unrelated changes.
 
 ```sh
 git add -- hosts/frieda/hardware-configuration.nix
-```
-
-Install the reviewed configuration:
-
-```sh
 nixos-install --flake .#frieda
 ```
 
-The installer prompts for the root password, not the normal user's password.
-Set the latter before rebooting:
+### 4. Finish and reboot
+
+The installer prompts for the root password. Set `philipp`'s password separately:
 
 ```sh
 nixos-enter --root /mnt -c 'passwd philipp'
 ```
 
-To use the WebDAV mount, provision `/etc/davfs2/secrets` on the installed
-system, owned by `root:root` with mode `0600`. See `man mount.davfs` for the
-credential format. Keep credentials outside Git and the Nix store.
+For WebDAV, provision `/etc/davfs2/secrets` on the installed system
+(`/mnt/etc/davfs2/secrets` from the installer), owned by `root:root` with mode
+`0600`. See `man mount.davfs` for the credential format. Keep credentials
+outside Git and the Nix store.
 
-### 4. Keep the checkout
-
-Preserve the reviewed configuration on the installed system before rebooting:
+Preserve the reviewed checkout:
 
 ```sh
 mkdir -p /mnt/home/philipp
@@ -109,11 +85,11 @@ cp -a /tmp/nixos-config /mnt/home/philipp/.nixos-config
 nixos-enter --root /mnt -c 'chown -R philipp:users /home/philipp/.nixos-config'
 ```
 
-After booting the installed system, the checkout is at `~/.nixos-config`.
+Reboot into the installed system. The checkout is at `~/.nixos-config`.
 
-## Commands
+## Maintenance
 
-Run these from the checkout on the installed system:
+Run these commands from the checkout on the installed system:
 
 ```sh
 cd ~/.nixos-config
@@ -121,19 +97,14 @@ cd ~/.nixos-config
 
 ### Build and apply
 
-Build without activating the configuration:
+Build without activation, then inspect package and closure changes:
 
 ```sh
-nixos-rebuild build --flake .#frieda
+nixos-rebuild build --flake .#frieda &&
+  nvd diff /run/current-system result
 ```
 
-After a successful build, review package and closure changes:
-
-```sh
-nvd diff /run/current-system result
-```
-
-Apply the configuration when ready:
+Apply after reviewing the result:
 
 ```sh
 sudo nixos-rebuild switch --flake .#frieda
@@ -157,17 +128,8 @@ Review the lock-file diff, then build and inspect the result before applying.
 Changing release branches also requires keeping nixpkgs and Home Manager
 aligned; see [Versions and pins](AGENTS.md#versions-and-pins).
 
-### Format and check
-
-Format Nix, Lua, and TypeScript with treefmt, then run the checks:
-
-```sh
-nix fmt && nix flake check
-```
-
-Generated hardware configuration and `flake.lock` are excluded from formatting.
-See [Validation](AGENTS.md#validation) for the complete validation workflow.
-A successful build does not establish that runtime behavior is correct.
+See [AGENTS.md](AGENTS.md) for repository layout, editing conventions, and
+the [validation workflow](AGENTS.md#validation).
 
 ## AI disclaimer
 
