@@ -19,13 +19,16 @@
     nvd
     sd
     unzip
+    wl-clipboard
     zip
 
     # Applications
     anki
     bitwarden-desktop
     calibre
+    dconf-editor
     foliate
+    gnome-tweaks
     libreoffice
     markdown-anki-decks
     newsflash

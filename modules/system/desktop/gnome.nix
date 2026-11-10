@@ -1,11 +1,6 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    dconf-editor
-    gnome-tweaks
-  ];
-
   services = {
     displayManager.gdm.enable = true;
     desktopManager.gnome = {

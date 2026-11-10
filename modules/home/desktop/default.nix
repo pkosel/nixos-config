@@ -5,5 +5,6 @@
     ./gnome.nix
     ./gtk.nix
     ./mimeapps.nix
+    ./wayland.nix
   ];
 }
