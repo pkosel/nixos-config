@@ -3,6 +3,8 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./printing.nix
+    ./webdav.nix
 
     ../../modules/system/audio.nix
     ../../modules/system/ausweisapp.nix
@@ -12,10 +14,8 @@
     ../../modules/system/nix-ld.nix
     ../../modules/system/nix.nix
     ../../modules/system/nixpkgs.nix
-    ../../modules/system/printing.nix
     ../../modules/system/virtualization/docker.nix
     ../../modules/system/vpn.nix
-    ../../modules/system/webdav.nix
   ];
 
   boot = {
