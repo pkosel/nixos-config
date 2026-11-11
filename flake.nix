@@ -14,6 +14,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # nixpkgs' pi-coding-agent trails stable; remove this input and its
     # overlay in modules/system/nixpkgs.nix once it catches up.
     pi = {
@@ -35,44 +40,21 @@
   };
 
   outputs =
-    inputs@{ nixpkgs, home-manager, ... }:
+    inputs@{
+      nixpkgs,
+      home-manager,
+      treefmt-nix,
+      ...
+    }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      treefmt = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
     in
     {
-      formatter.${system} = pkgs.treefmt.withConfig {
-        settings = {
-          tree-root-file = "flake.nix";
-          excludes = [
-            "hosts/*/hardware-configuration.nix"
-            "flake.lock"
-          ];
-
-          formatter = {
-            nixfmt = {
-              command = "${pkgs.nixfmt}/bin/nixfmt";
-              includes = [ "*.nix" ];
-            };
-
-            stylua = {
-              command = "${pkgs.stylua}/bin/stylua";
-              includes = [ "*.lua" ];
-            };
-
-            biome = {
-              command = "${pkgs.biome}/bin/biome";
-              options = [
-                "format"
-                "--write"
-              ];
-              includes = [ "*.ts" ];
-            };
-          };
-        };
-      };
-
       packages.${system}.disko = inputs.disko.packages.${system}.disko;
+
+      formatter.${system} = treefmt.config.build.wrapper;
 
       checks.${system} = {
         # Generated hardware configuration is not linted.
