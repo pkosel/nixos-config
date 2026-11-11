@@ -12,48 +12,82 @@ together.
 
 ## Installation
 
-Before installing on another machine, adapt the
-[host settings](hosts/frieda/default.nix) and
+The installation target is fixed in [the disk declaration](hosts/frieda/disk-config.nix).
+Before replacing the SSD or installing on another machine, update its by-id
+path and review the [host settings](hosts/frieda/default.nix) and
 [user profile](users/philipp/default.nix), including hardware, personal
 identity, mounts, and network devices.
 
-Boot a NixOS live installer in UEFI mode with network access, Git, and working
-`nix-shell`. Run these steps from a root shell. Stop if any command fails.
+Boot a NixOS live installer in UEFI mode with network access and Git.
+Run these steps from an interactive root shell. Stop if any command fails.
 
 ### 1. Clone
+
+Clone the published configuration into an unused `/tmp/nixos-config`
+directory. Local uncommitted changes are not included.
 
 ```sh
 git clone https://github.com/pkosel/nixos-config.git /tmp/nixos-config
 cd /tmp/nixos-config
+export NIX_CONFIG="${NIX_CONFIG:-}
+extra-experimental-features = nix-command flakes"
+git rev-parse --short HEAD
 ```
 
 ### 2. Partition
 
-**The partition helper erases the selected disk. Back up its data first.**
-Use an unused, canonical whole-disk path such as `/dev/nvme0n1`, not a
-partition or `/dev/disk/by-*` alias. Verify its identity and capacity, and
-ensure nothing is mounted at or below `/mnt`. Do not use the disk or change
-mounts from another process while the helper runs.
+**Disk preparation erases all data on the configured disk. Back up its data first.**
+Identify the target by model, serial number, and capacity:
 
 ```sh
-scripts/setup-partitions
+lsblk --nodeps --output PATH,SIZE,MODEL,SERIAL,LOG-SEC
+ls -l /dev/disk/by-id/
 ```
 
-The helper creates a GPT layout with an EFI partition, ext4 root, and 4 GiB
-swap, mounts the filesystems under `/mnt`, and generates hardware configuration.
+Verify that the configured by-id path identifies the intended whole disk,
+not a partition or the live installer disk. Inspect the configured disk and
+its partitions:
+
+```sh
+target=$(nix eval --raw .#nixosConfigurations.frieda.config.disko.devices.disk.main.device)
+lsblk --output PATH,TYPE,SIZE,MODEL,SERIAL,LOG-SEC,MOUNTPOINTS "$target"
+```
+
+Ensure the target is unused and nothing is mounted at or below `/mnt`.
+Run the flake-pinned disko and review its destructive-operation confirmation:
+
+```sh
+nix run .#disko -- --mode destroy,format,mount --flake .#frieda
+```
+
+Disko creates GPT partitions for a 512 MiB FAT32 EFI filesystem, ext4 root
+using the remaining space, and 4 GiB swap. It mounts the filesystems under
+`/mnt`. Activate swap separately:
+
+```sh
+swapon /dev/disk/by-partlabel/swap
+```
+
 For other layouts, follow the
 [NixOS installation manual](https://nixos.org/manual/nixos/stable/#ch-installation).
 
 ### 3. Review and install
 
-Copy the generated hardware configuration into the host:
+Verify that `/mnt`, `/mnt/boot`, and swap use the configured disk:
 
 ```sh
-cp /mnt/etc/nixos/hardware-configuration.nix hosts/frieda/hardware-configuration.nix
+findmnt --mountpoint /mnt
+findmnt --mountpoint /mnt/boot
+swapon --show
 ```
 
-Verify that `/` and `/boot` identify the intended devices and that no
-live-installer root or unrelated mounts are included.
+Generate hardware configuration without filesystem or swap definitions;
+disko supplies them. Copy the generated file into the host:
+
+```sh
+nixos-generate-config --no-filesystems --root /mnt
+cp /mnt/etc/nixos/hardware-configuration.nix hosts/frieda/hardware-configuration.nix
+```
 
 Git-backed flakes ignore untracked files. Stage the hardware configuration
 and any new files referenced by the flake, then install. Never stage
@@ -61,29 +95,31 @@ credentials or unrelated changes.
 
 ```sh
 git add -- hosts/frieda/hardware-configuration.nix
-nixos-install --flake .#frieda
+nixos-install --flake .#frieda --no-root-password
 ```
 
 ### 4. Finish and reboot
 
-The installer prompts for the root password. Set `philipp`'s password separately:
+Set passwords for root and `philipp` using the installed system's tools:
 
 ```sh
-nixos-enter --root /mnt -c 'passwd philipp'
+installed_bin_directory=/nix/var/nix/profiles/system/sw/bin
+nixos-enter --root /mnt -- "$installed_bin_directory/passwd" root
+nixos-enter --root /mnt -- "$installed_bin_directory/passwd" philipp
+```
+
+Preserve the reviewed checkout:
+
+```sh
+mkdir -p /mnt/home/philipp
+cp -a -- /tmp/nixos-config/. /mnt/home/philipp/.nixos-config
+nixos-enter --root /mnt -- "$installed_bin_directory/chown" -R philipp:users /home/philipp/.nixos-config
 ```
 
 For WebDAV, provision `/etc/davfs2/secrets` on the installed system
 (`/mnt/etc/davfs2/secrets` from the installer), owned by `root:root` with mode
 `0600`. See `man mount.davfs` for the credential format. Keep credentials
 outside Git and the Nix store.
-
-Preserve the reviewed checkout:
-
-```sh
-mkdir -p /mnt/home/philipp
-cp -a /tmp/nixos-config /mnt/home/philipp/.nixos-config
-nixos-enter --root /mnt -c 'chown -R philipp:users /home/philipp/.nixos-config'
-```
 
 Reboot into the installed system. The checkout is at `~/.nixos-config`.
 

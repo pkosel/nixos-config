@@ -1,8 +1,20 @@
-{ pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  partitions = config.disko.devices.disk.main.content.partitions;
+in
 
 {
   imports = [
     ./hardware-configuration.nix
+    inputs.disko.nixosModules.disko
+    ./disk-config.nix
     ./printing.nix
     ./webdav.nix
 
@@ -17,11 +29,19 @@
     ../../modules/system/nixpkgs.nix
   ];
 
+  # Replace generated hardware definitions with disko's settings; merging the
+  # swap lists would add duplicate entries for the same partition.
+  # Remove these overrides and the partitions binding once hardware configuration
+  # is regenerated with nixos-generate-config --no-filesystems.
+  fileSystems."/" = lib.mkForce (lib.head partitions.nixos.content._config).fileSystems."/";
+  fileSystems."/boot" = lib.mkForce (lib.head partitions.boot.content._config).fileSystems."/boot";
+  swapDevices = lib.mkForce (lib.head partitions.swap.content._config).swapDevices;
+
   boot = {
     loader = {
       systemd-boot = {
         enable = true;
-        # /boot is a 512M ESP; unlimited entries fill it up.
+        # The small ESP cannot hold unlimited boot entries.
         configurationLimit = 10;
       };
       efi.canTouchEfiVariables = true;
