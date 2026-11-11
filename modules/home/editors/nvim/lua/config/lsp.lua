@@ -76,8 +76,10 @@ vim.lsp.config("rust_analyzer", {
 vim.lsp.enable({
   "bashls",
   "pyright",
+  "cssls",
   "dockerls",
   "fish_lsp",
+  "html",
   "jsonls",
   "just",
   "lua_ls",

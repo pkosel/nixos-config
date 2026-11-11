@@ -2,6 +2,8 @@ local conform = require("conform")
 
 conform.setup({
   formatters_by_ft = {
+    css = { "prettier" },
+    html = { "prettier" },
     javascript = { "biome" },
     javascriptreact = { "biome" },
     json = { "prettier" },
