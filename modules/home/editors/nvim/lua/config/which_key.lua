@@ -23,7 +23,7 @@ which_key.setup({
       { "]", group = "next" },
       { "g", group = "goto" },
       { "s", group = "surround" },
-      { "z", group = "fold" },
+      { "z", group = "fold/spelling" },
       { "gx", desc = "Open with system app" },
     },
     { "<leader><tab>", group = "tabs" },

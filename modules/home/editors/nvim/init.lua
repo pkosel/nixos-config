@@ -1,6 +1,7 @@
 require("config.options")
 require("config.which_key")
 require("config.keymaps")
+require("config.spell")
 
 require("gitsigns").setup()
 require("mini.pairs").setup()
