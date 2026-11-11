@@ -110,7 +110,6 @@ in
           gitattributes
           gitcommit
           gitignore
-          go
           hcl
           html
           ini
@@ -133,7 +132,6 @@ in
           toml
           tsx
           typescript
-          vim
           vimdoc
           yaml
         ]
