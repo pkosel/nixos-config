@@ -133,7 +133,7 @@ text with its code; rewrite errors rather than appending corrections.
 │   └── home/                 # User configuration, including Neovim Lua
 ├── pkgs/                     # Local package definitions
 ├── overlays/                 # Add or override packages in nixpkgs
-└── scripts/                  # Installation helpers
+└── scripts/                  # Installation helper
 ```
 
 - Follow imports from `flake.nix` through `hosts/frieda/default.nix` or
@@ -187,7 +187,7 @@ failure:
 
    Generated hardware configuration and `flake.lock` are excluded.
 
-2. Check flake outputs, deadnix, and statix:
+2. Check flake outputs, deadnix, statix, and shellcheck:
 
    ```sh
    nix flake check
@@ -214,15 +214,16 @@ failure:
    The build leaves `result` in the repository root. Configuration-only
    changes can appear as added and removed paths rather than version changes.
 
-There is no CI or test suite. Evaluation, building, and activation are
-separate; a successful build does not verify runtime behavior. Report checks
-run, skipped, or blocked, their results, and anything still unverified.
+There is no CI or persistent test suite. Evaluation, building, and activation
+are separate; a successful build does not verify real-machine runtime behavior.
+Report checks run, skipped, or blocked, their results, and anything still
+unverified.
 
 ## Hazards and boundaries
 
 - Do not activate, install, or repartition: no `nixos-rebuild switch`, `boot`,
-  or `test`, no `nixos-install`, and no `scripts/setup-partitions`. The user
-  performs activation and installation.
+  or `test`, no `nixos-install`, and no disk preparation on physical disks.
+  The user performs real-machine activation and installation.
 - Do not use `sudo` or `--impure`.
 - Do not update `flake.lock`, commit, push, or rewrite Git history unless
   explicitly asked. Do not bypass a failing check.

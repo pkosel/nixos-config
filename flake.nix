@@ -87,6 +87,11 @@
           statix check .
           touch $out
         '';
+
+        shellcheck = pkgs.runCommand "shellcheck" { nativeBuildInputs = [ pkgs.shellcheck ]; } ''
+          shellcheck ${./scripts/install.sh}
+          touch $out
+        '';
       };
 
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
