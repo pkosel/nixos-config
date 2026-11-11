@@ -179,7 +179,7 @@ git diff --check
 For code or configuration changes, run these in order; stop at the first
 failure:
 
-1. Format Nix, Lua, and TypeScript with treefmt:
+1. Format Nix, Lua, and TypeScript and apply deadnix/statix fixes with treefmt:
 
    ```sh
    nix fmt
@@ -187,7 +187,7 @@ failure:
 
    Generated hardware configuration and `flake.lock` are excluded.
 
-2. Check flake outputs, deadnix, statix, and shellcheck:
+2. Check flake outputs, formatting, and linting without modifying the checkout:
 
    ```sh
    nix flake check

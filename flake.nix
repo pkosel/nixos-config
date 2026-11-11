@@ -55,26 +55,7 @@
       packages.${system}.disko = inputs.disko.packages.${system}.disko;
 
       formatter.${system} = treefmt.config.build.wrapper;
-
-      checks.${system} = {
-        # Generated hardware configuration is not linted.
-        deadnix = pkgs.runCommand "deadnix" { nativeBuildInputs = [ pkgs.deadnix ]; } ''
-          cd ${./.}
-          deadnix --fail . --exclude hosts/frieda/hardware-configuration.nix
-          touch $out
-        '';
-
-        statix = pkgs.runCommand "statix" { nativeBuildInputs = [ pkgs.statix ]; } ''
-          cd ${./.}
-          statix check .
-          touch $out
-        '';
-
-        shellcheck = pkgs.runCommand "shellcheck" { nativeBuildInputs = [ pkgs.shellcheck ]; } ''
-          shellcheck ${./scripts/install.sh}
-          touch $out
-        '';
-      };
+      checks.${system}.formatting = treefmt.config.build.check inputs.self;
 
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
         inherit system;
