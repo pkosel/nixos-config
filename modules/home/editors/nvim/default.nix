@@ -31,6 +31,8 @@ in
       # Language servers
       bash-language-server
       dockerfile-language-server
+      fish-lsp
+      just-lsp
       lua-language-server
       marksman
       nixd
@@ -101,6 +103,7 @@ in
           bash
           comment
           css
+          csv
           diff
           dockerfile
           editorconfig
@@ -116,6 +119,7 @@ in
           javascript
           jsdoc
           json
+          just
           lua
           luadoc
           luap
