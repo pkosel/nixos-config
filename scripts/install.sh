@@ -54,30 +54,22 @@ log_step "Preparing the disk. Disko will ask for confirmation before erasing $ta
 
 nix run .#disko -- --mode destroy,format,mount --flake .#frieda
 
-log_step "Activating swap and checking the mounted filesystems."
-
-swapon /dev/disk/by-partlabel/swap
+log_step "Checking the mounted filesystems and swap."
 
 findmnt --mountpoint /mnt
 findmnt --mountpoint /mnt/boot
 swapon --show
 
-log_step "Generating and staging frieda's hardware configuration."
+log_step "Generating frieda's hardware configuration."
 
-nixos-generate-config --no-filesystems --root /mnt
+nixos-generate-config --no-filesystems --root /mnt \
+  --show-hardware-config > hosts/frieda/hardware-configuration.nix
 
-cp /mnt/etc/nixos/hardware-configuration.nix hosts/frieda/hardware-configuration.nix
-git add -- hosts/frieda/hardware-configuration.nix
+log_step "Installing NixOS and setting the root password."
 
-log_step "Installing NixOS."
-
-nixos-install --flake .#frieda --no-root-password
+nixos-install --flake .#frieda
 
 readonly installed_bin_directory=/nix/var/nix/profiles/system/sw/bin
-
-log_step "Setting the root password."
-
-nixos-enter --root /mnt -- "$installed_bin_directory/passwd" root
 
 log_step "Setting philipp's password."
 
