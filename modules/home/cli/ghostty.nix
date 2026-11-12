@@ -5,6 +5,7 @@
     enable = true;
     settings = {
       theme = "light:Light Owl,dark:Night Owl";
+      keybind = [ "ctrl+shift+w=close_surface" ];
       font-family = [
         "Fira Code"
         "Noto Color Emoji"
