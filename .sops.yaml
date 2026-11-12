@@ -1,0 +1,5 @@
+creation_rules:
+  - path_regex: ^secrets/bridget\.yaml$
+    age: >-
+      age1m8alagktq745wnjgkk97t48dye65xcxvx7ut7m7d0ce78hw5kc4sxj6us2,
+      age12d36dlq9vay7aq98fnm73d0rpu80knu3hz7ys7ja260j5pnak9tsz3ufh0

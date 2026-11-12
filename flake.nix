@@ -9,6 +9,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -52,10 +57,19 @@
       treefmt = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
     in
     {
-      packages.${system}.disko = inputs.disko.packages.${system}.disko;
+      packages.${system} = {
+        disko = inputs.disko.packages.${system}.disko;
+        inherit (pkgs) nixos-anywhere;
+      };
 
       formatter.${system} = treefmt.config.build.wrapper;
       checks.${system}.formatting = treefmt.config.build.check inputs.self;
+
+      nixosConfigurations.bridget = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs; };
+        modules = [ ./hosts/bridget/default.nix ];
+      };
 
       nixosConfigurations.frieda = nixpkgs.lib.nixosSystem {
         inherit system;
