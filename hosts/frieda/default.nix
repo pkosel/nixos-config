@@ -15,9 +15,9 @@ in
     ./hardware-configuration.nix
     inputs.disko.nixosModules.disko
     ./disk-config.nix
-    ./printing.nix
-    ./webdav.nix
 
+    ../../modules/services/printing.nix
+    ../../modules/system/webdav.nix
     ../../modules/system/ausweisapp.nix
     ../../modules/system/brave.nix
     ../../modules/system/docker.nix
