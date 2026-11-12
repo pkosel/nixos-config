@@ -16,13 +16,10 @@ Run these commands in a root Bash shell on a UEFI NixOS installer with Git.
 Clone the published configuration and enable Nix's flake commands:
 
 ```sh
-set -euo pipefail
 checkout_directory=/tmp/nixos-config
 git clone https://github.com/pkosel/nixos-config.git "$checkout_directory"
 cd -- "$checkout_directory"
-export NIX_CONFIG="${NIX_CONFIG:-}
-extra-experimental-features = nix-command flakes"
-git rev-parse --short HEAD
+export NIX_CONFIG="extra-experimental-features = nix-command flakes"
 ```
 
 Disko erases and mounts the disk selected in the host's
@@ -62,16 +59,29 @@ After boot, provision `/etc/davfs2/secrets` (`root:root`, `0600`) for WebDAV.
 
 ### bridget (remote)
 
-Run from a repository checkout with tracked `secrets/bridget.yaml`. Prepare
-these private files in a bootstrap directory outside the checkout, with mode
-`0600`:
-
-```text
-etc/ssh/ssh_host_ed25519_key    # SSH host key
-var/lib/sops-nix/key.txt        # Bridget's age identity
-```
+Run from a repository checkout with tracked `secrets/bridget.yaml`.
+For first setup, create an age identity for SOPS and a separate SSH host key
+outside the checkout. Reuse existing keys on reinstalls:
 
 ```sh
+nix shell --inputs-from . nixpkgs#age nixpkgs#sops
+umask 077
+age-keygen -o "<age-key-file>"
+ssh-keygen -t ed25519 -N "" -f "<ssh-host-key-file>"
+```
+
+Update the server recipient in [.sops.yaml](.sops.yaml), retaining the
+administrator recipient, then re-encrypt:
+
+```sh
+SOPS_AGE_KEY_FILE="<administrator-age-key-file>" sops updatekeys secrets/bridget.yaml
+```
+
+Prepare the bootstrap directory outside the checkout and install:
+
+```sh
+install -D -m 0600 "<age-key-file>" "<bootstrap-directory>/var/lib/sops-nix/key.txt"
+install -D -m 0600 "<ssh-host-key-file>" "<bootstrap-directory>/etc/ssh/ssh_host_ed25519_key"
 nix run .#nixos-anywhere -- --flake .#bridget \
   --target-host "root@<server-ip>" \
   --extra-files "<bootstrap-directory>"
