@@ -84,9 +84,8 @@ nixos-enter --root /mnt -- "$installed_bin_directory/chown" -R philipp:users /ho
 reboot
 ```
 
-Remove the installation USB stick and log in as `philipp`. Provision
-`/etc/davfs2/secrets` (`root:root`, `0600`) for WebDAV. For subsequent changes,
-use the [rebuild commands](#rebuilding) from the installed checkout.
+Remove the installation USB stick and log in as `philipp`. For subsequent
+changes, use the [rebuild commands](#rebuilding) from the installed checkout.
 
 #### Alternative: disko-install
 

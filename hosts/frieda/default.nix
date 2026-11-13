@@ -17,7 +17,6 @@ in
     ./disk-config.nix
 
     ../../modules/services/printing.nix
-    ../../modules/system/webdav.nix
     ../../modules/system/ausweisapp.nix
     ../../modules/system/brave.nix
     ../../modules/system/docker.nix
