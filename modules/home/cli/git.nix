@@ -4,7 +4,7 @@ let
   email = "170943+pkosel@users.noreply.github.com";
 
   # Signing requires the matching private key in GNOME's SSH agent.
-  signingPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHgPnFNx3Xh/s2AaPlfND+jpypNf4h1mD8BZyGiK0dAF";
+  signingPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHSSLqnBtA6WHXds7TADlPvaUW13HGXyqCINYUgWmZ0c";
 
   # SSH verification requires an explicit allowlist of trusted signing keys.
   allowedSignersFile = pkgs.writeText "allowed_signers" ''
