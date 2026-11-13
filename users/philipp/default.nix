@@ -33,8 +33,8 @@
     markdown-anki-decks
     newsflash
     proton-pass
+    riff-client
     signal-desktop
-    spot
     todoist-electron
     zotero
   ];
