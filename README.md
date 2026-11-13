@@ -11,40 +11,64 @@ NixOS configurations for [frieda](hosts/frieda/) (laptop) and
 
 ### frieda (local)
 
-Run these commands in a root Bash shell on a UEFI NixOS installer with Git.
+Boot a NixOS installer in UEFI mode with network access and Git, then open a
+root Bash shell. These steps reinstall `frieda`; review the host's
+hardware-specific settings before using them on a different machine.
 
-Clone the published configuration and enable Nix's flake commands:
+#### 1. Clone the configuration
+
+Enable Nix's flake commands and clone the published configuration:
 
 ```sh
+export NIX_CONFIG="extra-experimental-features = nix-command flakes"
 checkout_directory=/tmp/nixos-config
 git clone https://github.com/pkosel/nixos-config.git "$checkout_directory"
 cd -- "$checkout_directory"
-export NIX_CONFIG="extra-experimental-features = nix-command flakes"
 ```
 
-Disko erases and mounts the disk selected in the host's
-[disk declaration](hosts/frieda/disk-config.nix) and activates swap:
+#### 2. Check the target disk
+
+Inspect the available drives and compare them with the host's
+[disk declaration](hosts/frieda/disk-config.nix). Update its `device` if needed:
 
 ```sh
+lsblk --output PATH,TYPE,SIZE,MODEL,SERIAL,LOG-SEC,MOUNTPOINTS
 target_disk=$(nix eval --raw .#nixosConfigurations.frieda.config.disko.devices.disk.main.device)
 lsblk --output PATH,TYPE,SIZE,MODEL,SERIAL,LOG-SEC,MOUNTPOINTS "$target_disk"
-nix run .#disko -- --mode destroy,format,mount --flake .#frieda
-findmnt --mountpoint /mnt
-findmnt --mountpoint /mnt/boot
-swapon --show
 ```
 
-Generate hardware settings without filesystem definitions, which Disko
-supplies, then install the system. The installer prompts for the root password:
+#### 3. Partition, format, and mount
+
+The pinned Disko erases the selected disk and mounts its filesystems under
+`/mnt`. It also activates the configured swap:
 
 ```sh
-nixos-generate-config --no-filesystems --root /mnt \
+nix run .#disko -- --mode destroy,format,mount --flake .#frieda
+findmnt -R /mnt
+```
+
+#### 4. Generate hardware settings and install
+
+Write hardware settings directly into the checkout. Omit filesystem definitions
+because Disko supplies them; this file is already tracked, so no `git add` is
+needed:
+
+```sh
+nixos-generate-config --root /mnt --no-filesystems \
   --show-hardware-config > hosts/frieda/hardware-configuration.nix
+```
+
+Install the system, including Home Manager. The installer prompts for the root
+password; no separate Home Manager activation is needed:
+
+```sh
 nixos-install --flake .#frieda
 ```
 
-Set Philipp's password and preserve the checkout at `~/.nixos-config` for
-subsequent rebuilds:
+#### 5. Set the user password and preserve the checkout
+
+Set Philipp's password, then copy the checkout to `~/.nixos-config` on the
+installed system so it survives reboot:
 
 ```sh
 installed_bin_directory=/nix/var/nix/profiles/system/sw/bin
@@ -52,10 +76,37 @@ nixos-enter --root /mnt -- "$installed_bin_directory/passwd" philipp
 mkdir -p /mnt/home/philipp
 cp -a -- "$checkout_directory/." /mnt/home/philipp/.nixos-config
 nixos-enter --root /mnt -- "$installed_bin_directory/chown" -R philipp:users /home/philipp/.nixos-config
+```
+
+#### 6. Reboot
+
+```sh
 reboot
 ```
 
-After boot, provision `/etc/davfs2/secrets` (`root:root`, `0600`) for WebDAV.
+Remove the installation USB stick and log in as `philipp`. Provision
+`/etc/davfs2/secrets` (`root:root`, `0600`) for WebDAV. For subsequent changes,
+use the [rebuild commands](#rebuilding) from the installed checkout.
+
+#### Alternative: disko-install
+
+After steps 1–2, the pinned `disko-install` can replace steps 3–4. Generate
+hardware settings first, then let it prepare the disk and install NixOS:
+
+```sh
+nixos-generate-config --no-filesystems \
+  --show-hardware-config > hosts/frieda/hardware-configuration.nix
+nix run .#disko-install -- --flake .#frieda --disk main "$target_disk" \
+  --write-efi-boot-entries
+```
+
+This tool unmounts the target on exit and skips the root-password prompt.
+Remount and set the root password, then continue with steps 5–6:
+
+```sh
+nix run .#disko -- --mode mount --flake .#frieda
+nixos-enter --root /mnt -- /nix/var/nix/profiles/system/sw/bin/passwd root
+```
 
 ### bridget (remote)
 

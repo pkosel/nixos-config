@@ -59,6 +59,7 @@
     {
       packages.${system} = {
         disko = inputs.disko.packages.${system}.disko;
+        disko-install = inputs.disko.packages.${system}.disko-install;
         inherit (pkgs) nixos-anywhere;
       };
 
