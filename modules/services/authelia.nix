@@ -25,7 +25,8 @@ in
         # The user database is rendered from SOPS and cannot be changed in place.
         password_reset.disable = true;
       };
-      access_control.default_policy = "deny";
+      # Authelia forbids a deny default when no access-control rules are defined.
+      access_control.default_policy = "two_factor";
       session.cookies = [
         {
           domain = config.networking.domain;

@@ -22,7 +22,12 @@ in
         DISABLE_REGISTRATION = true;
         DEFAULT_KEEP_EMAIL_PRIVATE = true;
         ENABLE_NOTIFY_MAIL = true;
+        # Prevent password login from bypassing Authelia MFA; tokens still work.
+        ENABLE_INTERNAL_SIGNIN = false;
+        ENABLE_BASIC_AUTHENTICATION = false;
       };
+      # Disable legacy OpenID, not the OAuth2/OpenID Connect authentication source.
+      openid.ENABLE_OPENID_SIGNIN = false;
       repository.DEFAULT_PRIVATE = "private";
       session.COOKIE_SECURE = true;
       actions.ENABLED = false;
