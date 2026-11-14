@@ -2,6 +2,7 @@
 
 let
   homepage = config.services.homepage-dashboard;
+  backends = config.services.traefik.dynamicConfigOptions.http.services;
 in
 
 {
@@ -15,6 +16,7 @@ in
       headerStyle = "clean";
       target = "_self";
       hideVersion = true;
+      statusStyle = "dot";
       # Updates are managed through the pinned NixOS package.
       disableUpdateCheck = true;
       layout.Services = {
@@ -22,6 +24,30 @@ in
         columns = 3;
       };
     };
+    widgets = [
+      {
+        resources = {
+          label = "Bridget";
+          cpu = true;
+          memory = true;
+          disk = "/";
+          uptime = true;
+          refresh = 5000;
+        };
+      }
+      {
+        openmeteo = {
+          label = "Munich";
+          latitude = 48.137154;
+          longitude = 11.576124;
+          timezone = config.time.timeZone;
+          units = "metric";
+          cache = 15;
+          format.maximumFractionDigits = 0;
+        };
+      }
+    ];
+    # Check backends directly so an SSO redirect cannot mask an unavailable app.
     services = [
       {
         Services = [
@@ -29,6 +55,7 @@ in
             Forgejo = {
               icon = "mdi-git";
               href = config.services.forgejo.settings.server.ROOT_URL;
+              siteMonitor = "${(builtins.head backends.forgejo.loadBalancer.servers).url}/api/healthz";
               description = "Git repositories and code collaboration";
             };
           }
@@ -36,6 +63,8 @@ in
             FreshRSS = {
               icon = "mdi-rss";
               href = config.services.freshrss.baseUrl;
+              # FreshRSS's upstream health check requests this PHP-rendered API page.
+              siteMonitor = "${(builtins.head backends.freshrss.loadBalancer.servers).url}/api/";
               description = "RSS subscriptions and reading";
             };
           }
@@ -43,6 +72,7 @@ in
             Authelia = {
               icon = "mdi-shield-account";
               href = "https://auth.${config.networking.domain}";
+              siteMonitor = "${(builtins.head backends.authelia.loadBalancer.servers).url}/api/health";
               description = "Authentication portal";
             };
           }
