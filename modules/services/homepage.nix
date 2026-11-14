@@ -9,6 +9,14 @@ in
   services.homepage-dashboard = {
     enable = true;
     allowedHosts = config.networking.domain;
+    customCSS = ''
+      /* Homepage 1.12.3 renders uptime last, with a bar based on clock seconds.
+         Hide that decorative bar but preserve alignment with the usage bars.
+         Remove this rule when upstream supports disabling the uptime bar. */
+      #information-widgets .information-widget-resource:last-child .resource-usage {
+        visibility: hidden;
+      }
+    '';
     settings = {
       title = "Bridget";
       theme = "dark";
@@ -27,7 +35,6 @@ in
     widgets = [
       {
         resources = {
-          label = "Bridget";
           cpu = true;
           memory = true;
           disk = "/";
