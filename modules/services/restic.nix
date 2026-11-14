@@ -38,11 +38,12 @@ in
     # Copy stopped applications locally, then restart before the network upload.
     backupPrepareCommand = ''
       set -euo pipefail
-      trap '${pkgs.systemd}/bin/systemctl start forgejo.service authelia-main.service' EXIT
-      ${pkgs.systemd}/bin/systemctl stop forgejo.service authelia-main.service
+      trap '${pkgs.systemd}/bin/systemctl start forgejo.service authelia-main.service phpfpm-freshrss.service freshrss-updater.timer' EXIT
+      ${pkgs.systemd}/bin/systemctl stop forgejo.service authelia-main.service phpfpm-freshrss.service freshrss-updater.timer freshrss-updater.service
       ${pkgs.coreutils}/bin/install -d -m 0700 ${backupDirectory}
       ${pkgs.rsync}/bin/rsync -a --delete ${config.services.forgejo.stateDir}/ ${backupDirectory}/forgejo/
       ${pkgs.rsync}/bin/rsync -a --delete /var/lib/authelia-main/ ${backupDirectory}/authelia-main/
+      ${pkgs.rsync}/bin/rsync -a --delete ${config.services.freshrss.dataDir}/ ${backupDirectory}/freshrss/
     '';
     backupCleanupCommand = ''
       set -euo pipefail
