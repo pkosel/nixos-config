@@ -31,7 +31,7 @@ in
         {
           domain = config.networking.domain;
           authelia_url = authenticationUrl;
-          default_redirection_url = config.services.forgejo.settings.server.ROOT_URL;
+          default_redirection_url = "https://${config.networking.domain}/";
         }
       ];
       storage.local.path = "/var/lib/authelia-main/db.sqlite3";

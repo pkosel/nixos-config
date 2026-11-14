@@ -15,6 +15,7 @@
     ../../modules/services/authelia.nix
     ../../modules/services/forgejo.nix
     ../../modules/services/freshrss.nix
+    ../../modules/services/homepage.nix
     ../../modules/services/restic.nix
     ../../modules/secrets.nix
     ../../modules/system/nix.nix
