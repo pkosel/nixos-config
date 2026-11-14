@@ -49,8 +49,8 @@ in
           longitude = 11.576124;
           timezone = config.time.timeZone;
           units = "metric";
-          cache = 15;
-          format.maximumFractionDigits = 0;
+          cache = 5;
+          format.maximumFractionDigits = 1;
         };
       }
     ];
