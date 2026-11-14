@@ -1,14 +1,15 @@
 { pkgs, ... }:
 
 let
-  email = "170943+pkosel@users.noreply.github.com";
+  email = "git@pkosel.dev";
 
   # Signing requires the matching private key in GNOME's SSH agent.
   signingPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHSSLqnBtA6WHXds7TADlPvaUW13HGXyqCINYUgWmZ0c";
 
-  # SSH verification requires an explicit allowlist of trusted signing keys.
+  # SSH verification needs an explicit allowlist; retain the previous email for
+  # historical commits signed by this key.
   allowedSignersFile = pkgs.writeText "allowed_signers" ''
-    ${email} namespaces="git" ${signingPublicKey}
+    ${email},170943+pkosel@users.noreply.github.com namespaces="git" ${signingPublicKey}
   '';
 in
 {

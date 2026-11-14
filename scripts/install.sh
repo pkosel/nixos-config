@@ -22,7 +22,7 @@ export NIX_CONFIG="extra-experimental-features = nix-command flakes"
 
 # Clone
 readonly checkout_directory=/tmp/nixos-config
-git clone https://git.pkosel.dev/philipp/nixos-config.git "$checkout_directory"
+git clone https://git.pkosel.dev/pkosel/nixos-config.git "$checkout_directory"
 cd -- "$checkout_directory"
 
 # Inspect the configured target disk
