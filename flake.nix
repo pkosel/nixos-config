@@ -64,7 +64,15 @@
       };
 
       formatter.${system} = treefmt.config.build.wrapper;
-      checks.${system}.formatting = treefmt.config.build.check inputs.self;
+      checks.${system} = {
+        formatting = treefmt.config.build.check inputs.self;
+        forgejo-workflow = pkgs.runCommand "forgejo-workflow-check" { } ''
+          set -euo pipefail
+          ${pkgs.forgejo-runner}/bin/forgejo-runner validate \
+            --workflow --path ${./.forgejo/workflows/ci.yaml}
+          touch "$out"
+        '';
+      };
 
       nixosConfigurations.bridget = nixpkgs.lib.nixosSystem {
         inherit system;
