@@ -30,7 +30,7 @@ in
       openid.ENABLE_OPENID_SIGNIN = false;
       repository.DEFAULT_PRIVATE = "private";
       session.COOKIE_SECURE = true;
-      actions.ENABLED = false;
+      actions.ENABLED = true;
       mailer = {
         ENABLED = true;
         PROTOCOL = "smtp+starttls";
