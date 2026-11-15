@@ -24,6 +24,7 @@
         "io.gitlab.news_flash.NewsFlash.desktop"
         "obsidian.desktop"
         "zotero.desktop"
+        "dev.diegovsky.Riff.desktop"
         "signal.desktop"
       ];
     };
