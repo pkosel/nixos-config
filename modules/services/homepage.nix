@@ -60,7 +60,7 @@ in
         Services = [
           {
             Forgejo = {
-              icon = "mdi-git";
+              icon = "forgejo.svg";
               href = config.services.forgejo.settings.server.ROOT_URL;
               siteMonitor = "${(builtins.head backends.forgejo.loadBalancer.servers).url}/api/healthz";
               description = "Git repositories and code collaboration";
@@ -68,7 +68,7 @@ in
           }
           {
             FreshRSS = {
-              icon = "mdi-rss";
+              icon = "freshrss.svg";
               href = config.services.freshrss.baseUrl;
               # FreshRSS's upstream health check requests this PHP-rendered API page.
               siteMonitor = "${(builtins.head backends.freshrss.loadBalancer.servers).url}/api/";
@@ -76,8 +76,16 @@ in
             };
           }
           {
+            Papra = {
+              icon = "papra.svg";
+              href = config.services.papra.environment.APP_BASE_URL;
+              siteMonitor = "${(builtins.head backends.papra.loadBalancer.servers).url}/api/health";
+              description = "Documents, OCR, and search";
+            };
+          }
+          {
             Authelia = {
-              icon = "mdi-shield-account";
+              icon = "authelia.svg";
               href = "https://auth.${config.networking.domain}";
               siteMonitor = "${(builtins.head backends.authelia.loadBalancer.servers).url}/api/health";
               description = "Authentication portal";
