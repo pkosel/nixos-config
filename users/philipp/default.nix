@@ -7,6 +7,7 @@
     ../../modules/home/desktop
     ../../modules/home/editors
     ../../modules/home/obsidian.nix
+    ../../modules/home/papra.nix
   ];
 
   home.packages = with pkgs; [
