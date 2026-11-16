@@ -18,7 +18,9 @@ review the complete task diff before finishing.
 - Put NixOS services in `modules/services/`, OS integration in `modules/system/`,
   and user settings needing no root in Home Manager under `modules/home/`.
 - Keep SOPS setup and declarations in `modules/secrets.nix`, encrypted data in
-  `secrets/`, and private identities outside the checkout.
+  `secrets/<service>.yaml`, and private identities outside the checkout. Shared
+  credentials have one feature file (for example, `smtp.yaml`); set each secret's
+  `sopsFile` explicitly.
 - Both NixOS and Home Manager receive `inputs`. Keep program themes and colors
   in their respective program modules.
 

@@ -8,36 +8,40 @@ in
   imports = [ inputs.sops-nix.nixosModules.sops ];
 
   sops = {
-    defaultSopsFile = ../secrets/bridget.yaml;
     age.keyFile = "/var/lib/sops-nix/key.txt";
     secrets = {
       smtp-password = {
+        sopsFile = ../secrets/smtp.yaml;
         owner = authelia.user;
         restartUnits = [
           "authelia-main.service"
           "forgejo.service"
         ];
       };
-      authelia-password-hash = { };
+      authelia-password-hash.sopsFile = ../secrets/authelia.yaml;
       authelia-jwt-secret = {
+        sopsFile = ../secrets/authelia.yaml;
         owner = authelia.user;
         restartUnits = [ "authelia-main.service" ];
       };
       authelia-storage-key = {
+        sopsFile = ../secrets/authelia.yaml;
         owner = authelia.user;
         restartUnits = [ "authelia-main.service" ];
       };
       authelia-oidc-hmac-secret = {
+        sopsFile = ../secrets/authelia.yaml;
         owner = authelia.user;
         restartUnits = [ "authelia-main.service" ];
       };
       authelia-oidc-private-key = {
+        sopsFile = ../secrets/authelia.yaml;
         owner = authelia.user;
         restartUnits = [ "authelia-main.service" ];
       };
-      forgejo-oidc-secret-hash = { };
-      restic-password = { };
-      restic-ssh-key = { };
+      forgejo-oidc-secret-hash.sopsFile = ../secrets/forgejo.yaml;
+      restic-password.sopsFile = ../secrets/restic.yaml;
+      restic-ssh-key.sopsFile = ../secrets/restic.yaml;
     };
   };
 }

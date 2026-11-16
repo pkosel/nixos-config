@@ -109,7 +109,7 @@ nixos-enter --root /mnt -- /nix/var/nix/profiles/system/sw/bin/passwd root
 
 ### bridget (remote)
 
-Run from a repository checkout with tracked `secrets/bridget.yaml`.
+Run from a repository checkout with tracked service secret files in `secrets/`.
 For first setup, create an age identity for SOPS and a separate SSH host key
 outside the checkout. Reuse existing keys on reinstalls:
 
@@ -124,7 +124,10 @@ Update the server recipient in [.sops.yaml](.sops.yaml), retaining the
 administrator recipient, then re-encrypt:
 
 ```sh
-SOPS_AGE_KEY_FILE="<administrator-age-key-file>" sops updatekeys secrets/bridget.yaml
+set -euo pipefail
+for secret_file in secrets/*.yaml; do
+  SOPS_AGE_KEY_FILE="<administrator-age-key-file>" sops updatekeys "$secret_file"
+done
 ```
 
 Prepare the bootstrap directory outside the checkout and install:
