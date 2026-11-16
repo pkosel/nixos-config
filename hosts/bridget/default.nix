@@ -16,6 +16,7 @@
     ../../modules/services/forgejo.nix
     ../../modules/services/forgejo-runner.nix
     ../../modules/services/freshrss.nix
+    ../../modules/services/papra.nix
     ../../modules/services/homepage.nix
     ../../modules/services/restic.nix
     ../../modules/secrets.nix

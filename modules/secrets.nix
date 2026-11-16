@@ -42,6 +42,13 @@ in
       forgejo-oidc-secret-hash.sopsFile = ../secrets/forgejo.yaml;
       restic-password.sopsFile = ../secrets/restic.yaml;
       restic-ssh-key.sopsFile = ../secrets/restic.yaml;
+      papra-auth-secret.sopsFile = ../secrets/papra.yaml;
+      papra-oidc-client-secret.sopsFile = ../secrets/papra.yaml;
+      papra-oidc-secret-hash = {
+        sopsFile = ../secrets/papra.yaml;
+        restartUnits = [ "authelia-main.service" ];
+      };
+      papra-intake-webhook-secret.sopsFile = ../secrets/papra.yaml;
     };
   };
 }

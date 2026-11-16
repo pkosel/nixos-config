@@ -82,6 +82,27 @@ in
             grant_types = [ "authorization_code" ];
             token_endpoint_auth_method = "client_secret_basic";
           }
+          {
+            client_id = "bridget-papra";
+            client_name = "Papra";
+            client_secret = config.sops.placeholder.papra-oidc-secret-hash;
+            public = false;
+            authorization_policy = "two_factor";
+            require_pkce = true;
+            pkce_challenge_method = "S256";
+            redirect_uris = [
+              "${config.services.papra.environment.APP_BASE_URL}/api/auth/oauth2/callback/authelia"
+            ];
+            scopes = [
+              "openid"
+              "email"
+              "profile"
+            ];
+            response_types = [ "code" ];
+            grant_types = [ "authorization_code" ];
+            # Papra's custom-provider schema does not expose token auth selection.
+            token_endpoint_auth_method = "client_secret_post";
+          }
         ];
       };
     };
