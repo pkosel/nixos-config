@@ -18,7 +18,6 @@
     jq
     mdcat
     nvd
-    proton-pass-cli
     sd
     unzip
     wl-clipboard

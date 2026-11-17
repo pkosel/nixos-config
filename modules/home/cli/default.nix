@@ -11,6 +11,7 @@
     ./ghostty.nix
     ./git.nix
     ./pi
+    ./proton-pass-cli.nix
     ./ripgrep.nix
     ./ssh.nix
     ./starship.nix
