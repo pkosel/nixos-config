@@ -44,6 +44,9 @@ in
     content = ''
       AUTH_SECRET=${config.sops.placeholder.papra-auth-secret}
       INTAKE_EMAILS_WEBHOOK_SECRET=${config.sops.placeholder.papra-intake-webhook-secret}
+      DOCUMENT_STORAGE_ENCRYPTION_IS_ENABLED=true
+      DOCUMENT_STORAGE_DOCUMENT_KEY_ENCRYPTION_KEYS=${config.sops.placeholder.papra-document-encryption-key}
+      DATABASE_ENCRYPTION_KEY=${config.sops.placeholder.papra-database-encryption-key}
       AUTH_PROVIDERS_CUSTOMS='${
         builtins.toJSON [
           {

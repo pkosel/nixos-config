@@ -49,6 +49,8 @@ in
         restartUnits = [ "authelia-main.service" ];
       };
       papra-intake-webhook-secret.sopsFile = ../secrets/papra.yaml;
+      papra-document-encryption-key.sopsFile = ../secrets/papra.yaml;
+      papra-database-encryption-key.sopsFile = ../secrets/papra.yaml;
     };
   };
 }
