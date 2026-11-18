@@ -26,6 +26,7 @@ in
     ../../modules/system/nix-ld.nix
     ../../modules/system/nix.nix
     ../../modules/system/nixpkgs.nix
+    ../../modules/system/scanning.nix
   ];
 
   # Replace generated hardware definitions with disko's settings; merging the
