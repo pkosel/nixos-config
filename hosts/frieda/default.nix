@@ -77,7 +77,13 @@ in
     thermald.enable = true;
   };
 
-  programs.fish.enable = true;
+  programs = {
+    fish.enable = true;
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+    };
+  };
 
   environment.systemPackages = with pkgs; [
     # Keep curl available independently of NixOS's core package defaults.
