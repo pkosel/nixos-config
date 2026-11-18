@@ -56,11 +56,28 @@ in
       }
     '';
     backupCleanupCommand = ''
+      set -euo pipefail
       ${capture} cleanup ${lib.escapeShellArg backupDirectory}
+      if [[ $SERVICE_RESULT == success && -f "$RUNTIME_DIRECTORY/backup-complete" ]]; then
+        if ! reply=$(
+          ${lib.getExe pkgs.curl} --disable \
+            --config ${lib.escapeShellArg config.sops.secrets.restic-healthcheck-curl.path} \
+            --proto '=https' --fail --silent --max-time 10 2>/dev/null
+        ) || [[ $reply != OK ]]; then
+          echo 'Bridget backup succeeded, but Healthchecks did not acknowledge the ping.' >&2
+        fi
+      fi
     '';
   };
 
   # Local staging is not encrypted by Restic, even when the repository is.
   systemd.tmpfiles.rules = [ "d ${backupParent} 0700 root root -" ];
-  systemd.services.restic-backups-bridget.path = [ pkgs.rsync ];
+  systemd.services.restic-backups-bridget = {
+    path = [ pkgs.rsync ];
+    # The oneshot reaches postStart only after backup, prune and check succeed.
+    # The cleanup hook also runs on failure, so require this per-run marker.
+    postStart = ''
+      touch "$RUNTIME_DIRECTORY/backup-complete"
+    '';
+  };
 }

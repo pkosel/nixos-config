@@ -42,6 +42,7 @@ in
       forgejo-oidc-secret-hash.sopsFile = ../secrets/forgejo.yaml;
       restic-password.sopsFile = ../secrets/restic.yaml;
       restic-ssh-key.sopsFile = ../secrets/restic.yaml;
+      restic-healthcheck-curl.sopsFile = ../secrets/restic.yaml;
       papra-auth-secret.sopsFile = ../secrets/papra.yaml;
       papra-oidc-client-secret.sopsFile = ../secrets/papra.yaml;
       papra-oidc-secret-hash = {
