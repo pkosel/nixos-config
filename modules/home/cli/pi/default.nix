@@ -16,6 +16,6 @@
       ".pi/agent/extensions/answer.LICENSE".source = ./answer.LICENSE;
     };
 
-    sessionVariables.PI_ANSWER_MODEL = "openrouter/openai/gpt-6-luna";
+    sessionVariables.PI_ANSWER_MODEL = "openai/gpt-6-luna";
   };
 }
