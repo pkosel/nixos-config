@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -7,6 +8,10 @@
 
 let
   nixdSettings = import ../nixd.nix { inherit inputs pkgs; };
+  obsidianWorkspace = {
+    name = "Vault";
+    path = "${config.home.homeDirectory}/${config.programs.obsidian.vaults.Vault.target}";
+  };
 in
 {
   programs.neovim = {
@@ -16,6 +21,7 @@ in
     initLua = ''
       vim.lsp.config("nixd", ${lib.generators.toLua { } { settings.nixd = nixdSettings; }})
       ${builtins.readFile ./init.lua}
+      require("config.obsidian")(${lib.generators.toLua { } obsidianWorkspace})
     '';
 
     # Home Manager defaults both to false for home.stateVersion >= 26.05,
@@ -72,6 +78,7 @@ in
       indent-blankline-nvim
       mini-nvim
       nvim-lint
+      obsidian-nvim
       todo-comments-nvim
       trouble-nvim
 
