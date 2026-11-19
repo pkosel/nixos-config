@@ -26,6 +26,7 @@
         "zotero.desktop"
         "dev.diegovsky.Riff.desktop"
         "signal.desktop"
+        "mullvad-vpn.desktop"
       ];
     };
 
