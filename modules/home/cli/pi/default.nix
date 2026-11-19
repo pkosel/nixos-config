@@ -14,6 +14,7 @@
       # Loading agent-stuff's answer extension as well would register /answer twice.
       ".pi/agent/extensions/answer.ts".source = ./answer.ts;
       ".pi/agent/extensions/answer.LICENSE".source = ./answer.LICENSE;
+      ".pi/agent/skills/commit".source = ./skills/commit;
     };
 
     sessionVariables.PI_ANSWER_MODEL = "openai/gpt-6-luna";
