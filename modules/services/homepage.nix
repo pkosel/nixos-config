@@ -100,7 +100,7 @@ in
 
   services.traefik.dynamicConfigOptions.http = {
     routers.homepage = {
-      rule = "Host(`${config.networking.domain}`)";
+      rule = "Host(`${config.networking.domain}`) && !PathPrefix(`/.well-known/`)";
       entryPoints = [ "websecure" ];
       middlewares = [ "homepage-auth" ];
       service = "homepage";

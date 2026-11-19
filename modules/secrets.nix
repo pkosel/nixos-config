@@ -52,6 +52,8 @@ in
       papra-intake-webhook-secret.sopsFile = ../secrets/papra.yaml;
       papra-document-encryption-key.sopsFile = ../secrets/papra.yaml;
       papra-database-encryption-key.sopsFile = ../secrets/papra.yaml;
+      tailscale-password-hash.sopsFile = ../secrets/tailscale.yaml;
+      tailscale-oidc-secret-hash.sopsFile = ../secrets/tailscale.yaml;
     };
   };
 }
