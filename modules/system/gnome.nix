@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   services = {
@@ -14,13 +14,4 @@
       '';
     };
   };
-
-  environment.gnome.excludePackages = with pkgs; [
-    epiphany
-    gnome-calendar
-    gnome-contacts
-    gnome-maps
-    gnome-music
-    gnome-weather
-  ];
 }
