@@ -117,10 +117,19 @@ in
   '';
 
   services.traefik.dynamicConfigOptions.http = {
-    routers.papra = {
-      rule = "Host(`${domain}`)";
-      entryPoints = [ "websecure" ];
-      service = "papra";
+    routers = {
+      papra = {
+        rule = "Host(`${domain}`)";
+        entryPoints = [ "websecure" ];
+        middlewares = [ "tailnet-only" ];
+        service = "papra";
+      };
+      # The email worker calls only this endpoint; Papra still verifies its signature.
+      papra-email-intake = {
+        rule = "Host(`${domain}`) && Method(`POST`) && Path(`/api/intake-emails/ingest`)";
+        entryPoints = [ "websecure" ];
+        service = "papra";
+      };
     };
     services.papra.loadBalancer.servers = [
       { url = "http://127.0.0.1:${config.systemd.services.papra.environment.PORT}"; }

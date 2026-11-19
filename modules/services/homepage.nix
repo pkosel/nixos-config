@@ -102,7 +102,10 @@ in
     routers.homepage = {
       rule = "Host(`${config.networking.domain}`) && !PathPrefix(`/.well-known/`)";
       entryPoints = [ "websecure" ];
-      middlewares = [ "homepage-auth" ];
+      middlewares = [
+        "tailnet-only"
+        "homepage-auth"
+      ];
       service = "homepage";
     };
     middlewares.homepage-auth.forwardAuth = {

@@ -33,14 +33,20 @@ in
       freshrss = {
         rule = "Host(`${freshrss.virtualHost}`)";
         entryPoints = [ "websecure" ];
-        middlewares = [ "freshrss-auth" ];
+        middlewares = [
+          "tailnet-only"
+          "freshrss-auth"
+        ];
         service = "freshrss";
       };
       # The more specific rule bypasses browser SSO; the API requires its own password.
       freshrss-api = {
         rule = "Host(`${freshrss.virtualHost}`) && PathPrefix(`/api/`)";
         entryPoints = [ "websecure" ];
-        middlewares = [ "freshrss-api-headers" ];
+        middlewares = [
+          "tailnet-only"
+          "freshrss-api-headers"
+        ];
         service = "freshrss";
       };
     };
