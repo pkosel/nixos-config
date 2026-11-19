@@ -74,6 +74,10 @@ in
 
   services = {
     fwupd.enable = true;
+    tailscale = {
+      enable = true;
+      disableTaildrop = true;
+    };
     thermald.enable = true;
   };
 

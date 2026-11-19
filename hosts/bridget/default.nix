@@ -60,6 +60,11 @@
     routes = [ { Gateway = "fe80::1"; } ];
   };
 
+  services.tailscale = {
+    enable = true;
+    disableTaildrop = true;
+  };
+
   services.openssh = {
     enable = true;
     settings = {
