@@ -14,6 +14,7 @@
 
     ../../modules/services/traefik.nix
     ../../modules/services/authelia.nix
+    ../../modules/services/dnsmasq.nix
     ../../modules/services/forgejo.nix
     ../../modules/services/forgejo-runner.nix
     ../../modules/services/freshrss.nix
@@ -67,6 +68,8 @@
   services.tailscale = {
     enable = true;
     disableTaildrop = true;
+    # Bridget serves split DNS; its own lookups must keep using public DNS.
+    extraSetFlags = [ "--accept-dns=false" ];
   };
 
   services.openssh = {
