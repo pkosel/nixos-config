@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   modulesPath,
   pkgs,
@@ -45,6 +46,7 @@
     firewall.allowedTCPPorts = [
       80
       443
+      config.services.forgejo.settings.server.SSH_PORT
     ];
   };
 
@@ -61,6 +63,8 @@
   services.openssh = {
     enable = true;
     settings = {
+      # The Forgejo account must not also accept keys through the system sshd.
+      DenyUsers = [ config.services.forgejo.user ];
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
     };

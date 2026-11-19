@@ -17,6 +17,9 @@ in
         DOMAIN = "git.${config.networking.domain}";
         ROOT_URL = "https://${forgejo.settings.server.DOMAIN}/";
         HTTP_ADDR = "127.0.0.1";
+        START_SSH_SERVER = true;
+        SSH_PORT = 2222;
+        SSH_CREATE_AUTHORIZED_KEYS_FILE = false;
       };
       service = {
         DISABLE_REGISTRATION = true;
