@@ -43,11 +43,15 @@
     hostName = "bridget";
     domain = "pkosel.dev";
     useNetworkd = true;
-    firewall.allowedTCPPorts = [
-      80
-      443
-      config.services.forgejo.settings.server.SSH_PORT
-    ];
+    firewall = {
+      allowedTCPPorts = [
+        80
+        443
+        config.services.forgejo.settings.server.SSH_PORT
+      ];
+      interfaces.${config.services.tailscale.interfaceName}.allowedTCPPorts =
+        config.services.openssh.ports;
+    };
   };
 
   systemd.network.networks."10-public" = {
@@ -67,6 +71,8 @@
 
   services.openssh = {
     enable = true;
+    # Administrative SSH and the SFTP jail share this tailnet-only listener.
+    openFirewall = false;
     settings = {
       # The Forgejo account must not also accept keys through the system sshd.
       DenyUsers = [ config.services.forgejo.user ];

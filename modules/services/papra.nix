@@ -101,7 +101,7 @@ in
     "d /var/lib/papra/ingestion 0700 ${papra.user} ${papra.group} -"
     "d /srv/papra 0755 root root -"
     "d /srv/papra/inbox 2770 papra-upload ${papra.group} -"
-    # Provision Frieda's and the scanner's public keys here; not an admin key.
+    # Provision Frieda's dedicated SFTP public key here, not the admin key.
     "d /var/lib/papra-sftp/authorized_keys 0755 root root -"
   ];
 

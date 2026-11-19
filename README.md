@@ -110,6 +110,9 @@ nixos-enter --root /mnt -- /nix/var/nix/profiles/system/sw/bin/passwd root
 ### bridget (remote)
 
 Run from a repository checkout with tracked service secret files in `secrets/`.
+A fresh Bridget install needs a bootstrap configuration with
+`services.openssh.openFirewall = true` until Tailscale is enrolled and tested;
+otherwise SSH will be unavailable on first boot.
 For first setup, create an age identity for SOPS and a separate SSH host key
 outside the checkout. Reuse existing keys on reinstalls:
 

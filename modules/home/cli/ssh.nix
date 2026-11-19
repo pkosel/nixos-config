@@ -11,11 +11,13 @@
     includes = [ "config.local" ];
 
     settings = {
-      bridget = {
-        HostName = "46.225.15.126";
-        User = "root";
+      "bridget papra-inbox" = {
+        HostName = "100.79.152.81";
+        # Keep verifying the existing OpenSSH host key after switching addresses.
+        HostKeyAlias = "46.225.15.126";
         StrictHostKeyChecking = "yes";
       };
+      bridget.User = "root";
 
       "*" = {
         ControlMaster = "auto";
