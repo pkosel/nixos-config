@@ -33,11 +33,6 @@
       inputs.nixpkgs-darwin-x64.follows = "nixpkgs";
     };
 
-    brave = {
-      url = "git+https://codeberg.org/buckley310/brave-browser-nix?ref=main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";

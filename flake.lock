@@ -1,26 +1,5 @@
 {
   "nodes": {
-    "brave": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1795150995,
-        "narHash": "sha256-WEs7PibPYFoXIbVdgRl/mOkGiUcLFSZKEmRV317UXUs=",
-        "ref": "main",
-        "rev": "461d1738bac96785ad20dd2fcdbe0201998ae56c",
-        "revCount": 10,
-        "type": "git",
-        "url": "https://codeberg.org/buckley310/brave-browser-nix"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://codeberg.org/buckley310/brave-browser-nix"
-      }
-    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -126,7 +105,6 @@
     },
     "root": {
       "inputs": {
-        "brave": "brave",
         "disko": "disko",
         "firefox-addons": "firefox-addons",
         "home-manager": "home-manager",
