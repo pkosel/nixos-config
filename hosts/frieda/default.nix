@@ -27,6 +27,7 @@ in
     ../../modules/system/nix.nix
     ../../modules/system/nixpkgs.nix
     ../../modules/system/scanning.nix
+    ../../modules/system/voxtype.nix
   ];
 
   # Replace generated hardware definitions with disko's settings; merging the
