@@ -15,6 +15,8 @@
       ".pi/agent/extensions/answer.ts".source = ./answer.ts;
       ".pi/agent/extensions/answer.LICENSE".source = ./answer.LICENSE;
       ".pi/agent/skills/commit".source = ./skills/commit;
+      # https://github.com/janestreet/agent_skills/tree/469868f4489cbdbe178c775a0af05bb6bef63689/socratic-tutor
+      ".pi/agent/skills/socratic-tutor".source = ./skills/socratic-tutor;
     };
 
     sessionVariables.PI_ANSWER_MODEL = "openai/gpt-6-luna";
